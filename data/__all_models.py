@@ -1,1 +1,1 @@
-from . import teacher, student, class_room, subject
+from . import teacher, student, class_room, subject, task
