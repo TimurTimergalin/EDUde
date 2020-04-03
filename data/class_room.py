@@ -18,7 +18,10 @@ class ClassRoom(SqlAlchemyBase):
     students = orm.relationship('Student', secondary='student_to_class')
 
     def __repr__(self):
-        return f'Class \'{self.name}\''
+        return f'Class \'{self.name}\'#{self.id}'
 
     def add_student(self, student):
         self.students.append(student)
+
+    def set_subject(self, subject):
+        self.subject = subject

@@ -26,7 +26,7 @@ class Teacher(SqlAlchemyBase):
     class_rooms = orm.relation('ClassRoom', back_populates='teacher')
 
     def __repr__(self):
-        return f'{self.surname} {self.name}, учитель'
+        return f'{self.surname} {self.name}#{self.id}, учитель'
 
     def add_student(self, student):
         self.students.append(student)
@@ -34,5 +34,7 @@ class Teacher(SqlAlchemyBase):
     def add_subject(self, subject):
         self.subjects.append(subject)
 
-    def add_class(self, class_room):
+    def add_class(self, class_room, subject):
+        class_room.set_subject(subject)
+        class_room.teacher = self
         self.class_rooms.append(class_room)

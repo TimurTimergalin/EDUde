@@ -21,4 +21,4 @@ class Student(SqlAlchemyBase):
     class_rooms = orm.relationship('ClassRoom', secondary='student_to_class')
 
     def __repr__(self):
-        return f'{self.surname} {self.name}, student'
+        return f'{self.surname} {self.name}#{self.id}, student'
