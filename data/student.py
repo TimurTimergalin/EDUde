@@ -17,7 +17,7 @@ class Student(SqlAlchemyBase):
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
     surname = Cl(sql.String)
     name = Cl(sql.String)
-    email = Cl(sql.String)
+    email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
     teachers = orm.relationship('Teacher', secondary='teacher_to_student')
     class_rooms = orm.relationship('ClassRoom', secondary='student_to_class')

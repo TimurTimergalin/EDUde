@@ -22,7 +22,7 @@ class Teacher(SqlAlchemyBase):
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
     surname = Cl(sql.String)
     name = Cl(sql.String)
-    email = Cl(sql.String)
+    email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
     subjects = orm.relationship('Subject', secondary='teacher_to_subject')
     students = orm.relationship('Student', secondary='teacher_to_student')
