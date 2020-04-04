@@ -20,7 +20,7 @@ def abort_if_teacher_not_found(student_id):
     return student
 
 
-class TeacherResource(Resource):
+class StudentResource(Resource):
     def get(self, student_id):
         teacher = abort_if_teacher_not_found(student_id)
         return jsonify({'teacher': teacher.to_dict(only=('surname', 'name'))})
@@ -33,7 +33,7 @@ class TeacherResource(Resource):
         return jsonify({'success': 'OK'})
 
 
-class TeacherListResource(Resource):
+class StudentListResource(Resource):
     def get(self):
         session = db_session.create_session()
         student = session.query(Student).all()
