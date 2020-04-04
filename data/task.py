@@ -16,3 +16,6 @@ class Task(SqlAlchemyBase):
     link = Cl(sql.String)
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
+
+    def set_deadline(self, deadline):
+        self.deadline = deadline
