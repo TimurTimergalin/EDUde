@@ -14,28 +14,15 @@
 <header>
     <nav class="navbar navbar-light">
         <img src="../static/img/logo.png" class="logo">
-<!--        {% if current_user.is_authenticated %}-->
-<!--            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>-->
-<!--        {% else %}-->
-
-            <p>
-            <a class="log_up_btn shadow-lg" href="/register">Зарегистрироваться</a>
-            <a class="log_up_btn shadow-lg" href="/login">Войти</a>
-            </p>
-<!--        {% endif %}-->
+        {% if current_user.is_authenticated %}
+            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
+        {% endif %}
+        {% block head %}{% endblock %}
     </nav>
 </header>
-
 <main role="main" class="">
-<!--    {% block content %}-->
-
-        <div>
-        <h1 class="text-main main-fir">Python TGK - Edu</h1>
-    </div>
-    <div>
-        <h1 class="text-main main-sec">Образовательный портал</h1>
-    </div>
-<!--    {% endblock %}&ndash;&gt;-->
+    {% block content %}
+    {% endblock %}
         </main>
 </body>
 </html>
