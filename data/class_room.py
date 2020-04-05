@@ -3,11 +3,14 @@ sys.path.insert(1, '/data')
 import sqlalchemy as sql
 from sqlalchemy import Column as Cl
 from sqlalchemy import orm
+from data import db_session
 from data.db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
 
 
 class ClassRoom(SqlAlchemyBase, SerializerMixin):
+    """ClassRoom
+    SQLAlchemy model of classroom"""
     __tablename__ = 'class_rooms'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
@@ -23,6 +26,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         return f'Class \'{self.name}\'#{self.id}'
 
     def add_student(self, student):
+        """ClassRoom.add_student
+        add student to the current class' students list"""
         try:
             self.students.append(student)
             return 0
@@ -30,6 +35,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
             return 1
 
     def remove_student(self, student):
+        """ClassRoom.remove_student
+        remove student from the current class' students list"""
         try:
             self.students.remove(student)
             return 0
@@ -37,6 +44,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
             return 1
 
     def set_subject(self, subject):
+        """ClassRoom.set_subject
+        change a subject of a classroom"""
         try:
             self.subject = subject
             return 0
@@ -44,6 +53,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
             return 1
 
     def add_task(self, task):
+        """ClassRoom.add_task
+        add task to the current class' tasks list"""
         try:
             task.class_room = self
             self.tasks.append(task)
@@ -51,7 +62,19 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         except Exception:
             return 1
 
+    def remove_task(self, task):
+        """ClassRoom.remove_task
+        remove task from the current class' tasks list"""
+        try:
+            session = db_session.create_session()
+            session.delete(task)
+            return 0
+        except Exception:
+            return 1
+
     def edit_myself(self, **kwargs):
+        """ClassRoom.edit_myself
+        edit the current object"""
         if not kwargs:
             return 1
         for i in kwargs:
