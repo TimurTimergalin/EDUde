@@ -4,9 +4,10 @@ import sqlalchemy as sql
 from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Task(SqlAlchemyBase):
+class Task(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'tasks'
 
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)
@@ -16,3 +17,6 @@ class Task(SqlAlchemyBase):
     link = Cl(sql.String)
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
+
+    def set_deadline(self, deadline):
+        self.deadline = deadline

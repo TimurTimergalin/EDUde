@@ -4,9 +4,10 @@ import sqlalchemy as sql
 from sqlalchemy import Column as Cl
 from sqlalchemy import orm
 from data.db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
 
 
-class ClassRoom(SqlAlchemyBase):
+class ClassRoom(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'class_rooms'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)

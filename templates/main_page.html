@@ -1,10 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends "base.html" %}
+{% block head %}
+    <p>
+    <a class="log_up_btn shadow-lg" href="/register">Зарегистрироваться</a>
+    <a class="log_up_btn shadow-lg" href="/login">Войти</a>
+    </p>
+{% endblock %}
+{% block content %}
+    <div>
+        <h1 class="text-main main-fir">Python TGK - Edu</h1>
+    </div>
+    <div>
+        <h1 class="text-main main-sec">Образовательный портал</h1>
+    </div>
+{% endblock %}
