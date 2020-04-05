@@ -8,6 +8,8 @@ from sqlalchemy_serializer import SerializerMixin
 
 
 class Task(SqlAlchemyBase, SerializerMixin):
+    """Task
+    SQLAlchemy model of task"""
     __tablename__ = 'tasks'
 
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)
@@ -19,4 +21,6 @@ class Task(SqlAlchemyBase, SerializerMixin):
     class_room = orm.relation('ClassRoom')
 
     def set_deadline(self, deadline):
+        """Task.set_deadline
+        Change a dealine of the task"""
         self.deadline = deadline

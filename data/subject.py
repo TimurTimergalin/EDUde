@@ -7,6 +7,8 @@ from data.db_session import SqlAlchemyBase
 
 
 class Subject(SqlAlchemyBase):
+    """Subject
+    SQLAlchemy model of subject"""
     __tablename__ = 'subjects'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)

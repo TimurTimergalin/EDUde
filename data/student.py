@@ -14,6 +14,8 @@ student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
 
 
 class Student(SqlAlchemyBase, SerializerMixin):
+    """Student
+    SQLAlchemy model of student"""
     __tablename__ = 'students'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
@@ -28,12 +30,18 @@ class Student(SqlAlchemyBase, SerializerMixin):
         return f'{self.surname} {self.name}#{self.id}, student'
 
     def set_password(self, password):
+        """Student.set_password
+        set an encrypted password"""
         self.hashed_password = werkzeug.generate_password_hash(password)
 
     def check_password(self, password):
+        """Student.check_password
+        encrypt input password and compare it with current user's password"""
         return werkzeug.check_password_hash(self.hashed_password, password)
 
     def edit_myself(self, **kwargs):
+        """Student.edit_myself
+        edit the current object"""
         if not kwargs:
             return 1
         for i in kwargs:

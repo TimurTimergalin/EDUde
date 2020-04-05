@@ -37,7 +37,7 @@ class TeacherListResource(Resource):
     def get(self):
         session = db_session.create_session()
         teacher = session.query(Teacher).all()
-        return jsonify({'news': [item.to_dict(
+        return jsonify({'teachers': [item.to_dict(
             only=('title', 'content', 'user.name')) for item in teacher]})
 
     def post(self):
