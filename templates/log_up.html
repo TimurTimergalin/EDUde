@@ -12,13 +12,13 @@
 </head>
 <style>
 body{
-background: #76ABFB url("../static/img/book1.png") no-repeat;
+background: #76ABFB url("../static/img/book2.png") no-repeat;
 background-size: cover;
 }
 form {
   width: 400px;
   height: auto;
-  margin: 100px auto;
+  margin: 75px auto;
   padding: 20px;
 
   background-color: #ffffff;
@@ -88,6 +88,11 @@ input::-webkit-input-placeholder {
 color: #76ABFB;
 opacity: 0.7;
 }
+.radio_div{
+margin-left: 50px;
+margin-top: 10px;
+margin-bottom: 10px;
+}
 </style>
 <body class="bod">
 
@@ -109,6 +114,15 @@ opacity: 0.7;
 
             <label for="check_password">Повторите пароль</label>
           <input type="password" id="check_password" name="check_password" placeholder="">
+
+            <div class="custom-control custom-radio custom-control-inline radio_div">
+              <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
+              <label class="custom-control-label" for="customRadioInline1">Ученик</label>
+            </div>
+            <div class="custom-control custom-radio custom-control-inline radio_div">
+              <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
+              <label class="custom-control-label" for="customRadioInline2">Учитель</label>
+            </div>
         </fieldset>
         <div class="buttons">
           <input type="submit" value="Зарегистрироваться">
