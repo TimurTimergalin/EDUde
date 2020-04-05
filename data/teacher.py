@@ -5,6 +5,7 @@ from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
 import werkzeug
+from sqlalchemy_serializer import SerializerMixin
 
 
 teacher_to_subject = sql.Table('teacher_to_subject', SqlAlchemyBase.metadata,
@@ -16,7 +17,7 @@ teacher_to_student = sql.Table('teacher_to_student', SqlAlchemyBase.metadata,
                                Cl('student', sql.Integer, sql.ForeignKey('students.id')))
 
 
-class Teacher(SqlAlchemyBase):
+class Teacher(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'teachers'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)

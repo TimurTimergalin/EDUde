@@ -4,9 +4,10 @@ import sqlalchemy as sql
 from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
+from sqlalchemy_serializer import SerializerMixin
 
 
-class Task(SqlAlchemyBase):
+class Task(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'tasks'
 
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)

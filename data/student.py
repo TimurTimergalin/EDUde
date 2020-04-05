@@ -5,13 +5,15 @@ from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
 import werkzeug
+from sqlalchemy_serializer import SerializerMixin
+
 
 student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
                              Cl('student', sql.Integer, sql.ForeignKey('students.id')),
                              Cl('class_room', sql.Integer, sql.ForeignKey('class_rooms.id')))
 
 
-class Student(SqlAlchemyBase):
+class Student(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'students'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
