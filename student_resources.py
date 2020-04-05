@@ -11,7 +11,7 @@ parser.add_argument('password', required=True)
 parser.add_argument('email', required=True)
 
 
-def abort_if_teacher_not_found(student_id):
+def abort_if_student_not_found(student_id):
     session = db_session.create_session()
     student = session.query(Student).get(student_id)
     if not student:
@@ -22,12 +22,12 @@ def abort_if_teacher_not_found(student_id):
 
 class StudentResource(Resource):
     def get(self, student_id):
-        teacher = abort_if_teacher_not_found(student_id)
-        return jsonify({'teacher': teacher.to_dict(only=('surname', 'name'))})
+        teacher = abort_if_student_not_found(student_id)
+        return jsonify({'student': teacher.to_dict(only=('surname', 'name'))})
 
     def delete(self, student_id):
         session = db_session.create_session()
-        student = abort_if_teacher_not_found(student_id)
+        student = abort_if_student_not_found(student_id)
         session.delete(student)
         session.commit()
         return jsonify({'success': 'OK'})
@@ -37,7 +37,7 @@ class StudentListResource(Resource):
     def get(self):
         session = db_session.create_session()
         student = session.query(Student).all()
-        return jsonify({'news': [item.to_dict(
+        return jsonify({'students': [item.to_dict(
             only=('title', 'content', 'user.name')) for item in student]})
 
     def post(self):
