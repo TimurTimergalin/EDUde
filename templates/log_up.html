@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <title>{{title}}</title>
+</head>
+<style>
+body{
+background-color: #76ABFB;
+}
+form {
+  width: 400px;
+  height: auto;
+  margin: auto;
+  padding: 20px;
+
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #cccccc;
+}
+
+fieldset {
+  padding: 10px;
+
+  border: 1px solid #76ABFB;
+  border-radius: 5px;
+}
+
+fieldset legend {
+  color: #76ABFB;
+  padding: 0;
+  margin: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #76ABFB;
+}
+
+input {
+  width: 95%;
+  height: 40px;
+  margin-bottom: 10px;
+  padding: 2px 5px;
+
+  font-family: "Roboto", sans-serif;
+  vertical-align: middle;
+
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin: 0 5px;
+  padding: 9px 20px;
+
+  color: #ffffff;
+
+  background-color: #76ABFB;
+  border: none;
+  border-radius: 12px;
+}
+
+.buttons {
+  margin-top: 10px;
+
+  text-align: center;
+}
+
+main {
+  min-height: 400px;
+}
+input.placeholder{
+color: #76ABFB;
+}
+</style>
+<body class="bod">
+
+<div class="container">
+ <form action="https://echo.htmlacademy.ru/courses" method="post">
+        <fieldset>
+          <legend>Регистрация пользователя</legend>
+          <label for="name">Ваше имя</label>
+          <input type="text" id="name" name="name" placeholder="Иван">
+
+            <label for="passport">Ваша фамилия</label>
+          <input type="text" id="passport" name="passport" placeholder="Иванов">
+
+            <label for="password">Придумайте пароль</label>
+          <input type="password" id="password" name="password" placeholder="">
+
+            <label for="password_repeat">Повторите пароль</label>
+          <input type="password" id="password_repeat" name="password_repeat" placeholder="">
+        </fieldset>
+        <div class="buttons">
+          <input type="submit" value="Оформить">
+        </div>
+      </form>
+</div>
+</body>
+</html>

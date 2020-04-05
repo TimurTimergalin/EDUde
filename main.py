@@ -1,11 +1,16 @@
 import sys
 sys.path.insert(1, '/data')
-from flask import Flask
+from flask import Flask, render_template
 from data import db_session
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+
+@app.route('/start')
+def start():
+    return render_template('main_page.html')
 
 
 def main():
