@@ -12,36 +12,37 @@
 </head>
 <style>
 body{
-background-color: #76ABFB;
+background: #76ABFB url("../static/img/book1.png") no-repeat;
+background-size: cover;
 }
 form {
   width: 400px;
   height: auto;
-  margin: auto;
+  margin: 100px auto;
   padding: 20px;
 
   background-color: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 0 10px #cccccc;
+  box-shadow: 0 0 15px #2B3346;
 }
 
 fieldset {
   padding: 10px;
-
-  border: 1px solid #76ABFB;
+  border: 1px solid #4163B9;
   border-radius: 5px;
 }
 
 fieldset legend {
-  color: #76ABFB;
+  color: #4163B9;
   padding: 0;
   margin: 0;
+  text-align: center;
 }
 
 label {
   display: block;
   margin-bottom: 5px;
-  color: #76ABFB;
+  color: #4163B9;
 }
 
 input {
@@ -61,7 +62,7 @@ input[type="submit"] {
   display: inline-block;
   width: auto;
   height: auto;
-  margin: 0 5px;
+  margin: 8px 0 0 0;
   padding: 9px 20px;
 
   color: #ffffff;
@@ -70,7 +71,9 @@ input[type="submit"] {
   border: none;
   border-radius: 12px;
 }
-
+input[type="submit"]:hover{
+  background-color: #4163B9;
+}
 .buttons {
   margin-top: 10px;
 
@@ -80,13 +83,15 @@ input[type="submit"] {
 main {
   min-height: 400px;
 }
-input.placeholder{
+
+input::-webkit-input-placeholder {
 color: #76ABFB;
+opacity: 0.7;
 }
 </style>
 <body class="bod">
 
-<div class="container">
+<div class="form-div">
  <form action="https://echo.htmlacademy.ru/courses" method="post">
         <fieldset>
           <legend>Регистрация пользователя</legend>
@@ -96,14 +101,17 @@ color: #76ABFB;
             <label for="passport">Ваша фамилия</label>
           <input type="text" id="passport" name="passport" placeholder="Иванов">
 
+            <label for="email">Ваш email</label>
+          <input type="email" id="email" name="email" placeholder="ivanov_@mail.ru">
+
             <label for="password">Придумайте пароль</label>
           <input type="password" id="password" name="password" placeholder="">
 
-            <label for="password_repeat">Повторите пароль</label>
-          <input type="password" id="password_repeat" name="password_repeat" placeholder="">
+            <label for="check_password">Повторите пароль</label>
+          <input type="password" id="check_password" name="check_password" placeholder="">
         </fieldset>
         <div class="buttons">
-          <input type="submit" value="Оформить">
+          <input type="submit" value="Зарегистрироваться">
         </div>
       </form>
 </div>
