@@ -3,6 +3,7 @@ import sys
 from flask_login import LoginManager
 from sqlalchemy.testing.pickleable import User
 from werkzeug.utils import redirect
+from create_user import create_user
 
 sys.path.insert(1, '/data')
 from flask import Flask, render_template
@@ -66,7 +67,6 @@ def register():
             registration_finale(Teacher, session, form)
         return redirect('/login')
     return render_template('log_up.html', title='Регистрация', form=form)
-
 
 def check_email(user_type, session, form):
     if session.query(user_type).filter(user_type.email == form.email.data).first():
