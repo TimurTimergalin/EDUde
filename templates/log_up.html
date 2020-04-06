@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block link %}
-<link rel="stylesheet" href="../static/css/style_log_up.css">
+<link rel="stylesheet" href="../static/css/log_up.css">
 {% endblock %}
 
 {% block content %}
+
 <div class="form-div">
  <form action="" method="post">
      {{ form.hidden_tag() }}
@@ -65,15 +66,20 @@
 
 <!--            <label for="check_password">Повторите пароль</label>-->
 <!--          <input type="password" id="check_password" name="check_password" placeholder="">-->
-
+        {% for subfield in form.user_type %}
             <div class="custom-control custom-radio custom-control-inline radio_div">
-              <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline1">Ученик</label>
+                {{ subfield(type="radio", class="custom-control-input") }}
+                {{ subfield.label(class="custom-control-label") }}
+<!--              <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">-->
+<!--              <label class="custom-control-label" for="customRadioInline1">Ученик</label>-->
             </div>
-            <div class="custom-control custom-radio custom-control-inline radio_div">
-              <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline2">Учитель</label>
-            </div>
+<!--            <div class="custom-control custom-radio custom-control-inline radio_div">-->
+<!--                {{ subfield }}-->
+<!--                {{ subfield.label(class="custom-control-label") }}-->
+<!--              <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">-->
+<!--              <label class="custom-control-label" for="customRadioInline2">Учитель</label>-->
+<!--            </div>-->
+            {% endfor %}
         </fieldset>
         <div class="buttons">
           <input type="submit" value="Зарегистрироваться">

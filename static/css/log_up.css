@@ -5,7 +5,9 @@ background-size: cover;
 form {
   width: 400px;
   height: auto;
-  margin: 75px auto;
+  margin: auto;
+  margin-top: -50px;
+  margin-bottom: 50px;
   padding: 20px;
 
   background-color: #ffffff;
@@ -28,7 +30,7 @@ fieldset legend {
 
 label {
   display: block;
-  margin-bottom: 5px;
+   margin-bottom: -10px;
   color: #4163B9;
 }
 
@@ -49,7 +51,7 @@ input[type="submit"] {
   display: inline-block;
   width: auto;
   height: auto;
-  margin: 8px 0 0 0;
+  margin: 5px 0 0 0;
   padding: 9px 20px;
 
   color: #ffffff;
@@ -62,7 +64,7 @@ input[type="submit"]:hover{
   background-color: #3B557E;
 }
 .buttons {
-  margin-top: 10px;
+  margin-top: 5px;
 
   text-align: center;
 }
