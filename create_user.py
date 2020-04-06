@@ -8,16 +8,16 @@ from data.student import Student
 
 def create_user(**kw):
     base_user = User()
-    if kw['user_type'] == 'учитель':
+    if kw['user_type'] == Teacher:
         user = Teacher()
         base_user.teacher = user
     else:
         user = Student()
         base_user.student = user
-    user.surname = kw['Фамилия']
-    user.name = kw['Имя']
-    user.email = kw['Эл. почта']
-    user.set_password(kw['Пароль'])
+    user.surname = kw['surname']
+    user.name = kw['name']
+    user.email = kw['email']
+    user.set_password(kw['password'])
     session = db_session.create_session()
     session.add(base_user)
     session.add(user)
