@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block link %}
+<link rel="stylesheet" href="../static/css/log_up.css">
+<link rel="stylesheet" href="../static/css/log__in.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-div">
+ <form action="" method="post">
+     {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+        <fieldset>
+          <legend>Вход в систему</legend>
+
+            {{ form.email.label }}<br>
+        {{ form.email(placeholder="ivanov_@mail.ru", type="email") }}<br>
+        {% for error in form.email.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+            {{ form.password.label }}<br>
+        {{ form.password(type="password") }}<br>
+        {% for error in form.password.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        <div class="custom-control custom-checkbox check_div">
+<!--            {{ form.remember_me() }} {{ form.remember_me.label }}-->
+        {{ form.remember_me(type="checkbox", class="custom-control-input") }}
+            {{ form.remember_me.label(class="custom-control-label") }}<br>
+            {% for error in form.remember_me.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        </div>
+
+        </fieldset>
+        <div class="buttons">
+        {{ form.submit(type="submit") }}<br>
+        {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        </div>
+      </form>
+</div>
+{% endblock %}

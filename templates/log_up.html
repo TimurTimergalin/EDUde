@@ -1,133 +1,80 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    <link rel="stylesheet" href="../static/css/style.css">
-    <title>{{title}}</title>
-</head>
-<style>
-body{
-background: #76ABFB url("../static/img/book2.png") no-repeat;
-background-size: cover;
-}
-form {
-  width: 400px;
-  height: auto;
-  margin: 75px auto;
-  padding: 20px;
+{% extends "base.html" %}
+{% block link %}
+<link rel="stylesheet" href="../static/css/log_up.css">
+{% endblock %}
 
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 0 15px #2B3346;
-}
-
-fieldset {
-  padding: 10px;
-  border: 1px solid #4163B9;
-  border-radius: 5px;
-}
-
-fieldset legend {
-  color: #4163B9;
-  padding: 0;
-  margin: 0;
-  text-align: center;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #4163B9;
-}
-
-input {
-  width: 95%;
-  height: 40px;
-  margin-bottom: 10px;
-  padding: 2px 5px;
-
-  font-family: "Roboto", sans-serif;
-  vertical-align: middle;
-
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-}
-
-input[type="submit"] {
-  display: inline-block;
-  width: auto;
-  height: auto;
-  margin: 8px 0 0 0;
-  padding: 9px 20px;
-
-  color: #ffffff;
-
-  background-color: #76ABFB;
-  border: none;
-  border-radius: 12px;
-}
-input[type="submit"]:hover{
-  background-color: #4163B9;
-}
-.buttons {
-  margin-top: 10px;
-
-  text-align: center;
-}
-
-main {
-  min-height: 400px;
-}
-
-input::-webkit-input-placeholder {
-color: #76ABFB;
-opacity: 0.7;
-}
-.radio_div{
-margin-left: 50px;
-margin-top: 10px;
-margin-bottom: 10px;
-}
-</style>
-<body class="bod">
+{% block content %}
 
 <div class="form-div">
- <form action="https://echo.htmlacademy.ru/courses" method="post">
+ <form action="" method="post">
+     {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
         <fieldset>
           <legend>Регистрация пользователя</legend>
-          <label for="name">Ваше имя</label>
-          <input type="text" id="name" name="name" placeholder="Иван">
 
-            <label for="passport">Ваша фамилия</label>
-          <input type="text" id="passport" name="passport" placeholder="Иванов">
+            {{ form.name.label }}<br>
+        {{ form.name(placeholder="Иван") }}<br>
+        {% for error in form.name.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
 
-            <label for="email">Ваш email</label>
-          <input type="email" id="email" name="email" placeholder="ivanov_@mail.ru">
 
-            <label for="password">Придумайте пароль</label>
-          <input type="password" id="password" name="password" placeholder="">
+            {{ form.surname.label }}<br>
+        {{ form.surname( placeholder="Иванов") }}<br>
+        {% for error in form.surname.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
 
-            <label for="check_password">Повторите пароль</label>
-          <input type="password" id="check_password" name="check_password" placeholder="">
+            {{ form.email.label }}<br>
+        {{ form.email(placeholder="ivanov_@mail.ru", type="email") }}<br>
+        {% for error in form.email.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
 
+            {{ form.password.label }}<br>
+        {{ form.password(type="password") }}<br>
+        {% for error in form.password.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+                    {{ form.check_password.label }}<br>
+        {{ form.check_password(type="password") }}<br>
+        {% for error in form.check_password.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+        {% for subfield in form.user_type %}
             <div class="custom-control custom-radio custom-control-inline radio_div">
-              <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline1">Ученик</label>
+                {{ subfield(type="radio", class="custom-control-input") }}
+                {{ subfield.label(class="custom-control-label") }}
+
             </div>
-            <div class="custom-control custom-radio custom-control-inline radio_div">
-              <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-              <label class="custom-control-label" for="customRadioInline2">Учитель</label>
-            </div>
+            {% endfor %}
+            {% for error in form.user_type.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
         </fieldset>
+
         <div class="buttons">
-          <input type="submit" value="Зарегистрироваться">
+        {{ form.submit(type="submit") }}<br>
+        {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
         </div>
       </form>
 </div>
-</body>
-</html>
+{% endblock %}

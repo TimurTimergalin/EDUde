@@ -1,0 +1,88 @@
+body{
+background: #76ABFB url("../img/book2.png") no-repeat;
+background-size: cover;
+}
+form {
+  width: 400px;
+  height: auto;
+  margin: auto;
+  margin-top: -50px;
+  margin-bottom: 50px;
+  padding: 20px;
+
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #2B3346;
+}
+
+fieldset {
+  padding: 10px;
+  border: 1px solid #4163B9;
+  border-radius: 5px;
+}
+
+fieldset legend {
+  color: #4163B9;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+label {
+  display: block;
+   margin-bottom: -10px;
+  color: #4163B9;
+}
+
+input {
+  width: 95%;
+  height: 40px;
+  margin-bottom: 10px;
+  padding: 2px 5px;
+
+  font-family: "Roboto", sans-serif;
+  vertical-align: middle;
+
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+
+input[type="submit"] {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin: 5px 0 0 0;
+  padding: 9px 20px;
+
+  color: #ffffff;
+
+  background-color: #3B7AA4;
+  border: none;
+  border-radius: 12px;
+}
+input[type="submit"]:hover{
+  background-color: #3B557E;
+}
+.buttons {
+  margin-top: 5px;
+
+  text-align: center;
+}
+
+main {
+  min-height: 400px;
+}
+
+input::-webkit-input-placeholder {
+color: #A8C7A8;
+opacity: 0.6;
+}
+.radio_div{
+margin-left: 50px;
+margin-top: 10px;
+margin-bottom: 10px;
+}
+
+input[type="submit"]:active{
+  background-color: #22324A;
+}

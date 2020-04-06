@@ -10,7 +10,7 @@ from data import db_session
 from data.student import Student
 from data.teacher import Teacher
 from flask_restful import Api
-from forms import RegistrationForm
+from forms import RegistrationForm, LoginForm
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -44,7 +44,8 @@ def start():
 
 @app.route('/login')
 def login():
-    pass
+    form = LoginForm()
+    return render_template('log_in.html', title='Вход', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
