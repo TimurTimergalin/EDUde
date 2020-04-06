@@ -2,6 +2,7 @@ from flask import jsonify
 from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.student import Student
+from create_user import create_user
 
 
 parser = reqparse.RequestParser()
@@ -42,13 +43,7 @@ class StudentListResource(Resource):
 
     def post(self):
         args = parser.parse_args()
-        session = db_session.create_session()
-        student = Student()
-        student.surname = args['surname']
-        student.name = args['name']
-        student.email = args['email']
-        student.set_password(args['password'])
-        session.add(student)
-        session.commit()
+        args['user_type'] = 'ученик'
+        create_user(**args)
         return jsonify({'success': 'OK'})
 
