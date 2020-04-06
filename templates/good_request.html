@@ -1,0 +1,89 @@
+<!--{% extends "base.html" %}-->
+<!--{% block link %}-->
+<!--<link rel="stylesheet" href="../static/css/log_up.css">-->
+<!--<link rel="stylesheet" href="../static/css/log__in.css">-->
+<!--{% endblock %}-->
+
+<!--{% block content %}-->
+
+<!--{% endblock %}-->
+
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../static/css/labels.css">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/log_up.css">
+    <link rel="stylesheet" href="../static/css/log__in.css">
+    <title>{{title}}</title>
+</head>
+<style>
+    .div_mes{
+    display: flex;
+    }
+    .success{
+    font-size: 24px;
+    vertical-align: center;
+    padding-top: 18px;
+    padding-left: 10px;
+    opacity: 0.8;
+    }
+    .div_normal{
+    display: inline-block;
+     background-color: #F9F9F9;
+    min-width: 300px;
+    width: 500px;
+    border-radius: 16px;
+    padding: 10px;
+<!--    margin-top: 300px;-->
+    }
+    .img_suc{
+    transform: scale(0.9);
+    margin-left: 17px;
+    }
+    .a_btn{
+    background-color: #A8C7A8;
+    width: 175px;
+    border-radius: 25px;
+    padding: 9px 23px;
+    text-decoration: none;
+    color: black;
+    opacity: 0.8;
+    font-size: 18px;
+    margin-bottom: 18px;
+    }
+    body{
+    text-align: center;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    }
+    .div_b{
+    margin-bottom: 18px;
+    }
+    a:hover{
+    text-decoration: none;
+    background-color: #859F85;
+    color: black;
+    }
+</style>
+<body class="bodys">
+<div>
+<div class="div_normal">
+    <div class="div_mes">
+        <p class="success">Вы успешно зарегистрировались</p>
+        <img src="../static/img/check.png" class="img_suc">
+    </div>
+    <br>
+    <div class="div_b">
+        <a href="/start" class="a_btn">На главную</a>
+    </div>
+</div>
+</div>
+</body>
+</html>
