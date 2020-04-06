@@ -1,0 +1,6 @@
+label::selection {
+   background: transparent;
+}
+label::-moz-selection {
+   background: transparent;
+}

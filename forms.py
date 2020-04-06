@@ -13,8 +13,8 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
     check_password = PasswordField('Повторите пароль', validators=[DataRequired()])
     user_type = RadioField('Учитель/Ученик', validators=[DataRequired()],
-                            choices=[('учитель', 'Учитель'), ('ученик', 'Ученик')])
-    submit = SubmitField('Зарегестрироваться')
+                           choices=[('учитель', 'Учитель'), ('ученик', 'Ученик')])
+    submit = SubmitField('Зарегистрироваться')
 
 
 class LoginForm(FlaskForm):

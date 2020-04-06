@@ -20,8 +20,6 @@
             </p>
         {% endfor %}
 
-<!--          <label for="name">Ваше имя</label>-->
-<!--          <input type="text" id="name" name="name" placeholder="Иван">-->
 
             {{ form.surname.label }}<br>
         {{ form.surname( placeholder="Иванов") }}<br>
@@ -31,9 +29,6 @@
             </p>
         {% endfor %}
 
-<!--            <label for="passport">Ваша фамилия</label>-->
-<!--          <input type="text" id="passport" name="passport" placeholder="Иванов">-->
-
             {{ form.email.label }}<br>
         {{ form.email(placeholder="ivanov_@mail.ru", type="email") }}<br>
         {% for error in form.email.errors %}
@@ -41,9 +36,6 @@
                 {{ error }}
             </p>
         {% endfor %}
-
-<!--            <label for="email">Ваш email</label>-->
-<!--          <input type="email" id="email" name="email" placeholder="ivanov_@mail.ru">-->
 
             {{ form.password.label }}<br>
         {{ form.password(type="password") }}<br>
@@ -53,9 +45,6 @@
             </p>
         {% endfor %}
 
-<!--            <label for="password">Придумайте пароль</label>-->
-<!--          <input type="password" id="password" name="password" placeholder="">-->
-
                     {{ form.check_password.label }}<br>
         {{ form.check_password(type="password") }}<br>
         {% for error in form.check_password.errors %}
@@ -64,25 +53,27 @@
             </p>
         {% endfor %}
 
-<!--            <label for="check_password">Повторите пароль</label>-->
-<!--          <input type="password" id="check_password" name="check_password" placeholder="">-->
         {% for subfield in form.user_type %}
             <div class="custom-control custom-radio custom-control-inline radio_div">
                 {{ subfield(type="radio", class="custom-control-input") }}
                 {{ subfield.label(class="custom-control-label") }}
-<!--              <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">-->
-<!--              <label class="custom-control-label" for="customRadioInline1">Ученик</label>-->
+
             </div>
-<!--            <div class="custom-control custom-radio custom-control-inline radio_div">-->
-<!--                {{ subfield }}-->
-<!--                {{ subfield.label(class="custom-control-label") }}-->
-<!--              <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">-->
-<!--              <label class="custom-control-label" for="customRadioInline2">Учитель</label>-->
-<!--            </div>-->
             {% endfor %}
+            {% for error in form.user_type.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
         </fieldset>
+
         <div class="buttons">
-          <input type="submit" value="Зарегистрироваться">
+        {{ form.submit(type="submit") }}<br>
+        {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
         </div>
       </form>
 </div>
