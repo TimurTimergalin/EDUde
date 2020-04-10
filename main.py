@@ -31,8 +31,8 @@ api.add_resource(classroom_resources.ClassRoomResource,
                  '/api/1.0/classroom/<int:teacher_id>/<int:teacher_password>/<int:class_room_id>')
 api.add_resource(classroom_resources.ClassRoomListResource,
                  '/api/1.0/classroom/<int:teacher_id>/<int:teacher_password>')
-api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>/<str:teacher_password>/<int:task_id>')
-api.add_resource(task_resources.TaskListResource, '/api/task/<int:teacher_id>/<str:teacher_password>')
+api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>/<string:teacher_password>/<int:task_id>')
+api.add_resource(task_resources.TaskListResource, '/api/task/<int:teacher_id>/<string:teacher_password>')
 
 
 @login_manager.user_loader
