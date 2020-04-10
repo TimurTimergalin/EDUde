@@ -65,7 +65,7 @@ class TaskResource(Resource):
         return jsonify({'success': 'OK'})
 
 
-class TaskListResources(Resource):
+class TaskListResource(Resource):
     def get(self, teacher_id, teacher_password):
         teacher = abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
