@@ -43,7 +43,6 @@ class TeacherListResource(Resource):
 
     def post(self):
         args = parser.parse_args()
-        args = parser.parse_args()
         args['user_type'] = 'учитель'
         create_user(**args)
         return jsonify({'success': 'OK'})

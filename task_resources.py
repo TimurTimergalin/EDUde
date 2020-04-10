@@ -3,19 +3,22 @@ from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.class_room import ClassRoom
 from data.teacher import Teacher
+from data.task import Task
 
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
+parser.add_argument('deadline')
+parser.add_argument('link')
 
 
-def abort_if_class_not_found(class_room_id):
+def abort_if_task_not_found(task_id):
     session = db_session.create_session()
-    class_room = session.query(ClassRoom).get(class_room_id)
-    if not class_room:
-        abort(404, message=f"News {class_room_id} not found")
+    task = session.query(ClassRoom).get(task_id)
+    if not task:
+        abort(404, message=f"News {task_id} not found")
         return
-    return class_room
+    return task
 
 
 def abort_if_teacher_not_found(teacher_id):
@@ -34,50 +37,50 @@ def abort_if_password_is_wrong(teacher_id, password):
         abort(402, message="Wrong password")
 
 
-def abort_if_request_is_forbidden(teacher_id, class_room_id):
+def abort_if_request_is_forbidden(teacher_id, task_id):
     session = db_session.create_session()
     teacher = session.query(Teacher).get(teacher_id)
-    class_room = session.query(ClassRoom).get(class_room_id)
-    if class_room.teacher_id != teacher.id:
-        abort(403, message=f"You are not allowed to get information about classroom #{class_room_id}")
+    task = session.query(Task).get(task_id)
+    for i in teacher.class_rooms:
+        if task in i.tasks:
+            return
+    abort(403, message="You are not allowed to get info about this task")
 
 
-class ClassRoomResource(Resource):
-    def get(self, teacher_id, teacher_password, class_room_id):
-        class_room = abort_if_class_not_found(class_room_id)
+class TaskResource(Resource):
+    def get(self, teacher_id, teacher_password, task_id):
+        task = abort_if_task_not_found(task_id)
         abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
-        abort_if_request_is_forbidden(teacher_id, class_room_id)
-        return jsonify({'classroom': class_room.to_dict(only=('id', 'name'))})
+        abort_if_request_is_forbidden(teacher_id, task_id)
+        return jsonify({'task': task.to_dict(only=('id', 'name'))})
 
-    def delete(self, teacher_id, teacher_password, class_room_id):
-        class_room = abort_if_class_not_found(class_room_id)
+    def delete(self, teacher_id, teacher_password, task_id):
+        task = abort_if_task_not_found(task_id)
         abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
-        abort_if_request_is_forbidden(teacher_id, class_room_id)
+        abort_if_request_is_forbidden(teacher_id, task_id)
         session = db_session.create_session()
-        session.delete(class_room)
-        session.commit()
+        session.delete(task)
         return jsonify({'success': 'OK'})
 
 
-class ClassRoomListResource(Resource):
+class TaskListResources(Resource):
     def get(self, teacher_id, teacher_password):
-        session = db_session.create_session()
-        abort_if_teacher_not_found(teacher_id)
+        teacher = abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
-        class_rooms = session.query(ClassRoom).filter(ClassRoom.teacher_id == teacher_id).all()
-        return jsonify({'classrooms': [item.to_dict(only=('id', 'name')) for item in class_rooms]})
+        return jsonify({'tasks': [{class_room.name: [item.to_dict(only=('id', 'name')) for item in class_room.tasks]}
+                                  for class_room in teacher.class_rooms]})
 
     def post(self, teacher_id, teacher_password):
         session = db_session.create_session()
         args = parser.parse_args()
         abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
-        class_room = ClassRoom()
-        class_room.name = args['name']
-        teacher = session.query(Teacher).get(teacher_id)
-        teacher.add_class(class_room)
-        session.add(class_room)
+        task = Task()
+        task.name = args['name']
+        task.deadline = args['deadline']
+        task.link = args['link']
+        session.add(task)
         session.commit()
         return jsonify({'success': 'OK'})
