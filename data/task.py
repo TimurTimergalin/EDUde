@@ -20,6 +20,9 @@ class Task(SqlAlchemyBase, SerializerMixin):
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
 
+    def __repr__(self):
+        return f'Task#{self.id}: {self.name}'
+
     def set_deadline(self, deadline):
         """Task.set_deadline
         Change a dealine of the task"""
