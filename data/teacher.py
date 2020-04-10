@@ -6,7 +6,9 @@ from sqlalchemy import Column as Cl
 from data import db_session
 from data.db_session import SqlAlchemyBase
 import werkzeug
+from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
 
 
 # Таблица для отношения учитель-предмет
@@ -20,7 +22,7 @@ teacher_to_student = sql.Table('teacher_to_student', SqlAlchemyBase.metadata,
                                Cl('student', sql.Integer, sql.ForeignKey('students.id')))
 
 
-class Teacher(SqlAlchemyBase, SerializerMixin):
+class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
     """Teacher
     SQLAlchemy model of teacher"""
     __tablename__ = 'teachers'
@@ -97,12 +99,12 @@ class Teacher(SqlAlchemyBase, SerializerMixin):
     def set_password(self, password):
         """Teacher.set_password
         set an encrypted password"""
-        self.hashed_password = werkzeug.generate_password_hash(password)
+        self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
         """Teacher.check_password
         encrypt input password and compare it with current user's password"""
-        return werkzeug.check_password_hash(self.hashed_password, password)
+        return check_password_hash(self.hashed_password, password)
 
     def edit_myself(self, **kwargs):
         """Teacher.edit_myself

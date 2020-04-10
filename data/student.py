@@ -4,8 +4,9 @@ import sqlalchemy as sql
 from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
-import werkzeug
+from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy_serializer import SerializerMixin
+from flask_login import UserMixin
 
 
 student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
@@ -13,7 +14,7 @@ student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
                              Cl('class_room', sql.Integer, sql.ForeignKey('class_rooms.id')))
 
 
-class Student(SqlAlchemyBase, SerializerMixin):
+class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
     """Student
     SQLAlchemy model of student"""
     __tablename__ = 'students'
@@ -32,12 +33,12 @@ class Student(SqlAlchemyBase, SerializerMixin):
     def set_password(self, password):
         """Student.set_password
         set an encrypted password"""
-        self.hashed_password = werkzeug.generate_password_hash(password)
+        self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
         """Student.check_password
         encrypt input password and compare it with current user's password"""
-        return werkzeug.check_password_hash(self.hashed_password, password)
+        return check_password_hash(self.hashed_password, password)
 
     def edit_myself(self, **kwargs):
         """Student.edit_myself

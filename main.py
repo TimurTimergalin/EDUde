@@ -1,7 +1,6 @@
 import sys
 
-from flask_login import LoginManager
-from sqlalchemy.testing.pickleable import User
+from flask_login import LoginManager, login_user
 from werkzeug.utils import redirect
 from create_user import create_user
 
@@ -10,12 +9,13 @@ from flask import Flask, render_template
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
+from data.user import User
+from create_user import create_user
 from flask_restful import Api
 from forms import RegistrationForm, LoginForm
 import student_resources
 import teacher_resources
 import classroom_resources
-
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -38,14 +38,23 @@ def load_user(user_id):
     return session.query(User).get(user_id)
 
 
-@app.route('/start')
+@app.route('/')
 def start():
     return render_template('main_page.html')
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        user = session.query(Student).filter(Student.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('log_in.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
     return render_template('log_in.html', title='Вход', form=form)
 
 
@@ -54,37 +63,27 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         if form.password.data != form.check_password.data:
-            return render_template('register.html', title='Регистрация',
+            return render_template('log_up.html', title='Регистрация',
                                    form=form,
                                    message="Пароли не совпадают")
         # db_session.global_init('')
         session = db_session.create_session()
-        if form.user_type == 'ученик':
+        if form.user_type.data == 'ученик':
             check_email(Student, session, form)
-            registration_finale(Student, session, form)
-        elif form.user_type == 'учитель':
+            create_user(user_type=Student, surname=form.surname.data, name=form.name.data, email=form.email.data,
+                        password=form.password.data)
+        elif form.user_type.data == 'учитель':
             check_email(Teacher, session, form)
-            registration_finale(Teacher, session, form)
+            create_user(user_type=Teacher, surname=form.surname.data, name=form.name.data, email=form.email.data,
+                        password=form.password.data)
         return redirect('/login')
     return render_template('log_up.html', title='Регистрация', form=form)
 
 def check_email(user_type, session, form):
     if session.query(user_type).filter(user_type.email == form.email.data).first():
-        return render_template('register.html', title='Регистрация',
+        return render_template('log_up.html', title='Регистрация',
                                form=form,
                                message="Такой пользователь уже есть")
-
-
-def registration_finale(user_type, session, form):
-    user = user_type(
-        surname=form.surname.data,
-        name=form.name.data,
-        email=form.email.data,
-        type=form.user_type.data
-    )
-    user.set_password(form.password.data)
-    session.add(user)
-    session.commit()
 
 
 def main():
