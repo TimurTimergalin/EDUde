@@ -9,46 +9,211 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
 <!--    {% block link %}{% endblock %}-->
+<!--    <link rel="stylesheet" href="../static/css/log_up.css">-->
+<!--<link rel="stylesheet" href="../static/css/log__in.css">-->
     <title>{{title}}</title>
 </head>
+<style>
+body{
+background: #65A2CE;
+background-size: cover;
+
+}
+.log_out{
+background-color: white;
+color: #6896DC;
+padding: 9px 30px;
+border-radius: 27px;
+text-decoration: none;
+font-size: 18px;
+margin-right: 13px;
+box-shadow: 0 0 4px #818181;
+}
+.log_out:hover{
+background-color: #A8C7A8;
+color: white;
+text-decoration: none;
+}
+.photo{
+text-align: center;
+}
+.photo img{
+width: 350px;
+height: 250px;
+border-radius: 30px;
+margin: 40px;
+margin-left: 60px;
+box-shadow: 0 0 8px #818181;
+}
+.prof{
+font-size: 15px;
+font-weight: 100;
+color: white;
+padding: 40px 30px 20px 30px;
+background-color: #A8C7A8;
+margin-top: -35px;
+border-radius: 10px;
+box-shadow: 0 0 8px #818181;
+letter-spacing: 2px;
+}
+.classes{
+margin-left: 35%;
+margin-top: 40px;
+font-size: 10px;
+}
+.bloc{
+display: flex;
+}
+figcaption{
+color: white;
+margin-top: -10px;
+}
+.more{
+text-align: center;
+font-size: 13px;
+margin-left: 242px;
+padding: 7px 13px;
+background-color: #65A2CE;
+border-radius: 20px;
+width: 100px;
+color: #fff;
+margin-top: -35px;
+}
+.bord{
+height: 70px;
+vertical-align: middle;
+}
+</style>
+<header>
+    <nav class="navbar navbar-light">
+        <a href="/start"><img src="../static/img/logo.png" class="logo"></a>
+        <p class="prof">Profile</p>
+<!--        {% if current_user.is_authenticated %}-->
+            <a class="log_out" href="/logout">
+<!--                {{ current_user.name }}-->
+                Выйти
+            </a>
+<!--        {% endif %}-->
+<!--        {% block head %}{% endblock %}-->
+    </nav>
+</header>
 <body>
-<div class="accordion container" id="accordionExample" style="width:300px;">
+<div class="bloc">
+<div class="photo">
+    <img src="../static/img/desk.jpg">
+    <figcaption>Фото профиля</figcaption>
+</div>
+<div class="accordion classes" id="accordionExample" style="width:400px;">
   <div class="card">
-    <div class="card-header" id="headingOne">
+    <div class="card-header bord" id="headingOne">
       <h2 class="mb-0">
         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Collapsible Group Item #1
+          Math class 10K
         </button>
       </h2>
+        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
     </div>
 
-    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squidteboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+    <div  data-spy="scroll" id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" data-offset="0">
+      <div  data-spy="scroll" class="card-body" style="max-height: 300px;" data-target="#collapseOne" data-offset="0">
+          <table  class="table">
+              <tbody>
+              <tr>
+                  <td>
+                      Sicheva Kseniya
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+
+              <tr>
+                  <td>
+                      Petukhov Greb
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+
+               <tr>
+                  <td>
+                      Sicheva Kseniya
+                  </td>
+                   <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      Petukhov Greb
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      Sicheva Kseniya
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+
+              <tr>
+                  <td>
+                      Petukhov Greb
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+
+               <tr>
+                  <td>
+                      Sicheva Kseniya
+                  </td>
+                   <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                      Petukhov Greb
+                  </td>
+                  <td>
+                      Petukhov Greb
+                  </td>
+              </tr>
+              </tbody>
+          </table>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header" id="headingTwo">
+    <div class="card-header bord" id="headingTwo">
       <h2 class="mb-0">
         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Collapsible Group Item #2
+          Math class 10A
         </button>
       </h2>
+        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
     </div>
     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body">
+      <div class="card-body" data-spy="scroll">
         Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header" id="headingThree">
+    <div class="card-header bord" id="headingThree">
       <h2 class="mb-0">
         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
           Collapsible Group Item #3
         </button>
       </h2>
+        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
     </div>
     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
       <div class="card-body">
@@ -67,6 +232,7 @@
     </div>
   </div>
 </div>
+    </div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
