@@ -86,6 +86,7 @@ def register():
         return redirect('/login')
     return render_template('log_up.html', title='Регистрация', form=form)
 
+
 def check_email(user_type, session, form):
     if session.query(user_type).filter(user_type.email == form.email.data).first():
         return render_template('log_up.html', title='Регистрация',
