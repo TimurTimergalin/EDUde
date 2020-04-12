@@ -1,0 +1,69 @@
+body{
+background: #65A2CE;
+background-size: cover;
+
+}
+.log_out{
+background-color: white;
+color: #6896DC;
+padding: 9px 30px;
+border-radius: 27px;
+text-decoration: none;
+font-size: 18px;
+margin-right: 13px;
+box-shadow: 0 0 4px #818181;
+}
+.log_out:hover{
+background-color: #A8C7A8;
+color: white;
+text-decoration: none;
+}
+.photo{
+text-align: center;
+}
+.photo img{
+width: 350px;
+height: 250px;
+border-radius: 30px;
+margin: 40px;
+margin-left: 60px;
+box-shadow: 0 0 8px #818181;
+}
+.prof{
+font-size: 15px;
+font-weight: 100;
+color: white;
+padding: 40px 30px 20px 30px;
+background-color: #A8C7A8;
+margin-top: -35px;
+border-radius: 10px;
+box-shadow: 0 0 8px #818181;
+letter-spacing: 2px;
+}
+.classes{
+margin-left: 35%;
+margin-top: 40px;
+font-size: 10px;
+}
+.bloc{
+display: flex;
+}
+figcaption{
+color: white;
+margin-top: -10px;
+}
+.more{
+text-align: center;
+font-size: 13px;
+margin-left: 242px;
+padding: 7px 13px;
+background-color: #65A2CE;
+border-radius: 20px;
+width: 100px;
+color: #fff;
+margin-top: -35px;
+}
+.bord{
+height: 70px;
+vertical-align: middle;
+}
