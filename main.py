@@ -1,6 +1,6 @@
 import sys
 
-from flask_login import LoginManager, login_user
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.utils import redirect
 from create_user import create_user
 
@@ -12,7 +12,7 @@ from data.teacher import Teacher
 from data.user import User
 from create_user import create_user
 from flask_restful import Api
-from forms import RegistrationForm, LoginForm
+from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -22,6 +22,8 @@ app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
+app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 api = Api(app)
 api.add_resource(student_resources.StudentResource, '/api/1.0/student/<int:id>')
 api.add_resource(student_resources.StudentListResource, '/api/1.0/student')
@@ -55,10 +57,10 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         session = db_session.create_session()
-        user = session.query(Student).filter(Student.email == form.email.data).first()
+        user = user_type_choice(session, form)
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return redirect("/dashboard")
         return render_template('log_in.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -75,23 +77,55 @@ def register():
                                    message="Пароли не совпадают")
         # db_session.global_init('')
         session = db_session.create_session()
-        if form.user_type.data == 'ученик':
-            check_email(Student, session, form)
-            create_user(user_type=Student, surname=form.surname.data, name=form.name.data, email=form.email.data,
-                        password=form.password.data)
-        elif form.user_type.data == 'учитель':
-            check_email(Teacher, session, form)
-            create_user(user_type=Teacher, surname=form.surname.data, name=form.name.data, email=form.email.data,
-                        password=form.password.data)
+        if check_email(session, form):
+            if form.user_type.data == 'ученик':
+                create_user(user_type=Student, surname=form.surname.data, name=form.name.data, email=form.email.data,
+                            password=form.password.data)
+            elif form.user_type.data == 'учитель':
+                create_user(user_type=Teacher, surname=form.surname.data, name=form.name.data, email=form.email.data,
+                            password=form.password.data)
+        else:
+            return render_template('log_up.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
         return redirect('/login')
     return render_template('log_up.html', title='Регистрация', form=form)
 
 
-def check_email(user_type, session, form):
-    if session.query(user_type).filter(user_type.email == form.email.data).first():
-        return render_template('log_up.html', title='Регистрация',
-                               form=form,
-                               message="Такой пользователь уже есть")
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
+
+@app.route('/dashboard')
+def teacher():
+    # Student/Teacher check?
+    session = db_session.create_session()
+    current_user_session = current_user_choice(session)
+    return render_template('profile_of_teacher.html')
+
+
+def check_email(session, form):
+    if session.query(Teacher).filter(Teacher.email == form.email.data).first():
+        return 0
+    elif session.query(Student).filter(Student.email == form.email.data).first():
+        return 0
+    return 1
+
+
+def user_type_choice(session, form):
+    if session.query(Student).filter(Student.email == form.email.data).first():
+        return session.query(Student).filter(Student.email == form.email.data).first()
+    return session.query(Teacher).filter(Teacher.email == form.email.data).first()
+
+
+def current_user_choice(session):
+    if current_user.teacher_id:
+        return session.query(Teacher).filter(Teacher.id == current_user.id).first()
+    return session.query(Student).filter(Student.id == current_user.id).first()
+
 
 
 def main():

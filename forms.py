@@ -19,7 +19,7 @@ class RegistrationForm(FlaskForm):
     check_password = PasswordField('Повторите пароль', validators=[DataRequired()])
     user_type = RadioField('Учитель/Ученик', validators=[DataRequired()],
                            choices=[('учитель', 'Учитель'), ('ученик', 'Ученик')])
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField()
     submit = SubmitField('Зарегистрироваться')
 
 
