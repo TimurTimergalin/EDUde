@@ -13,12 +13,17 @@
 </head>
 <body class="bodys">
 <header>
-    <nav class="navbar navbar-light">
-        <a href="/"><img src="../static/img/logo.png" class="logo"></a>
+    <nav class="navbar navbar-light logo">
+        <div><a href="/"><img src="../static/img/logo.png"></a></div>
+
         {% if current_user.is_authenticated %}
-            <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
-        {% endif %}
+            <p>
+                <a class="log_up_btn shadow-lg" href="/profile">Профиль</a>
+                <a class="log_up_btn shadow-lg" href="/log_out">Выйти</a>
+                </p>
+        {% else %}
         {% block head %}{% endblock %}
+        {% endif %}
     </nav>
 </header>
 <main role="main" class="">
