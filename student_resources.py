@@ -3,6 +3,7 @@ from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.student import Student
 from create_user import create_user
+from api_func import *
 
 
 parser = reqparse.RequestParser()
@@ -10,15 +11,6 @@ parser.add_argument('surname', required=True)
 parser.add_argument('name', required=True)
 parser.add_argument('password', required=True)
 parser.add_argument('email', required=True)
-
-
-def abort_if_student_not_found(student_id):
-    session = db_session.create_session()
-    student = session.query(Student).get(student_id)
-    if not student:
-        abort(404, message=f"News {student_id} not found")
-        return
-    return student
 
 
 class StudentResource(Resource):

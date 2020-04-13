@@ -3,43 +3,11 @@ from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.class_room import ClassRoom
 from data.teacher import Teacher
+from api_func import *
 
 
 parser = reqparse.RequestParser()
 parser.add_argument('name')
-
-
-def abort_if_class_not_found(class_room_id):
-    session = db_session.create_session()
-    class_room = session.query(ClassRoom).get(class_room_id)
-    if not class_room:
-        abort(404, message=f"News {class_room_id} not found")
-        return
-    return class_room
-
-
-def abort_if_teacher_not_found(teacher_id):
-    session = db_session.create_session()
-    teacher = session.query(Teacher).get(teacher_id)
-    if not teacher:
-        abort(404, message=f"News {teacher_id} not found")
-        return
-    return teacher
-
-
-def abort_if_password_is_wrong(teacher_id, password):
-    session = db_session.create_session()
-    teacher = session.query(Teacher).get(teacher_id)
-    if not teacher.check_password(password):
-        abort(402, message="Wrong password")
-
-
-def abort_if_request_is_forbidden(teacher_id, class_room_id):
-    session = db_session.create_session()
-    teacher = session.query(Teacher).get(teacher_id)
-    class_room = session.query(ClassRoom).get(class_room_id)
-    if class_room.teacher_id != teacher.id:
-        abort(403, message=f"You are not allowed to get information about classroom #{class_room_id}")
 
 
 class ClassRoomResource(Resource):
