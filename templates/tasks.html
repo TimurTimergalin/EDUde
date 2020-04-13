@@ -10,7 +10,7 @@
           crossorigin="anonymous">
 <!--    {% block link %}{% endblock %}-->
 <!--    <link rel="stylesheet" href="../static/css/log_up.css">-->
-<link rel="stylesheet" href="../static/css/tasks.css">
+<!--<link rel="stylesheet" href="../static/css/tasks.css">-->
     <title>{{title}}</title>
 </head>
 <header>
@@ -27,14 +27,127 @@
     </nav>
 </header>
 <body>
+<style>
+    body{
+background: #65A2CE;
+background-size: cover;
+}
+.prof{
+font-size: 15px;
+font-weight: 100;
+color: white;
+padding: 40px 30px 20px 30px;
+background-color: #A8C7A8;
+margin-top: -35px;
+border-radius: 10px;
+box-shadow: 0 0 8px #818181;
+letter-spacing: 2px;
+}
+.log_out{
+background-color: white;
+color: #6896DC;
+padding: 9px 30px;
+border-radius: 27px;
+text-decoration: none;
+font-size: 18px;
+margin-right: 13px;
+box-shadow: 0 0 4px #818181;
+}
+.log_out:hover{
+background-color: #A8C7A8;
+color: white;
+text-decoration: none;
+}
 
+
+.tab{
+background: white;
+width: 95%;
+margin-top: 30px;
+opacity: 0.9;
+border-radius: 20px;
+overflow: scroll;
+max-height: 700px;
+box-shadow: 0 0 10px #818181;
+}
+.submt{
+text-align: center;
+background-color: #A8C7A8;
+width: 160px;
+border-radius: 40px;
+margin-bottom: 50px;
+margin-top: 50px;
+padding: 6px 11px;
+box-shadow: 0 0 4px #818181;
+}
+textarea{
+max-width: 190px;
+margin: 0;
+border: none;
+min-height: 40px;
+max-width: 190px;
+}
+.save{
+color: white;
+font-size: 17px;
+font-weight: 80;
+letter-spacing: 1px;
+}
+.save:hover{
+color: white;
+text-decoration: none;
+}
+.delete{
+color: #6896DC;
+font-size: 17px;
+margin: 0;
+padding: 0;
+}
+.delete:hover{
+text-decoration: none;
+color: #689775
+}
+.add{
+width: 200px;
+font-size: 12px;
+text-align: center;
+background-color: #A8C7A8;
+margin-bottom: 10px;
+border-radius: 40px;
+padding: 7px 9px;
+box-shadow: 0 0 4px #818181;
+margin-left: 33%;
+}
+.add_a{
+font-size: 15px;
+letter-spacing: 2px;
+font-weight: 100;
+}
+
+    tab{
+    margin-left: 50px;
+    }
+    .flex_box{
+    display:flex;
+    margin: 0 50px;
+    }
+</style>
+<div style="display:flex;">
 <div class="container add">
     <div>
     <a href="/new_task/1/2" class="save add_a"> Добавить задание </a>
     <!--передаем айди учителя и класса-->
     </div>
 </div>
-<table class="table table-borderless tab container">
+<div class="container add" style="margin-right: 6%">
+    <div>
+    <a href="/new_task/1/2" class="save add_a"> Добавить ученика </a>
+    <!--передаем айди учителя и класса-->
+    </div>
+</div>
+</div>
+<div class='flex_box'>
+<table class="table table-borderless tab container" style="margin-right: 50px;">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -113,6 +226,56 @@
     </tr>
   </tbody>
 </table>
+
+<table class="table table-borderless tab container" style="width: 400px;">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+        <th scope="col">ФИО ученика</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+
+      <tr>
+      <th scope="row">1</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
 <div class="submt container">
     <button type="submit" class="btn save">Сохранить</button>
 </div>

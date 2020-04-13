@@ -9,7 +9,8 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
 <!--    {% block link %}{% endblock %}-->
-    <link rel="stylesheet" href="../static/css/profile_base.css">
+    <link rel="stylesheet" href="../static/css/profile_of_teacher.css">
+
     <title>{{title}}</title>
 </head>
 <header>
@@ -25,37 +26,25 @@
 <!--        {% block head %}{% endblock %}-->
     </nav>
 </header>
-<style>
-    .lis{
-    border-radius: 20px;
-    }
-    .class{
-    float: right;
-    width: 700px;
-
-    }
-    .btn_add{
-    width: 40%;
-    border-radius: 20px;
-    }
-</style>
 <body>
 <div class="bloc" style="display: inline">
 <div class="photo" style="float: left">
     <img src="../static/img/desk.jpg">
     <figcaption>Фото профиля</figcaption>
 </div>
-    <div class="class" style="float:right; width: 500px; margin-right: 70px; margin-top: 40px;">
+     <div class="class">
+<!--         Или список предметов в профиле ученика-->
+        <h2>Список классов</h2>
 <ul class="list-group list-group-flush">
-  <li class="lis list-group-item">Cras justo odio</li>
-  <li class="list-group-item">Dapibus ac facilisis in</li>
-  <li class="list-group-item">Morbi leo risus</li>
-  <li class="list-group-item">Porta ac consectetur ac</li>
-  <li class="list-group-item">Vestibulum at eros</li>
-    <li  class="list-group-item btn_add"><a class=" log_up_btn shadow-lg" href="/login">Добавить класс</a></li>
+
+  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>
+  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>
+  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>
+  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>
+  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>
+
 </ul>
     </div>
 </div>
-<a class="log_up_btn shadow-lg" href="/add_class">Добавить класс</a>
 </body>
 </html>

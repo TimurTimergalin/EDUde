@@ -9,7 +9,8 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
 <!--    {% block link %}{% endblock %}-->
-    <link rel="stylesheet" href="../static/css/profile_base.css">
+    <link rel="stylesheet" href="../static/css/profile_of_teacher.css">
+
     <title>{{title}}</title>
 </head>
 <header>
@@ -26,143 +27,40 @@
     </nav>
 </header>
 <body>
-<div class="bloc">
-<div class="photo">
+<div class="bloc" style="display: inline">
+<div class="photo" style="float: left">
     <img src="../static/img/desk.jpg">
     <figcaption>Фото профиля</figcaption>
 </div>
-<div class="accordion classes" id="accordionExample" style="width:400px;">
-  <div class="card">
-    <div class="card-header bord" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-          Math class 10K
-        </button>
-      </h2>
-        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
-    </div>
-
-    <div  data-spy="scroll" id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample" data-offset="0">
-      <div  data-spy="scroll" class="card-body" style="max-height: 300px;" data-target="#collapseOne" data-offset="0">
-          <table  class="table">
-              <tbody>
-              <tr>
-                  <td>
-                      Sicheva Kseniya
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-
-              <tr>
-                  <td>
-                      Petukhov Greb
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-
-               <tr>
-                  <td>
-                      Sicheva Kseniya
-                  </td>
-                   <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      Petukhov Greb
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      Sicheva Kseniya
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-
-              <tr>
-                  <td>
-                      Petukhov Greb
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-
-               <tr>
-                  <td>
-                      Sicheva Kseniya
-                  </td>
-                   <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-              <tr>
-                  <td>
-                      Petukhov Greb
-                  </td>
-                  <td>
-                      Petukhov Greb
-                  </td>
-              </tr>
-              </tbody>
-          </table>
-      </div>
-    </div>
+    <div class="class">
+        <h2>Добавить класс</h2>
+<form class="forma">
+  <div class="form-group">
+    <label for="name_of_class">Название класса</label>
+    <input type="text" class="form-control" id="name_of_class" aria-describedby="name">
+    <small id="name" class="sml">Например, 10А</small>
   </div>
-  <div class="card">
-    <div class="card-header bord" id="headingTwo">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Math class 10A
-        </button>
-      </h2>
-        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-      <div class="card-body" data-spy="scroll">
-        Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Предмет</label>
+    <input type="text" class="form-control" id="exampleInputPassword1">
   </div>
-  <div class="card">
-    <div class="card-header bord" id="headingThree">
-      <h2 class="mb-0">
-        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-          Collapsible Group Item #3
-        </button>
-      </h2>
-        <div class="more"><a href="/profile/1" class="color:white;">Открыть</a></div>
+  <button type="submit" class="btn btn_add lis form_btns sv">Сохранить</button>
+    <button type="submit" class="btn btn_add lis form_btns">Добавить учеников</button>
+</form>
     </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-      <div class="card-body">
-          <table>
-              <tr>
-                  <td>000</td>
-                  <td>010</td>
-              </tr>
-              <tr>
-                  <td>000</td>
-                  <td>010</td>
-              </tr>
-          </table>
-<!--        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.-->
-      </div>
+
+     <div class="class">
+        <h2>Список классов</h2>
+<ul class="list-group list-group-flush">
+
+  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>
+  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>
+  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>
+  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>
+  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>
+
+</ul>
     </div>
-  </div>
 </div>
-    </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

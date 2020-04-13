@@ -1,0 +1,133 @@
+body{
+background: #65A2CE;
+background-size: cover;
+
+}
+.log_out{
+background-color: white;
+color: #6896DC;
+padding: 9px 30px;
+border-radius: 27px;
+text-decoration: none;
+font-size: 18px;
+margin-right: 13px;
+box-shadow: 0 0 4px #818181;
+}
+.log_out:hover{
+background-color: #A8C7A8;
+color: white;
+text-decoration: none;
+}
+.photo{
+text-align: center;
+}
+.photo img{
+width: 350px;
+height: 250px;
+border-radius: 30px;
+margin: 40px;
+margin-left: 60px;
+box-shadow: 0 0 8px #818181;
+}
+.prof{
+font-size: 15px;
+font-weight: 100;
+color: white;
+padding: 40px 30px 20px 30px;
+background-color: #A8C7A8;
+margin-top: -35px;
+border-radius: 10px;
+box-shadow: 0 0 8px #818181;
+letter-spacing: 2px;
+}
+.classes{
+margin-left: 35%;
+margin-top: 40px;
+font-size: 10px;
+}
+.bloc{
+display: flex;
+}
+figcaption{
+color: white;
+margin-top: -10px;
+}
+.more{
+text-align: center;
+font-size: 13px;
+margin-left: 242px;
+padding: 7px 13px;
+background-color: #65A2CE;
+border-radius: 20px;
+width: 100px;
+color: #fff;
+margin-top: -35px;
+}
+.bord{
+height: 70px;
+vertical-align: middle;
+}
+
+.bloc{
+display: inline;
+}
+.class{
+float:right; width: 500px;
+margin-right: -40px;
+margin-top: 40px;
+}
+.btn_add{
+width: 60%;
+border-radius: 25px;
+background: white;
+list-style-type: none;
+padding: 10px 5px;
+text-align:center
+}
+.lis{
+border-radius: 25px;
+margin-bottom: 10px;
+}
+.class_add a{
+color: white;
+text-decoration: none;
+opacity: 0.8;
+}
+.class_add:hover{
+background-color: #A8C7A5;
+}
+.class_add{
+background-color: #A8C7A8;
+}
+h2{
+color: white;
+margin-bottom: 10px;
+margin-left: 40px;
+font-weight: 60;
+}
+.forma{
+width: 300px;
+margin-top: 16px;
+}
+.form_btns{
+ padding: 5px 10px;
+ color: white;
+ background-color: #A8C7A8;
+ margin-top: 10px;
+ box-shadow: 0 0 4px #818181;
+}
+.form_btns:hover{
+color: white;
+background-color: #8BB78B
+}
+.forma .sv{
+width: 100px;
+}
+form .sml{
+color: white;
+opacity: 0.8;
+}
+label{
+color: white;
+font-size: 17px;
+}
