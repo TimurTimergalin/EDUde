@@ -18,9 +18,10 @@ class StudentResource(Resource):
         teacher = abort_if_student_not_found(student_id)
         return jsonify({'student': teacher.to_dict(only=('surname', 'name'))})
 
-    def delete(self, student_id):
+    def delete(self, student_id, student_password):
         session = db_session.create_session()
         student = abort_if_student_not_found(student_id)
+        abort_if_password_is_wrong(student_id, student_password)
         session.delete(student)
         session.commit()
         return jsonify({'success': 'OK'})
