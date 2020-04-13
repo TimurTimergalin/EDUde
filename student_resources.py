@@ -12,16 +12,29 @@ parser.add_argument('name', required=True)
 parser.add_argument('password', required=True)
 parser.add_argument('email', required=True)
 
+edit_parser = reqparse.RequestParser()
+parser.add_argument('surname')
+parser.add_argument('name')
+parser.add_argument('email')
+
 
 class StudentResource(Resource):
     def get(self, student_id):
         teacher = abort_if_student_not_found(student_id)
         return jsonify({'student': teacher.to_dict(only=('surname', 'name'))})
 
+    def put(self, student_id, student_password):
+        student = abort_if_teacher_not_found(student_id)
+        abort_if_password_is_wrong1(student_id, student_password)
+        args = edit_parser.parse_args()
+        for i in args:
+            setattr(student, i, args[i])
+        return jsonify({'success', 'OK'})
+
     def delete(self, student_id, student_password):
         session = db_session.create_session()
         student = abort_if_student_not_found(student_id)
-        abort_if_password_is_wrong(student_id, student_password)
+        abort_if_password_is_wrong1(student_id, student_password)
         session.delete(student)
         session.commit()
         return jsonify({'success': 'OK'})

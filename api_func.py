@@ -31,6 +31,13 @@ def abort_if_password_is_wrong(teacher_id, password):
         abort(402, message="Wrong password")
 
 
+def abort_if_password_is_wrong1(student_id, student_password):
+    session = db_session.create_session()
+    student = session.query(Student).get(student_id)
+    if not student.check_password(student_password):
+        abort(402, message="Wrong password")
+
+
 def abort_if_request_is_forbidden(teacher_id, class_room_id):
     session = db_session.create_session()
     teacher = session.query(Teacher).get(teacher_id)
