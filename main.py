@@ -100,10 +100,10 @@ def logout():
 
 
 @app.route('/dashboard')
+@login_required
 def teacher():
     # Student/Teacher check?
-    session = db_session.create_session()
-    current_user_session = current_user_choice(session)
+    # print(current_user.teacher)
     return render_template('profile_of_teacher.html')
 
 
@@ -119,13 +119,6 @@ def user_type_choice(session, form):
     if session.query(Student).filter(Student.email == form.email.data).first():
         return session.query(Student).filter(Student.email == form.email.data).first()
     return session.query(Teacher).filter(Teacher.email == form.email.data).first()
-
-
-def current_user_choice(session):
-    if current_user.teacher_id:
-        return session.query(Teacher).filter(Teacher.id == current_user.id).first()
-    return session.query(Student).filter(Student.id == current_user.id).first()
-
 
 
 def main():
