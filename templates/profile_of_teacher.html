@@ -34,18 +34,31 @@
 </div>
     <div class="class">
         <h2>Добавить класс</h2>
-<form class="forma">
-  <div class="form-group">
-    <label for="name_of_class">Название класса</label>
-    <input type="text" class="form-control" id="name_of_class" aria-describedby="name">
-    <small id="name" class="sml">Например, 10А</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Предмет</label>
-    <input type="text" class="form-control" id="exampleInputPassword1">
-  </div>
-  <button type="submit" class="btn btn_add lis form_btns sv">Сохранить</button>
-    <button type="submit" class="btn btn_add lis form_btns">Добавить учеников</button>
+<form action="" method="post">
+  <form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+    <p>
+        {{ form.name.label }}<br>
+        {{ form.name(class="form-control", type="name") }}<br>
+        {% for error in form.name.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.course.label }}<br>
+        {{ form.course(class="form-control", type="course") }}<br>
+        {% for error in form.course.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    {{message}}
+</form>
 </form>
     </div>
 

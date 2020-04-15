@@ -9,10 +9,11 @@ from flask import Flask, render_template
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
+from data.class_room import ClassRoom
 from data.user import User
 from create_user import create_user
 from flask_restful import Api
-from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY
+from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassroomForm
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -39,6 +40,11 @@ api.add_resource(task_resources.TaskListResource, '/api/task/<int:teacher_id>/<s
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+
+
+@app.errorhandler(401)
+def error401(e):
+    return redirect('/login')
 
 
 @login_manager.user_loader
@@ -99,20 +105,31 @@ def logout():
     return redirect("/")
 
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=["GET", "POST"])
 @login_required
 def teacher():
     # Student/Teacher check?
     # print(current_user.teacher)
-    return render_template('profile_of_teacher.html')
+    form = AddClassroomForm()
+    if form.validate_on_submit():
+        session = db_session.create_session()
+        if session.query(ClassRoom).filter(ClassRoom.name == form.name.data).first():
+            return render_template('profile_of_teacher.html', form=form,
+                                   message="Такой класс уже есть")
+        classroom = ClassRoom()
+        classroom.name = form.name.data
+        classroom.teacher_id = current_user.teacher_id
+        session.add(classroom)
+        session.commit()
+    return render_template('profile_of_teacher.html', form=form)
 
 
 def check_email(session, form):
     if session.query(Teacher).filter(Teacher.email == form.email.data).first():
-        return 0
+        return True
     elif session.query(Student).filter(Student.email == form.email.data).first():
-        return 0
-    return 1
+        return False
+    return True
 
 
 def user_type_choice(session, form):
