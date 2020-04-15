@@ -10,10 +10,8 @@
 
   <div class="form-group">
        {{ form.name_of_class.label }}
-<!--    <label for="name_of_class">Название класса</label>-->
-      {{ form.name_of_class(type="text", class="form-control", aria-describedby="name") }}
-<!--    <input type="text" class="form-control" id="name_of_class" aria-describedby="name">-->
-    <small id="name" class="sml">Например, 10А</small>
+      {{ form.name_of_class(type="text", class="form-control") }}
+    <small class="sml">Например, 10А</small>
       {% for error in form.name_of_class.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
@@ -22,9 +20,7 @@
   </div>
   <div class="form-group">
       {{ form.subj.label }}
-<!--    <label for="exampleInputPassword1">Предмет</label>-->
       {{ form.subj(type="text", class="form-control") }}
-<!--    <input type="text" class="form-control" id="exampleInputPassword1">-->
       {% for error in form.subj.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
@@ -37,7 +33,6 @@
                 {{ error }}
             </p>
         {% endfor %}
-<!--  <button type="submit" class="btn btn_add lis form_btns sv">Сохранить</button>-->
     <a class="btn btn_add lis form_btns" href="/">Добавить учеников</a>
 </form>
     </div>
