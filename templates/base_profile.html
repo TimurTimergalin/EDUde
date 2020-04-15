@@ -8,7 +8,7 @@
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
           crossorigin="anonymous">
-<!--    {% block link %}{% endblock %}-->
+    {% block link %}{% endblock %}
     <link rel="stylesheet" href="../static/css/profile_of_teacher.css">
 
     <title>{{title}}</title>
@@ -17,13 +17,13 @@
     <nav class="navbar navbar-light">
         <a href="/start"><img src="../static/img/logo.png" class="logo"></a>
         <p class="prof">Profile</p>
-<!--        {% if current_user.is_authenticated %}-->
+        {% if current_user.is_authenticated %}
             <a class="log_out" href="/logout">
 <!--                {{ current_user.name }}-->
                 Выйти
             </a>
-<!--        {% endif %}-->
-<!--        {% block head %}{% endblock %}-->
+        {% endif %}
+        {% block head %}{% endblock %}
     </nav>
 </header>
 <body>
@@ -32,18 +32,21 @@
     <img src="../static/img/desk.jpg">
     <figcaption>Фото профиля</figcaption>
 </div>
+    {% block forms %}{% endblock %}
      <div class="class">
+         {% block list %}
 <!--         Или список предметов в профиле ученика-->
-        <h2>Список классов</h2>
-<ul class="list-group list-group-flush">
+<!--        <h2>Список классов</h2>-->
+<!--<ul class="list-group list-group-flush">-->
 
-  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>
-  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>
-  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>
+<!--  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>-->
+<!--  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>-->
+<!--  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>-->
+<!--  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>-->
+<!--  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>-->
 
-</ul>
+<!--</ul>-->
+         {% endblock %}
     </div>
 </div>
 </body>

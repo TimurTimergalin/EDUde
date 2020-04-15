@@ -32,7 +32,9 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Войти')
 
 
-class AddClassroomForm(FlaskForm):
-    name = StringField('Название', validators=[DataRequired()])
-    course = StringField('Предмет', validators=[DataRequired()])
+class AddClassForm(FlaskForm):
+    """AddClassForm
+       WTF model of Add class form"""
+    name_of_class = StringField('Название класса', validators=[DataRequired()])
+    subj = StringField('Предмет', validators=[DataRequired()])
     submit = SubmitField('Сохранить')

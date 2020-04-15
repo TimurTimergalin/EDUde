@@ -13,7 +13,7 @@ from data.class_room import ClassRoom
 from data.user import User
 from create_user import create_user
 from flask_restful import Api
-from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassroomForm
+from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -110,6 +110,8 @@ def logout():
 def teacher():
     # Student/Teacher check?
     # print(current_user.teacher)
+    form = AddClassForm()
+    return render_template('profile_of_teacher.html', form=form)
     form = AddClassroomForm()
     # print(current_user.class_rooms)
     if form.validate_on_submit():
