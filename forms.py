@@ -38,4 +38,3 @@ class AddClassForm(FlaskForm):
     name_of_class = StringField('Название класса', validators=[DataRequired()])
     subj = StringField('Предмет', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
-
