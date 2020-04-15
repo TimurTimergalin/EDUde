@@ -111,6 +111,7 @@ def teacher():
     # Student/Teacher check?
     # print(current_user.teacher)
     form = AddClassroomForm()
+    # print(current_user.class_rooms)
     if form.validate_on_submit():
         session = db_session.create_session()
         if session.query(ClassRoom).filter(ClassRoom.name == form.name.data).first():
@@ -118,10 +119,24 @@ def teacher():
                                    message="Такой класс уже есть")
         classroom = ClassRoom()
         classroom.name = form.name.data
-        classroom.teacher_id = current_user.teacher_id
+        # classroom.teacher_id = current_user.teacher_id  # wtf?????
+        classroom.teacher_id = 1
         session.add(classroom)
         session.commit()
+        redirect('/dashboard')
     return render_template('profile_of_teacher.html', form=form)
+
+
+@app.route('/tasks', methods=['GET', 'POST'])
+@login_required
+def tasks():
+    return render_template('tasks.html')
+
+
+@app.route('/new_task')
+@login_required
+def new_task():
+    return render_template('new_task.html')
 
 
 def check_email(session, form):
