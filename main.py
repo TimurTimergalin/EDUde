@@ -111,8 +111,6 @@ def teacher():
     # Student/Teacher check?
     # print(current_user.teacher)
     form = AddClassForm()
-    return render_template('profile_of_teacher.html', form=form)
-    form = AddClassroomForm()
     # print(current_user.class_rooms)
     if form.validate_on_submit():
         session = db_session.create_session()

@@ -13,15 +13,7 @@
       {{ form.name_of_class(type="text", class="form-control") }}
     <small class="sml">Например, 10А</small>
       {% for error in form.name_of_class.errors %}
-<form action="" method="post">
-  <form action="" method="post">
-    {{ form.hidden_tag() }}
-    {{ form.csrf_token }}
-    <p>
-        {{ form.name.label }}<br>
-        {{ form.name(class="form-control", type="name") }}<br>
-        {% for error in form.name.errors %}
-            <p class="alert alert-danger" role="alert">
+      <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
@@ -30,15 +22,11 @@
       {{ form.subj.label }}
       {{ form.subj(type="text", class="form-control") }}
       {% for error in form.subj.errors %}
-    </p>
-    <p>
-        {{ form.course.label }}<br>
-        {{ form.course(class="form-control", type="course") }}<br>
-        {% for error in form.course.errors %}
-            <p class="alert alert-danger" role="alert">
+      <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
+    </p>
   </div>
     {{ form.submit(type="submit", class="btn btn_add lis form_btns sv") }}
     {% for error in form.submit.errors %}
@@ -47,10 +35,8 @@
             </p>
         {% endfor %}
     <a class="btn btn_add lis form_btns" href="/">Добавить учеников</a>
-    </p>
-    <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
     {{message}}
-</form>
+
 </form>
     </div>
 {% endblock %}
