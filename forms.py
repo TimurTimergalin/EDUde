@@ -32,5 +32,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Войти')
 
 
-
+class AddClassForm(FlaskForm):
+    """AddClassForm
+       WTF model of Add class form"""
+    name_of_class = StringField('Название класса', validators=[DataRequired()])
+    subj = StringField('Предмет', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
 
