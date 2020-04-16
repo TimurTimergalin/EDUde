@@ -8,6 +8,8 @@ from data import db_session
 import werkzeug
 from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
+from data.student import Student
+from data.teacher import Teacher
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
@@ -15,9 +17,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
     is_teacher = Cl(sql.Boolean)
-    teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'), nullable=True)
+    teacher_number = Cl(sql.Integer, sql.ForeignKey('teachers.id'), nullable=True)
     teacher = orm.relation('Teacher')
-    student_id = Cl(sql.Integer, sql.ForeignKey('students.id'), nullable=True)
+    student_number = Cl(sql.Integer, sql.ForeignKey('students.id'), nullable=True)
     student = orm.relation('Student')
 
     def get_id(self):
@@ -27,3 +29,8 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         if self.is_teacher:
             return self.teacher
         return self.student
+
+    def user_type(self):
+        if self.is_teacher == 1:
+            return Teacher
+        return Student

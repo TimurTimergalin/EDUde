@@ -65,7 +65,7 @@ def login():
         session = db_session.create_session()
         user = user_type_choice(session, form)
         if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
+            login_user(user.users[0], remember=form.remember_me.data)
             return redirect("/dashboard")
         return render_template('log_in.html',
                                message="Неправильный логин или пароль",
@@ -107,24 +107,23 @@ def logout():
 
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
-def teacher():
-    # Student/Teacher check?
-    # print(current_user.teacher)
-    form = AddClassForm()
-    # print(current_user.class_rooms)
-    if form.validate_on_submit():
-        session = db_session.create_session()
-        if session.query(ClassRoom).filter(ClassRoom.name == form.name.data).first():
-            return render_template('profile_of_teacher.html', form=form,
-                                   message="Такой класс уже есть")
-        classroom = ClassRoom()
-        classroom.name = form.name.data
-        # classroom.teacher_id = current_user.teacher_id  # wtf?????
-        classroom.teacher_id = 1
-        session.add(classroom)
-        session.commit()
-        redirect('/dashboard')
-    return render_template('profile_of_teacher.html', form=form)
+def dashboard():
+    if current_user.user_type() == Teacher:
+        form = AddClassForm()
+        if form.validate_on_submit():
+            session = db_session.create_session()
+            if session.query(ClassRoom).filter(ClassRoom.name == form.name.data).first():
+                return render_template('profile_of_teacher.html', form=form,
+                                       message="Такой класс уже есть")
+            classroom = ClassRoom()
+            classroom.name = form.name.data
+            classroom.teacher_number = current_user.teacher_number  # wtf?????
+            session.add(classroom)
+            session.commit()
+            redirect('/dashboard')
+        return render_template('profile_of_teacher.html', form=form)
+    else:
+        return render_template('profile_of_student.html')
 
 
 @app.route('/tasks', methods=['GET', 'POST'])

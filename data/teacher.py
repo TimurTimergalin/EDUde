@@ -35,9 +35,10 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
     subjects = orm.relationship('Subject', secondary='teacher_to_subject')
     students = orm.relationship('Student', secondary='teacher_to_student')
     class_rooms = orm.relation('ClassRoom', back_populates='teacher')
+    users = orm.relation('User', back_populates='teacher')
 
     def __repr__(self):
-        return f'{self.surname} {self.name}#{self.id}, учитель'
+        return f'{self.surname} {self.name}#{self.id}, teacher'
 
     def add_student(self, student):
         """Teacher.add_student

@@ -11,9 +11,11 @@ def create_user(**kw):
     if kw['user_type'] == Teacher:
         user = Teacher()
         base_user.teacher = user
+        base_user.is_teacher = 1
     else:
         user = Student()
         base_user.student = user
+        base_user.is_teacher = 0
     user.surname = kw['surname']
     user.name = kw['name']
     user.email = kw['email']

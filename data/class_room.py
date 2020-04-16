@@ -14,7 +14,7 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'class_rooms'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
-    name = Cl(sql.Integer)
+    name = Cl(sql.String)
     subject_id = Cl(sql.Integer, sql.ForeignKey('subjects.id'))
     subject = orm.relation('Subject')
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
