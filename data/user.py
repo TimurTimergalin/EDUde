@@ -14,6 +14,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'users'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
+    is_teacher = Cl(sql.Boolean)
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'), nullable=True)
     teacher = orm.relation('Teacher')
     student_id = Cl(sql.Integer, sql.ForeignKey('students.id'), nullable=True)
