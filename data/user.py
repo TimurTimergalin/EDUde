@@ -18,3 +18,11 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     teacher = orm.relation('Teacher')
     student_id = Cl(sql.Integer, sql.ForeignKey('students.id'), nullable=True)
     student = orm.relation('Student')
+
+    def get_id(self):
+        return self.id
+
+    def get_user(self):
+        if self.teacher_id is None:
+            return self.student
+        return self.teacher
