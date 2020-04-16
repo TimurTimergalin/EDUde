@@ -50,3 +50,6 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
                 return 2
             setattr(self, i, kwargs[i])
         return 0
+
+    def user_type(self):
+        return Student
