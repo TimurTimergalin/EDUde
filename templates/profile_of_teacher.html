@@ -44,12 +44,9 @@
      <div class="class">
         <h2>Список классов</h2>
 <ul class="list-group list-group-flush">
-
-  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>
-  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>
-  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>
+   {% for classroom in classrooms %}
+        <li class="btn_add lis"><a href="/tasks">{{ classroom.name }}</a></li>
+   {% endfor %}
 
 </ul>
      </div>

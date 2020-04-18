@@ -37,7 +37,6 @@ api.add_resource(classroom_resources.ClassRoomListResource,
 api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>/<string:teacher_password>/<int:task_id>')
 api.add_resource(task_resources.TaskListResource, '/api/task/<int:teacher_id>/<string:teacher_password>')
 
-
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
@@ -108,20 +107,24 @@ def logout():
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
 def dashboard():
+    session = db_session.create_session()
     if current_user.user_type() == Teacher:
         form = AddClassForm()
         if form.validate_on_submit():
-            session = db_session.create_session()
-            if session.query(ClassRoom).filter(ClassRoom.name == form.name.data).first():
+            if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
                 return render_template('profile_of_teacher.html', form=form,
                                        message="Такой класс уже есть")
             classroom = ClassRoom()
-            classroom.name = form.name.data
-            classroom.teacher_number = current_user.teacher_number  # wtf?????
+            classroom.name = form.name_of_class.data
+            classroom.teacher_id = current_user.teacher_id
+            # classroom.subject = form.subj.data  # id?
             session.add(classroom)
             session.commit()
             redirect('/dashboard')
-        return render_template('profile_of_teacher.html', form=form)
+        print(session.query(ClassRoom).filter(
+            ClassRoom.teacher_id == current_user.teacher_id))
+        return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
+            ClassRoom.teacher_id == current_user.teacher_id))
     else:
         return render_template('profile_of_student.html')
 
@@ -129,7 +132,12 @@ def dashboard():
 @app.route('/tasks', methods=['GET', 'POST'])
 @login_required
 def tasks():
-    return render_template('tasks.html')
+    if current_user.teacher_id:
+        session = db_session.create_session()
+        return render_template('tasks.html', student_lst=session.query(Teacher).filter(
+            Teacher.id == current_user.teacher_id).first().class_rooms)
+    else:
+        return render_template('bad_request.html')
 
 
 @app.route('/new_task')
