@@ -1,4 +1,3 @@
-{% extends "base.html" %}
 {% block link %}
 <link rel="stylesheet" href="../static/css/log_up.css">
 <link rel="stylesheet" href="../static/css/log__in.css">
@@ -6,13 +5,15 @@
 {% endblock %}
 
 {% block content %}
-
 <body class="bodys">
 <div>
-<div class="div_normal">
+<div class="div_normal" style="min-width: 500px;font-size: 10px">
     <div class="div_mes">
-        <p class="success">Вы успешно зарегистрировались</p>
-        <img src="../static/img/check.png" class="img_suc">
+        <p class="success">Возникли временные неполадки</p>
+        <div style="margin-top: -12px; margin-bottom: -10px">
+            <img src="../static/img/bad.png" class="img_suc" style="transform: scale(0.8); padding: 0; margin:0">
+        </div>
+
     </div>
     <br>
     <div class="div_b">
@@ -21,5 +22,4 @@
 </div>
 </div>
 </body>
-
 {% endblock %}
