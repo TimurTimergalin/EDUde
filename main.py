@@ -134,8 +134,8 @@ def dashboard():
 def tasks():
     if current_user.teacher_id:
         session = db_session.create_session()
-        return render_template('tasks.html', student_lst=session.query(Teacher).filter(
-            Teacher.id == current_user.teacher_id).first().class_rooms)
+        return render_template('tasks.html', teacher_id=current_user.teacher_id)
+        # classroom id ?
     else:
         return render_template('bad_request.html')
 
@@ -143,7 +143,7 @@ def tasks():
 @app.route('/new_task')
 @login_required
 def new_task():
-    return render_template('new_task.html')
+    return render_template('new_task.html', current_user=current_user)
 
 
 def check_email(session, form):
