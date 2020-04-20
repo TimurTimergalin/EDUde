@@ -24,11 +24,14 @@ class StudentResource(Resource):
         return jsonify({'student': teacher.to_dict(only=('surname', 'name'))})
 
     def put(self, student_id, student_password):
-        student = abort_if_teacher_not_found(student_id)
+        session = db_session.create_session()
+        student = session.query(Student).get(student_id)
+        abort_if_teacher_not_found(student_id)
         abort_if_password_is_wrong1(student_id, student_password)
         args = edit_parser.parse_args()
         for i in args:
             setattr(student, i, args[i])
+        session.commit()
         return jsonify({'success', 'OK'})
 
     def delete(self, student_id, student_password):
@@ -47,9 +50,4 @@ class StudentListResource(Resource):
         return jsonify({'students': [item.to_dict(
             only=('title', 'content', 'user.name')) for item in student]})
 
-    def post(self):
-        args = parser.parse_args()
-        args['user_type'] = 'ученик'
-        create_user(**args)
-        return jsonify({'success': 'OK'})
 

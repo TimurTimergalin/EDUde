@@ -7,7 +7,10 @@ from api_func import *
 
 
 parser = reqparse.RequestParser()
-parser.add_argument('name')
+parser.add_argument('name', required=True)
+
+edit_parser = reqparse.RequestParser()
+edit_parser.add_argument('name')
 
 
 class ClassRoomResource(Resource):
@@ -17,6 +20,20 @@ class ClassRoomResource(Resource):
         abort_if_password_is_wrong(teacher_id, teacher_password)
         abort_if_request_is_forbidden(teacher_id, class_room_id)
         return jsonify({'classroom': class_room.to_dict(only=('id', 'name'))})
+
+    def put(self, teacher_id, teacher_password, class_room_id):
+        abort_if_teacher_not_found(teacher_id)
+        abort_if_class_not_found(class_room_id)
+        session = db_session.create_session()
+        class_room = session.query(ClassRoom).get(class_room_id)
+        abort_if_password_is_wrong(teacher_id, teacher_password)
+        abort_if_request_is_forbidden(teacher_id, class_room_id)
+        args = edit_parser.parse_args()
+        if not args:
+            abort(400, message='Empty request')
+        class_room.name = args['name']
+        session.commit()
+        return jsonify({'success': 'OK'})
 
     def delete(self, teacher_id, teacher_password, class_room_id):
         class_room = abort_if_class_not_found(class_room_id)
