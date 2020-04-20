@@ -140,6 +140,12 @@ def tasks():
         return render_template('bad_request.html')
 
 
+@app.route('/api')
+def api():
+    return render_template('api.html', title='Api проекта')
+
+
+
 @app.route('/new_task')
 @login_required
 def new_task():
