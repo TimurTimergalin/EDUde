@@ -1,0 +1,112 @@
+.project{
+height: 750px;
+background: #76ABFB url('../img/group.png') no-repeat 0px -20px;
+background-size: cover;
+overflow: hidden;
+}
+.what{
+font-size: 64px;
+font-weight: 100;
+letter-spacing: 2px;
+text-align: center;
+padding: 10px 35px 10px 20px;
+background-color: #93AE93;
+border-radius: 30px;
+width: 60%;
+margin:auto;
+height: 110px;
+margin-top: -30px;
+overflow: hidden;
+box-shadow: 0 0 3px #818181;
+color: white;
+}
+.item{
+background-color: #4265C0;
+margin:0;
+width: 32%;
+height: 70%;
+border-radius: 40px;
+margin-top: 40px;
+display: inline;
+color: #ECECEC;
+letter-spacing: 2px;
+font-weight: regular;
+padding: 10px;
+box-shadow: 0 0 6px #818181;
+}
+.persons{
+display: inline;
+}
+.item:last-child{
+float: right;
+margin-right: 11%;
+}
+.item:first-child{
+float: left;
+margin-left: 11%;
+}
+img{
+width: 98px;
+height: 93px
+}
+.flex{
+height: 100px;
+display:flex;
+text-align: center;
+}
+h4{
+margin-left: 60px;
+margin-top: 30px;
+}
+ul{
+list-style-type: none;
+}
+.item:first-child ul{
+margin-top: 45px;
+}
+li{
+margin-bottom: 40px;
+margin-top: 20px;
+width: 85%;
+line-height: 25px;
+}
+.item::before{
+transform: rotate(-90deg);
+font-size: 90px;
+color: white;
+opacity: 0.8;
+margin-top: 178px;
+margin-left: -195px;
+position: absolute
+}
+.item:first-child::before{
+content: "Ученик";
+}
+.item:last-child::before{
+content: "Учитель";
+float: left;
+margin-top: 178px;
+margin-left: -210px;
+}
+.effect{
+position: absolute;
+width: 1051px;
+height: 1051px;
+border-radius: 52px;
+transform: rotate(-40deg);
+z-index: 1;
+}
+
+.ab{
+width: 120px;
+padding: 10px;
+margin-top: 20px;
+}
+.ab a{
+border-radius: 10px;
+background: transparent;
+font-size: 17px;
+color: white;
+margin: 20px 0 0 15px;
+padding-top: 10px;
+}

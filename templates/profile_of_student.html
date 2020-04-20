@@ -1,49 +1,17 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../static/css/labels.css">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    {% block link %}{% endblock %}
+{% extends "base_profile.html" %}
+    {% block link %}
     <link rel="stylesheet" href="../static/css/profile_of_teacher.css">
-
-    <title>{{title}}</title>
-</head>
-<header>
-    <nav class="navbar navbar-light">
-        <a href="/"><img src="../static/img/logo.png" class="logo"></a>
-        <p class="prof">Profile</p>
-        {% if current_user.is_authenticated %}
-            <a class="log_out" href="/logout">
-                Выйти
-            </a>
-        {% endif %}
+    {% endblock %}
         {% block head %}{% endblock %}
-    </nav>
-</header>
-<body>
-<div class="bloc" style="display: inline">
-<div class="photo" style="float: left">
-    <img src="../static/img/desk.jpg">
-    <figcaption>Фото профиля</figcaption>
-</div>
 
+
+{% block list %}
      <div class="class">
         <h2>Список классов</h2>
-<ul class="list-group list-group-flush">
-
-  <li class="btn_add lis"><a href="/">Cras justo odio</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Dapibus ac facilisis in</a></li>
-  <li class="btn_add lis" style="border-radius: 20px;"><a>Morbi leo risus</a></li>
-  <li class="btn_add lis" ><a>Porta ac consectetur ac</a></li>
-  <li class="btn_add lis" ><a>Vestibulum at eros</a></li>
-
-</ul>
+         <ul class="list-group list-group-flush">
+         {% for i in range(5) %}
+          <li class="btn_add lis"><a href="/{{loop.index}}">Cras justo odio</a></li>
+             {% endfor %}
+        </ul>
      </div>
-</div>
-</body>
-</html>
+{% endblock %}

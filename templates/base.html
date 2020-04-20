@@ -11,11 +11,23 @@
     {% block link %}{% endblock %}
     <title>{{title}}</title>
 </head>
-<body class="bodys">
+<body>
+<div class="bodys">
 <header>
-    <nav class="navbar navbar-light logo">
+    <nav class="navbar navbar-expand-lg navbar-light logo">
         <div><a href="/"><img src="../static/img/logo.png"></a></div>
 
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item ab">
+        <a class="" href="#about">О проекте</a>
+      </li>
+      <li class="nav-item ab">
+        <a class="" href="#">Api сайта</a>
+      </li>
+    </ul>
+
+    <span class="navbar-text">
         {% if current_user.is_authenticated %}
             <p>
                 <a class="log_up_btn shadow-lg" href="/dashboard">Профиль</a>
@@ -24,11 +36,16 @@
         {% else %}
         {% block head %}{% endblock %}
         {% endif %}
-    </nav>
+    </span>
+  </div>
+</nav>
 </header>
-<main role="main" class="">
+<main role="main">
     {% block content %}
     {% endblock %}
         </main>
+</div>
 </body>
+{% block pages %}
+{% endblock %}
 </html>
