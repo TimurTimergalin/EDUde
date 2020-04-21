@@ -45,7 +45,8 @@
         <h2>Список классов</h2>
 <ul class="list-group list-group-flush">
    {% for classroom in classrooms %}
-        <li class="btn_add lis"><a href="/tasks">{{ classroom.name }}</a></li>
+        <li class="btn_add lis"><a href="/tasks{{ classrom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a></li>
+<!--    Обработчик типа /tasks/<int:class_id>/<int:class_teach_id>-->
    {% endfor %}
 
 </ul>
