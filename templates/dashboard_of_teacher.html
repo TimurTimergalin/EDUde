@@ -1,0 +1,52 @@
+{% extends "base_profile.html" %}
+{% block buttons %}
+
+<div style="display:flex;">
+<div class="container add">
+    <div>
+    <a href="/new_task" class="save add_a"> Добавить задание </a>
+    <!--передаем айди учителя и класса-->
+    </div>
+</div>
+<div class="container add" style="margin-right: 6%">
+    <div>
+    <a href="/new_task/1/2" class="save add_a"> Добавить ученика </a>
+    <!--передаем айди учителя и класса-->
+    </div>
+</div>
+</div>
+{% endblock %}
+{% block tasks %}
+    <tr>
+      <th scope="row">1</th>
+      <td><textarea wrap='soft'>Mark</textarea></td>
+        <td><input type="date" value="2020-08-09" style="border: none"></td>
+      <td><textarea wrap='soft'>Mark</textarea></td>
+        <td><textarea wrap='soft'>Mark</textarea></td>
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+{% endblock %}
+
+{% block study %}
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+        <th scope="col">ФИО ученика</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+
+        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+    </tr>
+
+  </tbody>
+{% endblock %}

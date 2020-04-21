@@ -112,7 +112,7 @@ def dashboard():
         form = AddClassForm()
         if form.validate_on_submit():
             if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
-                return render_template('profile_of_teacher.html', form=form,
+                return render_template('dashboard_of_teacher.html', form=form,
                                        message="Такой класс уже есть")
             classroom = ClassRoom()
             classroom.name = form.name_of_class.data
@@ -123,7 +123,7 @@ def dashboard():
             redirect('/dashboard')
         print(session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
-        return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
+        return render_template('dashboard_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
     else:
         return render_template('profile_of_student.html')

@@ -1,17 +1,38 @@
 {% extends "base_profile.html" %}
-    {% block link %}
-    <link rel="stylesheet" href="../static/css/profile_of_teacher.css">
-    {% endblock %}
-        {% block head %}{% endblock %}
 
+<!--{% block list %}-->
+<!--     <div class="class">-->
+<!--        <h2>Список классов</h2>-->
+<!--         <ul class="list-group list-group-flush">-->
+<!--         {% for i in range(5) %}-->
+<!--          <li class="btn_add lis"><a href="/{{loop.index}}">Cras justo odio</a></li>-->
+<!--             {% endfor %}-->
+<!--        </ul>-->
+<!--     </div>-->
+<!--{% endblock %}-->
+{% block tasks %}
+<tr>
+      <th scope="row">1</th>
+      <td><p>Mark</p></td>
+        <td>2020-08-09</td>
+      <td><p>Mark</p></td>
+        <td><p>Mark</p></td>
+    </tr>
+{% endblock %}
 
-{% block list %}
-     <div class="class">
-        <h2>Список классов</h2>
-         <ul class="list-group list-group-flush">
-         {% for i in range(5) %}
-          <li class="btn_add lis"><a href="/{{loop.index}}">Cras justo odio</a></li>
-             {% endfor %}
-        </ul>
-     </div>
+{% block study %}
+<thead>
+    <tr>
+        <th scope="col">Класс\предмет</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="#">10А математика</a></td>
+    </tr>
+    <tr>
+        <td><a href="#">10А информатика</a></td>
+    </tr>
+
+  </tbody>
 {% endblock %}
