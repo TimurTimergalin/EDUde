@@ -1,33 +1,6 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../static/css/labels.css">
-    <link rel="stylesheet" href="../static/css/table.css">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-<!--    {% block link %}{% endblock %}-->
-<!--    <link rel="stylesheet" href="../static/css/log_up.css">-->
-<link rel="stylesheet" href="../static/css/tasks.css">
-    <title>{{title}}</title>
-</head>
-<header>
-    <nav class="navbar navbar-light">
-        <a href="/"><img src="../static/img/logo.png" class="logo"></a>
-        <p class="prof">Tasks</p>
-<!--        {% if current_user.is_authenticated %}-->
-            <a class="log_out" href="/logout">
-<!--                {{ current_user.name }}-->
-                Выйти
-            </a>
-<!--        {% endif %}-->
-<!--        {% block head %}{% endblock %}-->
-    </nav>
-</header>
-<body>
+{% extends "base_profile.html" %}
+{% block buttons %}
+
 <div style="display:flex;">
 <div class="container add">
     <div>
@@ -42,18 +15,8 @@
     </div>
 </div>
 </div>
-<div class='flex_box'>
-<table class="table table-borderless tab container" style="margin-right: 50px;">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Название</th>
-      <th scope="col">Дедлайн</th>
-      <th scope="col">Домашнее задание</th>
-        <th scope="col">Куда отправлять</th>
-    </tr>
-  </thead>
-  <tbody>
+{% endblock %}
+{% block tasks %}
     <tr>
       <th scope="row">1</th>
       <td><textarea wrap='soft'>Mark</textarea></td>
@@ -62,10 +25,10 @@
         <td><textarea wrap='soft'>Mark</textarea></td>
         <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
     </tr>
-  </tbody>
-</table>
+{% endblock %}
 
-<table class="table table-borderless tab container" style="width: 400px;">
+{% block study %}
+  </tbody>
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -87,11 +50,4 @@
     </tr>
 
   </tbody>
-</table>
-</div>
-<div class="submt container">
-    <button type="submit" class="btn save">Сохранить</button>
-</div>
-
-</body>
-</html>
+{% endblock %}

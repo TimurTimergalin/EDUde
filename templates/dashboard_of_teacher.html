@@ -8,12 +8,6 @@
     <!--передаем айди учителя и класса-->
     </div>
 </div>
-<div class="container add" style="margin-right: 6%">
-    <div>
-    <a href="/new_task/1/2" class="save add_a"> Добавить ученика </a>
-    <!--передаем айди учителя и класса-->
-    </div>
-</div>
 </div>
 {% endblock %}
 {% block tasks %}
@@ -28,24 +22,17 @@
 {% endblock %}
 
 {% block study %}
-  <thead>
+<thead>
     <tr>
-      <th scope="col">#</th>
-        <th scope="col">ФИО ученика</th>
+        <th scope="col">Класс\предмет</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th scope="row">1</th>
-      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
-
-        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+      <td><a href="#">10А математика</a></td>
     </tr>
     <tr>
-      <th scope="row">2</th>
-      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
-
-        <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
+        <td><a href="#">10А информатика</a></td>
     </tr>
 
   </tbody>
