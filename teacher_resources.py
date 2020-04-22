@@ -48,6 +48,6 @@ class TeacherListResource(Resource):
         session = db_session.create_session()
         teacher = session.query(Teacher).all()
         return jsonify({'teachers': [item.to_dict(
-            only=('title', 'content', 'user.name')) for item in teacher]})
+            only=('id', 'name', 'surnmae')) for item in teacher]})
 
 
