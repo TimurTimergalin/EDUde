@@ -126,7 +126,7 @@ def dashboard():
         return render_template('dashboard_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
     else:
-        return render_template('profile_of_student.html')
+        return render_template('dashboard_of_student.html')
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
@@ -134,7 +134,7 @@ def dashboard():
 def tasks():
     if current_user.teacher_id:
         session = db_session.create_session()
-        return render_template('tasks.html', teacher_id=current_user.teacher_id)
+        return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id)
         # classroom id ?
     else:
         return render_template('bad_request.html')

@@ -1,17 +1,9 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../static/css/labels.css">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
-    {% block link %}{% endblock %}
+{% extends "very_base.html" %}
+    {% block else_link %}
     <link rel="stylesheet" href="../static/css/table.css">
-    <title>{{title}}</title>
-</head>
+    {% endblock %}
+{% block modules %}
+<body>
 <header>
     <nav class="navbar navbar-light">
         <a href="/"><img src="../static/img/logo.png" class="logo"></a>
@@ -24,8 +16,6 @@
         {% block head %}{% endblock %}
     </nav>
 </header>
-<div>
-
 <!--<div class="photo" style="float: left">-->
 <!--    <img src="../static/img/desk.jpg">-->
 <!--    <figcaption>Фото профиля</figcaption>-->
@@ -56,6 +46,5 @@
     {% block study %}{% endblock %}
 </table>
 </div>
-</div>
 </body>
-</html>
+{% endblock %}
