@@ -107,7 +107,9 @@ def logout():
 
 @app.route('/dash')
 def dash():
-    return render_template('dashboard_of_teacher.html', title='Даш проекта')
+    if current_user.user_type() == Teacher:
+        return render_template('dashboard_of_teacher.html', title='Даш проекта')
+    return render_template('dashboard_of_student.html', title='Даш проекта')
 
 
 # должен быть не даш а профиль именно

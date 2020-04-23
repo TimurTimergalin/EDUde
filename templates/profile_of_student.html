@@ -29,6 +29,7 @@ text-decoration: none;
 }
 .photo{
 text-align: center;
+width: auto
 }
 .photo img{
 width: 350px;
@@ -186,48 +187,11 @@ margin-top: 20px
     <figcaption>Фото профиля</figcaption>
     <h6 class="name_user">Имя пользователя: Сычева Ксения</h6>
 </div>
-    <div class="class" >
-        <h2>Добавить класс</h2>
-<form class="forma" method="post">
-    {{ form.hidden_tag() }}
-    {{ form.csrf_token }}
-
-  <div class="form-group">
-       {{ form.name_of_class.label }}
-      {{ form.name_of_class(type="text", class="form-control") }}
-    <small class="sml">Например, 10А</small>
-      {% for error in form.name_of_class.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-  </div>
-  <div class="form-group">
-      {{ form.subj.label }}
-      {{ form.subj(type="text", class="form-control") }}
-      {% for error in form.subj.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    </p>
-  </div>
-    {{ form.submit(type="submit", class="btn btn_add lis form_btns sv") }}
-    {% for error in form.submit.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-    <a class="btn btn_add lis form_btns" href="/">Добавить учеников</a>
-    {{message}}
-
-</form>
-    </div>
      <div class="point">
         <h2 class="li_of_s">Список классов</h2>
 <ul class="list-group list-group-flush">
    {% for classroom in classrooms %}
-        <li class="btn_add lis"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a>
+        <li class="btn_add lis"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}"> zdes budet imya</a>
         </li>
 <!--    Обработчик типа /tasks/<int:class_id>/<int:class_teach_id>-->
    {% endfor %}
@@ -238,11 +202,11 @@ margin-top: 20px
         <h2 class="li_of_s">Заявки на классы</h2>
 <ul class="list-group list-group-flush">
    {% for classroom in classrooms %}
-        <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a><br>
+        <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">zdes budet imya</a><br>
             Здесь будет указано название и предмет класса и его руководитель
         <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
         </li>
-    <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a><br>
+    <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">zdes budet imya</a><br>
             Здесь будет указано название и предмет класса и его руководитель
         <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
         </li>
