@@ -4,6 +4,8 @@ from data.teacher import Teacher
 from data.class_room import ClassRoom
 from data.student import Student
 from data.task import Task
+from generate_key import generate_key
+import webbrowser
 
 
 def abort_if_class_not_found(class_room_id):
@@ -27,15 +29,15 @@ def abort_if_teacher_not_found(teacher_id):
 def abort_if_password_is_wrong(teacher_id, password):
     session = db_session.create_session()
     teacher = session.query(Teacher).get(teacher_id)
-    if not (teacher.hashed_password == password):
-        abort(402, message="Wrong password")
+    if not (generate_key(teacher) == password):
+        abort(403, message="Wrong password")
 
 
 def abort_if_password_is_wrong1(student_id, student_password):
     session = db_session.create_session()
     student = session.query(Student).get(student_id)
-    if not (student.hashed_password == student_password):
-        abort(402, message="Wrong password")
+    if not (generate_key(student) == student_password):
+        abort(403, message="Wrong password")
 
 
 def abort_if_request_is_forbidden(teacher_id, class_room_id):
@@ -50,7 +52,7 @@ def abort_if_student_not_found(student_id):
     session = db_session.create_session()
     student = session.query(Student).get(student_id)
     if not student:
-        abort(404, message=f"News {student_id} not found")
+        abort(404, message=f"Student {student_id} not found")
         return
     return student
 
