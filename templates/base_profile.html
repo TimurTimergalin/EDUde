@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block else_link %}
+<link rel="stylesheet" href="../static/css/profs.css">
+{% endblock %}
+
+    {% block content %}
+<div class="photo">
+    <img src="../static/img/desk.jpg">
+    <figcaption>Фото профиля</figcaption>
+    <h6 class="name_user">Имя пользователя: Сычева Ксения</h6>
+</div>
+{% block add_class_to_teacher %}
+{% endblock %}
+<div class="point">
+        <h2 class="li_of_s">Список классов</h2>
+<ul class="list-group list-group-flush">
+   {% for classroom in classrooms %}
+        <li class="btn_add lis"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a>
+        </li>
+<!--    Обработчик типа /tasks/<int:class_id>/<int:class_teach_id>-->
+   {% endfor %}
+
+</ul>
+     </div>
+<div class='point reques'>
+        <h2 class="li_of_s">Заявки на классы</h2>
+<ul class="list-group list-group-flush">
+   {% for classroom in classrooms %}
+        <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a><br>
+            Здесь будет указано название и предмет класса и его руководитель
+        <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
+        </li>
+    <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a><br>
+            Здесь будет указано название и предмет класса и его руководитель
+        <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
+        </li>
+<!--    Обработчик типа /tasks/<int:class_id>/<int:class_teach_id>-->
+   {% endfor %}
+
+</ul>
+     </div>
+{% endblock %}
