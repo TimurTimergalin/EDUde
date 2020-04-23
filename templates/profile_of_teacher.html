@@ -1,8 +1,6 @@
 {% extends "base_profile.html" %}
-    <title>{{title}}</title>
-
-    {% block forms %}
-    <div class="class">
+{% block add_class_to_teacher %}
+    <div class="class" >
         <h2>Добавить класс</h2>
 <form class="forma" method="post">
     {{ form.hidden_tag() }}
@@ -39,16 +37,4 @@
 
 </form>
     </div>
-{% endblock %}
-    {% block list %}
-     <div class="class">
-        <h2>Список классов</h2>
-<ul class="list-group list-group-flush">
-   {% for classroom in classrooms %}
-        <li class="btn_add lis"><a href="/tasks/{{ classroom.id }}/{{ classroom.teacher_id }}">{{ classroom.name }}</a></li>
-<!--    Обработчик типа /tasks/<int:class_id>/<int:class_teach_id>-->
-   {% endfor %}
-
-</ul>
-     </div>
          {% endblock %}

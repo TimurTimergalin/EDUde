@@ -66,7 +66,7 @@ def login():
         user = user_type_choice(session, form)
         if user and user.check_password(form.password.data):
             login_user(user.users[0], remember=form.remember_me.data)
-            return redirect("/dashboard")
+            return redirect("/dash")
         return render_template('log_in.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -105,6 +105,14 @@ def logout():
     return redirect("/")
 
 
+@app.route('/dash')
+def dash():
+    if current_user.user_type() == Teacher:
+        return render_template('dashboard_of_teacher.html', title='Даш проекта')
+    return render_template('dashboard_of_student.html', title='Даш проекта')
+
+
+# должен быть не даш а профиль именно
 @app.route('/dashboard', methods=["GET", "POST"])
 @login_required
 def dashboard():
@@ -113,7 +121,7 @@ def dashboard():
         form = AddClassForm()
         if form.validate_on_submit():
             if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
-                return render_template('dashboard_of_teacher.html', form=form,
+                return render_template('profile_of_teacher.html', form=form,
                                        message="Такой класс уже есть")
             classroom = ClassRoom()
             classroom.name = form.name_of_class.data
@@ -124,10 +132,10 @@ def dashboard():
             redirect('/dashboard')
         print(session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
-        return render_template('dashboard_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
+        return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
     else:
-        return render_template('dashboard_of_student.html')
+        return render_template('profile_of_student.html')
 
 
 @app.route('/tasks', methods=['GET', 'POST'])
@@ -144,7 +152,6 @@ def tasks():
 @app.route('/api')
 def api():
     return render_template('api.html', title='Api проекта')
-
 
 
 @app.route('/new_task')
