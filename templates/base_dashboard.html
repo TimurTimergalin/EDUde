@@ -7,7 +7,7 @@
 <header>
     <nav class="navbar navbar-light">
         <a href="/"><img src="../static/img/logo.png" class="logo"></a>
-        <a class="prof" href="#" style="margin-top: -45px">Профиль</a>
+        <a class="prof" href="/dashboard" style="margin-top: -45px">Профиль</a>
         {% if current_user.is_authenticated %}
             <a class="log_out" href="/logout">
                 Выйти
@@ -16,21 +16,12 @@
         {% block head %}{% endblock %}
     </nav>
 </header>
-<!--<div class="photo" style="float: left">-->
-<!--    <img src="../static/img/desk.jpg">-->
-<!--    <figcaption>Фото профиля</figcaption>-->
-<!--</div>-->
-<!--    {% block forms %}{% endblock %}-->
-<!--     <div class="class">-->
-<!--         {% block list %}-->
-<!--         {% endblock %}-->
-<!--    </div>-->
     {% block buttons %}{% endblock %}
     <div class="flex_box">
     <table class="table table-borderless tab container" style="margin-right: 50px;">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col">id</th>
       <th scope="col">Название</th>
       <th scope="col">Дедлайн</th>
       <th scope="col">Домашнее задание</th>
