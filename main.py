@@ -42,6 +42,11 @@ RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
 
+@app.errorhandler(403)
+def error403(e):
+    return redirect('bad_request.html')
+
+
 @app.errorhandler(401)
 def error401(e):
     return redirect('/login')
@@ -66,7 +71,7 @@ def login():
         user = user_type_choice(session, form)
         if user and user.check_password(form.password.data):
             login_user(user.users[0], remember=form.remember_me.data)
-            return redirect("/dash")
+            return redirect("/profile")
         return render_template('log_in.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -94,8 +99,14 @@ def register():
             return render_template('log_up.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
-        return redirect('/login')
+        return redirect('/logup_successful')
     return render_template('log_up.html', title='Регистрация', form=form)
+
+
+
+@app.route('/logup_successful')
+def logup_successful():
+    return render_template('good_request.html')
 
 
 @app.route('/logout')
@@ -105,17 +116,9 @@ def logout():
     return redirect("/")
 
 
-@app.route('/dash')
-def dash():
-    if current_user.user_type() == Teacher:
-        return render_template('dashboard_of_teacher.html', title='Даш проекта')
-    return render_template('dashboard_of_student.html', title='Даш проекта')
-
-
-# должен быть не даш а профиль именно
-@app.route('/dashboard', methods=["GET", "POST"])
+@app.route('/profile', methods=["GET", "POST"])
 @login_required
-def dashboard():
+def profile():
     session = db_session.create_session()
     if current_user.user_type() == Teacher:
         form = AddClassForm()
@@ -126,27 +129,35 @@ def dashboard():
             classroom = ClassRoom()
             classroom.name = form.name_of_class.data
             classroom.teacher_id = current_user.teacher_id
-            # classroom.subject = form.subj.data  # id?
             session.add(classroom)
             session.commit()
             redirect('/dashboard')
         print(session.query(ClassRoom).filter(
             ClassRoom.teacher_id == current_user.teacher_id))
+        teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == current_user.teacher_id))
+            ClassRoom.teacher_id == teacher.id), name=teacher.name)
     else:
         return render_template('profile_of_student.html')
 
 
-@app.route('/tasks', methods=['GET', 'POST'])
+@app.route('/dashboard', methods=["GET", "POST"])
 @login_required
-def tasks():
-    if current_user.teacher_id:
-        session = db_session.create_session()
-        return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id)
-        # classroom id ?
+def dashboard():
+    session = db_session.create_session()
+    if current_user.user_type() == Teacher:
+        return render_template('dashboard_of_teacher.html')
     else:
-        return render_template('bad_request.html')
+        return render_template('profile_of_student.html')
+
+
+@app.route('/tasks/<teacher_id>/<classroom_id>', methods=['GET', 'POST'])
+@login_required
+def tasks(teacher_id, classroom_id):
+    if current_user.teacher_id == int(teacher_id):
+        return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
+                               classroom_id=classroom_id)
+    return render_template('bad_request.html')
 
 
 @app.route('/api')
