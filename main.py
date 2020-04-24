@@ -27,16 +27,16 @@ app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
 api = Api(app)
 api.add_resource(student_resources.StudentResource, '/api/1.0/student/<int:student_id>&<string:student_password>')
-api.add_resource(student_resources.StudentListResource, '/api/1.0/student')
+api.add_resource(student_resources.StudentListResource, '/api/1.0/students')
 api.add_resource(student_resources.StudentGetResource, '/api/1.0/student/<int:student_id>')
 api.add_resource(teacher_resources.TeacherResource, '/api/1.0/teacher/<int:id>')
-api.add_resource(teacher_resources.TeacherListResource, '/api/1.0/teacher')
+api.add_resource(teacher_resources.TeacherListResource, '/api/1.0/teachers')
 api.add_resource(classroom_resources.ClassRoomResource,
                  '/api/1.0/classroom/<int:teacher_id>&<int:teacher_password>&<int:class_room_id>')
 api.add_resource(classroom_resources.ClassRoomListResource,
-                 '/api/1.0/classroom/<int:teacher_id>&<string:teacher_password>')
+                 '/api/1.0/classrooms/<int:teacher_id>&<string:teacher_password>')
 api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>&<string:teacher_password>&<int:task_id>')
-api.add_resource(task_resources.TaskListResource, '/api/task/<int:teacher_id>&<string:teacher_password>')
+api.add_resource(task_resources.TaskListResource, '/api/tasks/<int:teacher_id>&<string:teacher_password>')
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'

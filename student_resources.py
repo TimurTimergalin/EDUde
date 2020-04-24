@@ -48,7 +48,7 @@ class StudentListResource(Resource):
 
 class StudentGetResource(Resource):
     def get(self, student_id):
-        teacher = abort_if_student_not_found(student_id)
-        return jsonify({'student': teacher.to_dict(only=('id', 'surname', 'name'))})
+        student = abort_if_student_not_found(student_id)
+        return jsonify({'student': student.to_dict(only=('id', 'surname', 'name'))})
 
 
