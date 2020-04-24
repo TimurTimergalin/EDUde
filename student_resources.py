@@ -37,9 +37,11 @@ class StudentResource(Resource):
 
 
 class StudentListResource(Resource):
-    def get(self):
+    def get(self, teacher_id):
         session = db_session.create_session()
-        student = session.query(Student).all()
+        abort_if_teacher_not_found(teacher_id)
+        teacher = session.query(Teacher).get(teacher_id)
+        student = session.query(Student).filter(teacher in Student.teachers).all()
         return jsonify({'students': [item.to_dict(
             only=('id', 'name', 'surname')) for item in student]})
 
