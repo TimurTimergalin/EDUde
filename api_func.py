@@ -12,7 +12,7 @@ def abort_if_class_not_found(class_room_id):
     session = db_session.create_session()
     class_room = session.query(ClassRoom).get(class_room_id)
     if not class_room:
-        abort(404, message=f"News {class_room_id} not found")
+        abort(404, message=f"Class {class_room_id} not found")
         return
     return class_room
 
@@ -21,7 +21,7 @@ def abort_if_teacher_not_found(teacher_id):
     session = db_session.create_session()
     teacher = session.query(Teacher).get(teacher_id)
     if not teacher:
-        abort(404, message=f"News {teacher_id} not found")
+        abort(404, message=f"Teacher {teacher_id} not found")
         return
     return teacher
 
@@ -71,6 +71,6 @@ def abort_if_task_not_found(task_id):
     session = db_session.create_session()
     task = session.query(ClassRoom).get(task_id)
     if not task:
-        abort(404, message=f"News {task_id} not found")
+        abort(404, message=f"Task {task_id} not found")
         return
     return task
