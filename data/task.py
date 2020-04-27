@@ -15,7 +15,7 @@ class Task(SqlAlchemyBase, SerializerMixin):
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)
     name = Cl(sql.String)
     description = Cl(sql.Text)
-    deadline = Cl(sql.DateTime)
+    deadline = Cl(sql.String)
     link = Cl(sql.String)
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')

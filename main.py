@@ -41,8 +41,8 @@ api.add_resource(classroom_resources.ClassRoomResource,
                  '/api/1.0/classroom/<int:teacher_id>&<string:teacher_password>&<int:class_room_id>')
 api.add_resource(classroom_resources.ClassRoomListResource,
                  '/api/1.0/classrooms/<int:teacher_id>&<string:teacher_password>')
-api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>&<string:teacher_password>&<int:task_id>')
-api.add_resource(task_resources.TaskListResource, '/api/tasks/<int:teacher_id>&<string:teacher_password>')
+api.add_resource(task_resources.TaskResource, '/api/1.0/task/<int:teacher_id>&<string:teacher_password>&<int:task_id>')
+api.add_resource(task_resources.TaskListResource, '/api/1.0/tasks/<int:teacher_id>&<string:teacher_password>')
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'

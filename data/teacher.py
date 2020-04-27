@@ -10,12 +10,6 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
 
-
-# Таблица для отношения учитель-предмет
-teacher_to_subject = sql.Table('teacher_to_subject', SqlAlchemyBase.metadata,
-                               Cl('teacher', sql.Integer, sql.ForeignKey('teachers.id')),
-                               Cl('subject', sql.Integer, sql.ForeignKey('subjects.id')))
-
 # Таблица для отношения учитель-студент
 teacher_to_student = sql.Table('teacher_to_student', SqlAlchemyBase.metadata,
                                Cl('teacher', sql.Integer, sql.ForeignKey('teachers.id')),

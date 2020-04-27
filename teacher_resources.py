@@ -23,7 +23,7 @@ class TeacherResource(Resource):
                 continue
             setattr(teacher, i, args[i])
         session.commit()
-        return jsonify(teacher.to_dict(only=('id', 'name', 'surname')))
+        return jsonify({'success': args})
 
     def delete(self, teacher_id, teacher_password):
         session = db_session.create_session()
