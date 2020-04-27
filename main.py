@@ -18,6 +18,11 @@ import student_resources
 import teacher_resources
 import classroom_resources
 import task_resources
+import logging
+from logging.handlers import RotatingFileHandler
+
+logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -29,17 +34,30 @@ api = Api(app)
 api.add_resource(student_resources.StudentResource, '/api/1.0/student/<int:student_id>&<string:student_password>')
 api.add_resource(student_resources.StudentListResource, '/api/1.0/students')
 api.add_resource(student_resources.StudentGetResource, '/api/1.0/student/<int:student_id>')
-api.add_resource(teacher_resources.TeacherResource, '/api/1.0/teacher/<int:id>')
+api.add_resource(teacher_resources.TeacherGetResource, '/api/1.0/teacher/<int:teacher_id>')
+api.add_resource(teacher_resources.TeacherResource, '/api/1.0/teacher/<int:teacher_id>&<string:teacher_password>')
 api.add_resource(teacher_resources.TeacherListResource, '/api/1.0/teachers')
 api.add_resource(classroom_resources.ClassRoomResource,
-                 '/api/1.0/classroom/<int:teacher_id>&<int:teacher_password>&<int:class_room_id>')
+                 '/api/1.0/classroom/<int:teacher_id>&<string:teacher_password>&<int:class_room_id>')
 api.add_resource(classroom_resources.ClassRoomListResource,
                  '/api/1.0/classrooms/<int:teacher_id>&<string:teacher_password>')
-api.add_resource(task_resources.TaskResource, '/api/task/<int:teacher_id>&<string:teacher_password>&<int:task_id>')
-api.add_resource(task_resources.TaskListResource, '/api/tasks/<int:teacher_id>&<string:teacher_password>')
+api.add_resource(task_resources.TaskResource, '/api/1.0/task/<int:teacher_id>&<string:teacher_password>&<int:task_id>')
+api.add_resource(task_resources.TaskListResource, '/api/1.0/tasks/<int:teacher_id>&<string:teacher_password>')
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+
+
+def log_func(func):
+    def new_func(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as ex:
+            logging.error(f":error in {func.__name__}: {', '.join(ex.args)}")
+        else:
+            logging.info(f':The result of {func.__name__} is: {result}')
+            return result
+    return new_func
 
 
 @app.errorhandler(403)
@@ -101,7 +119,6 @@ def register():
                                    message="Такой пользователь уже есть")
         return redirect('/logup_successful')
     return render_template('log_up.html', title='Регистрация', form=form)
-
 
 
 @app.route('/logup_successful')

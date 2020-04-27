@@ -5,24 +5,13 @@ from data.teacher import Teacher
 from create_user import create_user
 from api_func import *
 
-
-parser = reqparse.RequestParser()
-parser.add_argument('surname', required=True)
-parser.add_argument('name', required=True)
-parser.add_argument('password', required=True)
-parser.add_argument('email', required=True)
-
 edit_parser = reqparse.RequestParser()
-parser.add_argument('surname')
-parser.add_argument('name')
-parser.add_argument('email')
+edit_parser.add_argument('surname')
+edit_parser.add_argument('name')
+edit_parser.add_argument('email')
 
 
 class TeacherResource(Resource):
-    def get(self, teacher_id):
-        teacher = abort_if_teacher_not_found(teacher_id)
-        return jsonify({'teacher': teacher.to_dict(only=('surname', 'name'))})
-
     def put(self, teacher_id, teacher_password):
         abort_if_teacher_not_found(teacher_id)
         session = db_session.create_session()
@@ -30,17 +19,26 @@ class TeacherResource(Resource):
         abort_if_password_is_wrong(teacher_id, teacher_password)
         args = edit_parser.parse_args()
         for i in args:
+            if not args[i]:
+                continue
             setattr(teacher, i, args[i])
-            session.commit()
-        return jsonify({'success', 'OK'})
+        session.commit()
+        return jsonify({'success': args})
 
     def delete(self, teacher_id, teacher_password):
         session = db_session.create_session()
-        teacher = abort_if_teacher_not_found(teacher_id)
+        abort_if_teacher_not_found(teacher_id)
+        teacher = session.query(Teacher).get(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
         session.delete(teacher)
         session.commit()
         return jsonify({'success': 'OK'})
+
+
+class TeacherGetResource(Resource):
+    def get(self, teacher_id):
+        teacher = abort_if_teacher_not_found(teacher_id)
+        return jsonify({'teacher': teacher.to_dict(only=('id', 'surname', 'name'))})
 
 
 class TeacherListResource(Resource):
@@ -48,6 +46,6 @@ class TeacherListResource(Resource):
         session = db_session.create_session()
         teacher = session.query(Teacher).all()
         return jsonify({'teachers': [item.to_dict(
-            only=('id', 'name', 'surnmae')) for item in teacher]})
+            only=('id', 'name', 'surname')) for item in teacher]})
 
 

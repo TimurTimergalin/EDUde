@@ -13,7 +13,6 @@ edit_parser.add_argument('email')
 
 class StudentResource(Resource):
     def put(self, student_id, student_password):
-        print(student_id, student_password)
         session = db_session.create_session()
         student = session.query(Student).get(student_id)
         abort_if_student_not_found(student_id)
@@ -37,11 +36,9 @@ class StudentResource(Resource):
 
 
 class StudentListResource(Resource):
-    def get(self, teacher_id):
+    def get(self,):
         session = db_session.create_session()
-        abort_if_teacher_not_found(teacher_id)
-        teacher = session.query(Teacher).get(teacher_id)
-        student = session.query(Student).filter(teacher in Student.teachers).all()
+        student = session.query(Student).all()
         return jsonify({'students': [item.to_dict(
             only=('id', 'name', 'surname')) for item in student]})
 

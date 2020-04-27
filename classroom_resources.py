@@ -29,18 +29,18 @@ class ClassRoomResource(Resource):
         abort_if_password_is_wrong(teacher_id, teacher_password)
         abort_if_request_is_forbidden(teacher_id, class_room_id)
         args = edit_parser.parse_args()
-        if not args:
-            abort(400, message='Empty request')
-        class_room.name = args['name']
+        if args['name']:
+            class_room.name = args['name']
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({'success': args})
 
     def delete(self, teacher_id, teacher_password, class_room_id):
-        class_room = abort_if_class_not_found(class_room_id)
+        abort_if_class_not_found(class_room_id)
         abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
         abort_if_request_is_forbidden(teacher_id, class_room_id)
         session = db_session.create_session()
+        class_room = session.query(ClassRoom).get(class_room_id)
         session.delete(class_room)
         session.commit()
         return jsonify({'success': 'OK'})
@@ -65,4 +65,4 @@ class ClassRoomListResource(Resource):
         teacher.add_class(class_room)
         session.add(class_room)
         session.commit()
-        return jsonify({'success': 'OK'})
+        return jsonify({'success': args})
