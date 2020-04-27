@@ -19,7 +19,6 @@ edit_parser.add_argument('name')
 edit_parser.add_argument('deadline')
 edit_parser.add_argument('link')
 edit_parser.add_argument('description')
-edit_parser.add_argument('class_room_id')
 
 
 class TaskResource(Resource):
@@ -74,7 +73,6 @@ class TaskListResource(Resource):
         task.deadline = args['deadline']
         task.link = args['link']
         task.description = args['description']
-        task.class_room_id = args['class_room_id']
         session.add(task)
         session.commit()
         return jsonify({'success': args})

@@ -9,6 +9,7 @@ import werkzeug
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
+from data.teacher_invite import TeacherInvite
 
 # Таблица для отношения учитель-студент
 teacher_to_student = sql.Table('teacher_to_student', SqlAlchemyBase.metadata,
@@ -94,4 +95,13 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def user_type(self):
         return Teacher
+
+    def invite(self, student_id):
+        session = db_session.create_session()
+        invite_ = TeacherInvite()
+        invite_.teacher_id = self.id
+        invite_.student_id = student_id
+        session.add(invite_)
+        session.commit()
+
 

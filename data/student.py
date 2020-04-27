@@ -7,6 +7,8 @@ from data.db_session import SqlAlchemyBase
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
+from data.student_invite import StudentInvite
+from data import db_session
 
 
 student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
@@ -54,3 +56,11 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def user_type(self):
         return Student
+
+    def invite(self, teacher_id):
+        session = db_session.create_session()
+        invite_ = StudentInvite()
+        invite_.student_id = self.id
+        invite_.teacher_id = teacher_id
+        session.add(invite_)
+        session.commit()
