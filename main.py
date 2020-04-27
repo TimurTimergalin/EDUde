@@ -18,6 +18,11 @@ import student_resources
 import teacher_resources
 import classroom_resources
 import task_resources
+import logging
+from logging.handlers import RotatingFileHandler
+
+logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -41,6 +46,18 @@ api.add_resource(task_resources.TaskListResource, '/api/tasks/<int:teacher_id>&<
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+
+
+def log_func(func):
+    def new_func(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+        except Exception as ex:
+            logging.error(f":error in {func.__name__}: {', '.join(ex.args)}")
+        else:
+            logging.info(f':The result of {func.__name__} is: {result}')
+            return result
+    return new_func
 
 
 @app.errorhandler(403)
@@ -102,7 +119,6 @@ def register():
                                    message="Такой пользователь уже есть")
         return redirect('/logup_successful')
     return render_template('log_up.html', title='Регистрация', form=form)
-
 
 
 @app.route('/logup_successful')
