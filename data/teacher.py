@@ -32,7 +32,6 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
     name = Cl(sql.String)
     email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
-    subjects = orm.relationship('Subject', secondary='teacher_to_subject')
     students = orm.relationship('Student', secondary='teacher_to_student')
     class_rooms = orm.relation('ClassRoom', back_populates='teacher')
     users = orm.relation('User', back_populates='teacher')
@@ -58,29 +57,10 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         except Exception:
             return 1
 
-    def add_subject(self, subject):
-        """Teacher.add_subject
-        add a subject to the current teacher's subjects list"""
-        try:
-            self.subjects.append(subject)
-            return 0
-        except Exception:
-            return 0
-
-    def remove_subject(self, subject):
-        """Teacher.remove_subject
-        remove a subject from the current teacher's subjects list"""
-        try:
-            self.subjects.remove(subject)
-            return 0
-        except Exception:
-            return 0
-
-    def add_class(self, class_room, subject):
+    def add_class(self, class_room):
         """Teacher.add_class
         add a classroom to the current teacher's classrooms list"""
         try:
-            class_room.set_subject(subject)
             class_room.teacher = self
             self.class_rooms.append(class_room)
             return 0

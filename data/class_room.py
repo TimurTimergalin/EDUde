@@ -15,8 +15,6 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
     name = Cl(sql.String)
-    subject_id = Cl(sql.Integer, sql.ForeignKey('subjects.id'))
-    subject = orm.relation('Subject')
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
     teacher = orm.relation('Teacher')
     students = orm.relationship('Student', secondary='student_to_class')
@@ -39,15 +37,6 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         remove student from the current class' students list"""
         try:
             self.students.remove(student)
-            return 0
-        except Exception:
-            return 1
-
-    def set_subject(self, subject):
-        """ClassRoom.set_subject
-        change a subject of a classroom"""
-        try:
-            self.subject = subject
             return 0
         except Exception:
             return 1
