@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, SelectField, DateTimeField
+from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, SelectField, DateTimeField, TextAreaField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 from flask_wtf.recaptcha import RecaptchaField
@@ -42,7 +42,8 @@ class AddClassForm(FlaskForm):
 class AddTaskForm(FlaskForm):
     """AddTaskForm
        WTF model of Add class form"""
-    name_of_task = StringField('Название задания', validators=[DataRequired()])
-    task = StringField('Что делать', validators=[DataRequired()])
+    name_of_task = TextAreaField('Название задания', validators=[DataRequired()])
+    task = TextAreaField('Что делать', validators=[DataRequired()])
     deadline = DateTimeField("Дедлайн")  # ?
     post_place = StringField('Куда отправлять', validators=[DataRequired()])
+    submit = SubmitField('Отправить')

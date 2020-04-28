@@ -1,5 +1,29 @@
 {% extends "base_profile.html" %}
+{% block about_pr %}
+<li class="nav-item ab" style="width: auto;">
+        <button id="userButton" style="width: auto;background: transparent; border: none;color: white">
+            Скопировать пароль<br>
+        <small style="font-size: 9px; margin-left: 12px">Никому не разглашайте данный пароль</small>
+        </button>
+    <script>
+var button = document.getElementById('userButton');
+button.addEventListener('click', function () {
+  var ta = document.getElementById('cont');
+  var range = document.createRange();
+  range.selectNode(ta);
+  window.getSelection().addRange(range);
+  try {
+    document.execCommand('copy');
+  } catch(err) {
+    console.log('Can`t copy, boss');
+  }
+  window.getSelection().removeAllRanges();
+});
+</script>
+      </li>
+        {% endblock %}
 {% block add_class_to_teacher %}
+    <textarea style="display: none" id="cont">90909090909090</textarea>
     <div class="class" >
         <h2>Добавить класс</h2>
 <form class="forma" method="post">
