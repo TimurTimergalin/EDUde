@@ -24,16 +24,18 @@
 {% block study %}
 <thead>
     <tr>
+        <th scope="col">id</th>
         <th scope="col">Класс\предмет</th>
     </tr>
   </thead>
   <tbody>
+  {% for classroom in classrooms %}
     <tr>
-      <td><a href="#">10А математика</a></td>
+        <td class="btn_add lis"><strong>{{ classroom.id }}</strong></td>
+        <td class="btn_add lis"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>
+        </td>
     </tr>
-    <tr>
-        <td><a href="#">10А информатика</a></td>
-    </tr>
+  {% endfor %}
 
   </tbody>
 {% endblock %}
