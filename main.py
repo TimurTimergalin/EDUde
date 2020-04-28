@@ -171,7 +171,12 @@ def tasks(teacher_id, classroom_id):
 
 @app.route('/api')
 def api():
-    return render_template('api.html', title='Api проекта')
+    return render_template('api.html', title='API проекта')
+
+
+@app.route('/api/1.0')
+def api_1_0():
+    return render_template('documentation_1.0.html', title='API v1.0')
 
 
 @app.route('/new_task', methods=['GET', 'POST'])
