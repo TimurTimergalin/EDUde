@@ -1,5 +1,14 @@
 {% extends "base_profile.html" %}
+{% block about_pr %}
+<li class="nav-item ab" style="width: auto;">
+        <button id="userButton" style="width: auto;background: transparent; border: none;color: white">
+            Скопировать пароль<br>
+        <small style="font-size: 9px; margin-left: 12px">Никому не разглашайте данный пароль</small>
+        </button>
+      </li>
+        {% endblock %}
 {% block add_class_to_teacher %}
+    <textarea style="display: none" id="cont">90909090909090</textarea>
     <div class="class" >
         <h2>Добавить класс</h2>
 <form class="forma" method="post">
@@ -37,4 +46,15 @@
 
 </form>
     </div>
+ <script>
+var button = document.getElementById("userButton");
+button.addEventListener("click", function (popa){
+var copytext = document.createElement("input");
+copytext.value = "090909000";
+document.body.appendChild(copytext);
+copytext.select();
+document.execCommand("copy");
+document.body.removeChild(copytext);
+});
+</script>
          {% endblock %}

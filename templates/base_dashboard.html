@@ -1,12 +1,12 @@
 {% extends "very_base.html" %}
     {% block else_link %}
-    <link rel="stylesheet" href="../static/css/table.css">
+    <link rel="stylesheet" href="{{ link_css }}">
     {% endblock %}
 {% block modules %}
 <body>
 <header>
     <nav class="navbar navbar-light">
-        <a href="/"><img src="../static/img/logo.png" class="logo"></a>
+        <a href="/"><img src="{{ link_logo }}" class="logo"></a>
         <a class="prof" href="/profile" style="margin-top: -45px">Профиль</a>
         {% if current_user.is_authenticated %}
             <a class="log_out" href="/logout">

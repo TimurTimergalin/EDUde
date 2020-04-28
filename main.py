@@ -5,7 +5,7 @@ from werkzeug.utils import redirect
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -13,7 +13,7 @@ from data.class_room import ClassRoom
 from data.user import User
 from create_user import create_user
 from flask_restful import Api
-from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm
+from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm, AddTaskForm
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -46,18 +46,6 @@ api.add_resource(task_resources.TaskListResource, '/api/1.0/tasks/<int:teacher_i
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
-
-
-def log_func(func):
-    def new_func(*args, **kwargs):
-        try:
-            result = func(*args, **kwargs)
-        except Exception as ex:
-            logging.error(f":error in {func.__name__}: {', '.join(ex.args)}")
-        else:
-            logging.info(f':The result of {func.__name__} is: {result}')
-            return result
-    return new_func
 
 
 @app.errorhandler(403)
@@ -165,7 +153,8 @@ def dashboard():
     if current_user.user_type() == Teacher:
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('dashboard_of_teacher.html', classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == teacher.id))
+            ClassRoom.teacher_id == teacher.id), link_css=url_for('static', filename='css/table.css'),
+                               link_logo=url_for('static', filename='img/logo.png'))
     else:
         return render_template('profile_of_student.html')
 
@@ -175,7 +164,8 @@ def dashboard():
 def tasks(teacher_id, classroom_id):
     if current_user.teacher_id == int(teacher_id):
         return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
-                               classroom_id=classroom_id)
+                               classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
+                               link_logo=url_for('static', filename='img/logo.png'))
     return render_template('bad_request.html')
 
 
@@ -184,10 +174,14 @@ def api():
     return render_template('api.html', title='Api проекта')
 
 
-@app.route('/new_task')
+@app.route('/new_task', methods=['GET', 'POST'])
 @login_required
 def new_task():
-    return render_template('new_task.html', current_user=current_user)
+    form = AddTaskForm()
+    session = db_session.create_session()
+    return render_template('new_task.html', current_user=current_user,
+                           classrooms=session.query(ClassRoom).filter(ClassRoom.teacher_id == current_user.teacher_id),
+                           form=form)
 
 
 def check_email(session, form):

@@ -8,33 +8,56 @@
   <body>
     <main>
       <form action="" method="post">
+        {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
         <fieldset>
           <legend>Добавление задания</legend>
-          <label for="title">Название задания</label>
-            <textarea id="title" placeholder="Введите тут..." class="two-third-width"></textarea>
-          <label for="tel">Что делать</label>
-          <textarea id="tel" name="work" placeholder="Заполните здесь..." class="two-third-width"></textarea>
-          <div>
-            <label for="class">Выберите класс</label>
-            <select class="custom-select two-third-width" id="class">
-            <option>Для какого именно</option>
-            <option value="1">10А</option>
-            <option value="2">11Б</option>
-            <option value="3">9Д</option>
-          </select>
-          </div>
-          <div class="half-width">
-            <label for="date">Дэдлайн</label>
-            <input type="date" id="date" name="date">
-          </div>
-          <div class="half-width">
-            <label for="url">Куда отправлять</label>
-            <input type="url" id="url" name="url">
-          </div>
+          {{ form.name_of_task.label }}
+      {{ form.name_of_task(placeholder="Введите тут...", class="two-third-width") }}
+      {% for error in form.name_of_task.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+          {{ form.task.label }}
+      {{ form.task(placeholder="Заполните здесь...", class="two-third-width") }}
+      {% for error in form.task.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+          {{ form.deadline.label }}
+      {{ form.deadline(class="half-width", type='date') }}
+      {% for error in form.task.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+<!--          <div class="half-width">-->
+<!--            <label for="date">Дэдлайн</label>-->
+<!--            <input type="date" id="date" name="date">-->
+<!--          </div>-->
+          {{ form.post_place.label }}
+      {{ form.post_place(class="half-width", type='url') }}
+      {% for error in form.task.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+<!--          <div class="half-width">-->
+<!--            <label for="url">Куда отправлять</label>-->
+<!--            <input type="url" id="url" name="url">-->
+<!--          </div>-->
 
         </fieldset>
         <div class="buttons">
-          <input type="submit" value="Отправить">
+          {{ form.submit(type="submit") }}
+    {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+<!--          <input type="submit" value="Отправить">-->
         </div>
       </form>
     </main>
