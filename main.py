@@ -163,7 +163,9 @@ def profile():
 def dashboard():
     session = db_session.create_session()
     if current_user.user_type() == Teacher:
-        return render_template('dashboard_of_teacher.html')
+        teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
+        return render_template('dashboard_of_teacher.html', classrooms=session.query(ClassRoom).filter(
+            ClassRoom.teacher_id == teacher.id))
     else:
         return render_template('profile_of_student.html')
 
