@@ -5,21 +5,6 @@
             Скопировать пароль<br>
         <small style="font-size: 9px; margin-left: 12px">Никому не разглашайте данный пароль</small>
         </button>
-    <script>
-var button = document.getElementById('userButton');
-button.addEventListener('click', function () {
-  var ta = document.getElementById('cont');
-  var range = document.createRange();
-  range.selectNode(ta);
-  window.getSelection().addRange(range);
-  try {
-    document.execCommand('copy');
-  } catch(err) {
-    console.log('Can`t copy, boss');
-  }
-  window.getSelection().removeAllRanges();
-});
-</script>
       </li>
         {% endblock %}
 {% block add_class_to_teacher %}
@@ -61,4 +46,15 @@ button.addEventListener('click', function () {
 
 </form>
     </div>
+ <script>
+var button = document.getElementById("userButton");
+button.addEventListener("click", function (popa){
+var copytext = document.createElement("input");
+copytext.value = "090909000";
+document.body.appendChild(copytext);
+copytext.select();
+document.execCommand("copy");
+document.body.removeChild(copytext);
+});
+</script>
          {% endblock %}

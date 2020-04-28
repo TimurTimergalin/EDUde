@@ -47,3 +47,10 @@ class AddTaskForm(FlaskForm):
     deadline = DateTimeField("Дедлайн")  # ?
     post_place = StringField('Куда отправлять', validators=[DataRequired()])
     submit = SubmitField('Отправить')
+
+
+class InvitingForm(FlaskForm):
+    """invitingForm
+       WTF model of Inviting form"""
+    email =EmailField('Введите email ученика', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
