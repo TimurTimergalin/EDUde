@@ -27,14 +27,14 @@
             </p>
         {% endfor %}
           {{ form.deadline.label }}
-      {{ form.deadline(class="half-width", type='date') }}
+      {{ form.deadline(class="half-width", type='datetime-local', style="width:250px") }}
       {% for error in form.task.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
-          {{ form.post_place.label }}
-      {{ form.post_place(class="half-width", type='url') }}
+          {{ form.link.label }}
+      {{ form.link(class="half-width", type='email', style="width:250px") }}
       {% for error in form.task.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}

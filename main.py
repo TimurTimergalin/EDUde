@@ -11,6 +11,7 @@ from data.student import Student
 from data.teacher import Teacher
 from data.class_room import ClassRoom
 from data.user import User
+from data.task import Task
 from create_user import create_user
 from flask_restful import Api
 from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm, AddTaskForm
@@ -21,8 +22,8 @@ import task_resources
 import logging
 from logging.handlers import RotatingFileHandler
 
-logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+# logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
+#                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -141,7 +142,7 @@ def profile():
             ClassRoom.teacher_id == current_user.teacher_id))
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == teacher.id), name=teacher.name)
+            ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id)
     else:
         return render_template('profile_of_student.html')
 
@@ -179,14 +180,28 @@ def api_1_0():
     return render_template('documentation_1.0.html', title='API v1.0')
 
 
-@app.route('/new_task', methods=['GET', 'POST'])
+@app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
 @login_required
-def new_task():
-    form = AddTaskForm()
-    session = db_session.create_session()
-    return render_template('new_task.html', current_user=current_user,
-                           classrooms=session.query(ClassRoom).filter(ClassRoom.teacher_id == current_user.teacher_id),
-                           form=form)
+def new_task(classroom_id):
+    if current_user.user_type() == Teacher:
+        form = AddTaskForm()
+        session = db_session.create_session()
+        print(form.deadline.data)
+        if form.validate_on_submit():
+            print('ok')
+            task = Task()
+            task.name = form.name_of_task.data
+            task.description = form.task.data
+            task.link = form.link.data
+            task.teacher_id = current_user.teacher_id
+            task.deadline = form.deadline.data
+            task.class_room_id = classroom_id
+            session.add(task)
+            session.commit()
+            return redirect('/profile')
+        return render_template('new_task.html', current_user=current_user,
+                               classrooms=session.query(ClassRoom).filter(ClassRoom.teacher_id == current_user.teacher_id),
+                               form=form)
 
 
 def check_email(session, form):
