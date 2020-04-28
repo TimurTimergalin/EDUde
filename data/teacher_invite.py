@@ -8,6 +8,8 @@ from sqlalchemy_serializer import SerializerMixin
 
 
 class TeacherInvite(SqlAlchemyBase, SerializerMixin):  # От учителя к ученику
+    __tablename__ = 'teacher_invites'
+
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
     teacher = orm.relation('Teacher')
