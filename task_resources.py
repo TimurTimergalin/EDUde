@@ -1,3 +1,5 @@
+import datetime
+
 from flask import jsonify
 from flask_restful import reqparse, abort, Resource
 from data import db_session
@@ -39,6 +41,9 @@ class TaskResource(Resource):
         args = edit_parser.parse_args()
         for i in args:
             if not args[i]:
+                continue
+            if i == 'deadline':
+                task.deadline = datetime.datetime.strptime(args[i], '%Y-%m-%d %H:%M%S')
                 continue
             setattr(task, i, args[i])
         session.commit()
