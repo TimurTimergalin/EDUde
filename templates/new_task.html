@@ -33,10 +33,6 @@
                 {{ error }}
             </p>
         {% endfor %}
-<!--          <div class="half-width">-->
-<!--            <label for="date">Дэдлайн</label>-->
-<!--            <input type="date" id="date" name="date">-->
-<!--          </div>-->
           {{ form.post_place.label }}
       {{ form.post_place(class="half-width", type='url') }}
       {% for error in form.task.errors %}
@@ -44,11 +40,6 @@
                 {{ error }}
             </p>
         {% endfor %}
-<!--          <div class="half-width">-->
-<!--            <label for="url">Куда отправлять</label>-->
-<!--            <input type="url" id="url" name="url">-->
-<!--          </div>-->
-
         </fieldset>
         <div class="buttons">
           {{ form.submit(type="submit") }}
@@ -57,7 +48,6 @@
                 {{ error }}
             </p>
         {% endfor %}
-<!--          <input type="submit" value="Отправить">-->
         </div>
       </form>
     </main>
