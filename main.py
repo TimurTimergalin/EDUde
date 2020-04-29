@@ -199,6 +199,11 @@ def api_1_0():
     # form = AddClassForm()/
 
 
+@app.route('/invite')
+def invite():
+    pass
+
+
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def new_task(classroom_id):
