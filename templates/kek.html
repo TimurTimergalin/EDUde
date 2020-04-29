@@ -1,28 +1,15 @@
 {% extends "base.html" %}
 {% block else_link %}
 <link rel="stylesheet" href="../static/css/log_up.css">
-<link rel="stylesheet" href="../static/css/log__in.css">
 <link rel="stylesheet" href="../static/css/log_success.css">
+<link rel="stylesheet" href="../static/css/kek.css">
 {% endblock %}
-
 {% block content %}
-
 <body class="bodys">
-
      <form method="post">
-         <p class="success" style="font-size: 23px">Действительно удалить?</p>
-    <button type="submit" class="a_btn" style="border: none;padding:5px 20px;font-size: 18px">Удалить</button>
+         <p class="success">Действительно удалить?</p>
+    <button type="submit" class="a_btn">Удалить</button>
     </form>
-<!--    <div class="div_mes">-->
-<!--        <p class="success">Вы успешно зарегистрировались</p>-->
-<!--        <img src="../static/img/check.png" class="img_suc">-->
-<!--    </div>-->
-<!--    <br>-->
-<!--    <div class="div_b">-->
-<!--        <a href="/" class="a_btn">На главную</a>-->
-<!--    </div>-->
-
-
 </body>
 
 {% endblock %}
