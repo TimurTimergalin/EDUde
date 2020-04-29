@@ -175,6 +175,8 @@ def tasks(teacher_id, classroom_id):
     if current_user.teacher_id == int(teacher_id):
         return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
                                classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
+                               link_css1=url_for('static', filename='css/tasks.css'),
+                               link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
                                link_logo=url_for('static', filename='img/logo.png'), tasks=session.query(Task).filter(
                 Task.class_room_id == classroom_id))
     return render_template('bad_request.html')

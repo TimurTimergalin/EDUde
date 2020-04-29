@@ -1,6 +1,10 @@
 {% extends "base_dashboard.html" %}
+    {% block else_link %}
+    <link rel="stylesheet" href="{{ link_css }}">
+<link rel="stylesheet" href="{{ link_css1 }}">
+<link rel="stylesheet" href="{{ link_css2 }}">
+    {% endblock %}
 {% block buttons %}
-<link rel="stylesheet" href="../static/css/dash_of_cur_class.css">
 <div class='flx'>
 <div class="container add">
     <div>
