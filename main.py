@@ -14,8 +14,8 @@ from data.user import User
 from data.task import Task
 from create_user import create_user
 from flask_restful import Api
-from api_func import abort_if_request_is_forbidden1
-from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm, AddTaskForm
+from api_func import abort_if_request_is_forbidden1, abort_if_student_not_found, abort_if_teacher_not_found
+from forms import *
 import student_resources
 import teacher_resources
 import classroom_resources
@@ -49,6 +49,11 @@ api.add_resource(task_resources.TaskListResource, '/api/1.0/tasks/<int:teacher_i
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
+
+
+@app.errorhandler(404)
+def error404(e):
+    return render_template('not_found.html')
 
 
 @app.errorhandler(403)
@@ -199,9 +204,21 @@ def api_1_0():
     # form = AddClassForm()/
 
 
-@app.route('/invite')
+@app.route('/invite',  methods=['GET', 'POST'])
+@login_required
 def invite():
-    pass
+    form = InvitingForm()
+    if form.validate_on_submit():
+        if current_user.user_type() == Teacher:
+            user = current_user.teacher
+            abort_if_student_not_found(int(form.id.data))
+            user.invite(int(form.id.data))
+        else:
+            user = current_user.student
+            abort_if_teacher_not_found(int(form.id.data))
+            user.invite(int(form.id.data))
+        return redirect('/profile')
+    return render_template('invitings.html', form=form)
 
 
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])

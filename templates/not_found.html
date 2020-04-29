@@ -1,0 +1,25 @@
+{% block link %}
+<link rel="stylesheet" href="../static/css/log_up.css">
+<link rel="stylesheet" href="../static/css/log__in.css">
+<link rel="stylesheet" href="../static/css/log_success.css">
+{% endblock %}
+
+{% block content %}
+<body class="bodys">
+<div>
+<div class="div_normal" style="min-width: 500px;font-size: 10px">
+    <div class="div_mes">
+        <p class="success">Пользователь не найден</p>
+        <div style="margin-top: -12px; margin-bottom: -10px">
+            <img src="../static/img/bad.png" class="img_suc" style="transform: scale(0.8); padding: 0; margin:0">
+        </div>
+
+    </div>
+    <br>
+    <div class="div_b">
+        <a href="/invite" class="a_btn">Назад</a>
+    </div>
+</div>
+</div>
+</body>
+{% endblock %}
