@@ -204,7 +204,7 @@ def accept_invite(invite_id):
 
 @app.route('/api')
 def api():
-    return render_template('api.html', title='API проекта')
+    return render_template('kek.html', title='API проекта')
 
 
 @app.route('/api/1.0')
