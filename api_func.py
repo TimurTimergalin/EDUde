@@ -53,7 +53,7 @@ def abort_if_student_not_found(student_id):
     student = session.query(Student).get(student_id)
     if not student:
         abort(404, message=f"Student {student_id} not found")
-        return
+        return True
     return student
 
 
@@ -72,5 +72,5 @@ def abort_if_task_not_found(task_id):
     task = session.query(ClassRoom).get(task_id)
     if not task:
         abort(404, message=f"Task {task_id} not found")
-        return
+        return True
     return task

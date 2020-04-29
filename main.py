@@ -157,19 +157,6 @@ def add_class():
     return render_template('add_class.html', form=form)
 
 
-@app.route('/dashboard', methods=["GET", "POST"])
-@login_required
-def dashboard():
-    session = db_session.create_session()
-    if current_user.user_type() == Teacher:
-        teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
-        return render_template('dashboard_of_teacher.html', classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == teacher.id), link_css=url_for('static', filename='css/table.css'),
-                               link_logo=url_for('static', filename='img/logo.png'))
-    else:
-        return render_template('dashboard_of_student.html')
-
-
 @app.route('/tasks/<teacher_id>/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def tasks(teacher_id, classroom_id):
