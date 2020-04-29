@@ -43,7 +43,7 @@ class TaskResource(Resource):
             if not args[i]:
                 continue
             if i == 'deadline':
-                task.deadline = datetime.datetime.strptime(args[i], '%Y-%m-%d %H:%M%S')
+                task.deadline = datetime.datetime.strptime(args[i], '%Y-%m-%d %H:%M')
                 continue
             setattr(task, i, args[i])
         session.commit()
@@ -75,7 +75,7 @@ class TaskListResource(Resource):
         abort_if_password_is_wrong(teacher_id, teacher_password)
         task = Task()
         task.name = args['name']
-        task.deadline = args['deadline']
+        task.deadline = datetime.datetime.strptime(args['deadline'], '%Y-%m-%d %H:%M:%S')
         task.link = args['link']
         task.description = args['description']
         session.add(task)

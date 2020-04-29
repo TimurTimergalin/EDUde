@@ -45,7 +45,7 @@ class AddTaskForm(FlaskForm):
        WTF model of Add class form"""
     name_of_task = TextAreaField('Название задания', validators=[DataRequired()])
     task = TextAreaField('Что делать', validators=[DataRequired()])
-    deadline = TimeField("Дедлайн", validators=[DataRequired()])
+    deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
     link = StringField('Куда отправлять', validators=[DataRequired()])
     submit = SubmitField('Отправить')
 

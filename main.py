@@ -21,6 +21,7 @@ import classroom_resources
 import task_resources
 import logging
 from logging.handlers import RotatingFileHandler
+from datetime import datetime
 
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
@@ -186,7 +187,11 @@ def new_task(classroom_id):
     if current_user.user_type() == Teacher:
         form = AddTaskForm()
         session = db_session.create_session()
-        print(form.deadline.data)
+        for i in dir(form.deadline):
+            try:
+                print(i, getattr(form.deadline, i))
+            except Exception:
+                pass
         if form.validate_on_submit():
             print('ok')
             task = Task()
