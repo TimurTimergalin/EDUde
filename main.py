@@ -5,7 +5,7 @@ from werkzeug.utils import redirect
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -14,6 +14,7 @@ from data.user import User
 from data.task import Task
 from create_user import create_user
 from flask_restful import Api
+from api_func import abort_if_request_is_forbidden1
 from forms import RegistrationForm, LoginForm, RECAPTCHA_PRIVATE_KEY, RECAPTCHA_PUBLIC_KEY, AddClassForm, AddTaskForm
 import student_resources
 import teacher_resources
@@ -135,7 +136,7 @@ def profile():
         return render_template('profile_of_student.html')
 
 
-@app.route('/new_class')
+@app.route('/new_class', methods=["GET", "POST"])
 def add_class():
     form = AddClassForm()
     session = db_session.create_session()
@@ -172,11 +173,32 @@ def dashboard():
 @app.route('/tasks/<teacher_id>/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def tasks(teacher_id, classroom_id):
+    session = db_session.create_session()
     if current_user.teacher_id == int(teacher_id):
+        tasks = session.query(Task).filter(
+            Task.class_room_id == classroom_id)
+        # print(task.deadline.strftime("%Y-%m-%d %H:%M:%s"))
         return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
                                classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
-                               link_logo=url_for('static', filename='img/logo.png'))
+                               link_logo=url_for('static', filename='img/logo.png'), tasks=session.query(Task).filter(
+                                Task.class_room_id == classroom_id))
     return render_template('bad_request.html')
+
+
+@app.route('/kek/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def kek(task_id):
+    if abort_if_request_is_forbidden1(current_user.teacher_id, task_id):
+        if request.method == 'GET':
+            print('kok')
+            return render_template('kek.html', task_id=task_id)
+        elif request.method == 'POST':
+            print('sok')
+            session = db_session.create_session()
+            task = session.query(Task).get(task_id)
+            session.delete(task)
+            session.commit()
+            return redirect(f'/tasks/{current_user.teacher_id}/{task_id}')
 
 
 @app.route('/api')
@@ -207,9 +229,10 @@ def new_task(classroom_id):
             task.class_room_id = classroom_id
             session.add(task)
             session.commit()
-            return redirect('/profile')
+            return redirect(f'/tasks/{current_user.teacher_id}/{classroom_id}')
         return render_template('new_task.html', current_user=current_user,
-                               classrooms=session.query(ClassRoom).filter(ClassRoom.teacher_id == current_user.teacher_id),
+                               classrooms=session.query(ClassRoom).filter(
+                                   ClassRoom.teacher_id == current_user.teacher_id),
                                form=form)
 
 

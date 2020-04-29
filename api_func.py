@@ -63,7 +63,7 @@ def abort_if_request_is_forbidden1(teacher_id, task_id):
     task = session.query(Task).get(task_id)
     for i in teacher.class_rooms:
         if task in i.tasks:
-            return
+            return True
     abort(403, message="You are not allowed to get info about this task")
 
 

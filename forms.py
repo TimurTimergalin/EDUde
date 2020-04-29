@@ -55,3 +55,7 @@ class InvitingForm(FlaskForm):
        WTF model of Inviting form"""
     email = EmailField('Введите email ученика', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class AcceptionForm(FlaskForm):
+    submit_true = SubmitField('Удалить')
