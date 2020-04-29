@@ -2,7 +2,14 @@
 {% block else_link %}
 <link rel="stylesheet" href="../static/css/profs.css">
 {% endblock %}
-
+{% block about_pr %}
+<li class="nav-item ab" style="width: auto;">
+        <button id="userButton" style="width: auto;background: white; border: none;color: black;border-radius: 50px;padding: 6px 14px;margin-left:10px">
+            Скопировать пароль<br>
+        <small style="font-size: 9px; margin-left: 6px">Никому не разглашайте данный пароль</small>
+        </button>
+      </li>
+        {% endblock %}
     {% block content %}
 <div class="photo">
     <img src="../static/img/desk.jpg">
@@ -12,16 +19,16 @@
 </div>
 {% block add_class_to_teacher %}
 {% endblock %}
-<div class="point">
-        <h2 class="li_of_s">Список классов</h2>
-<ul class="list-group list-group-flush">
-   {% for classroom in classrooms %}
-        <li class="btn_add lis"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>
-        </li>
-   {% endfor %}
+<!--<div class="point">-->
+<!--        <h2 class="li_of_s">Список классов</h2>-->
+<!--<ul class="list-group list-group-flush">-->
+<!--   {% for classroom in classrooms %}-->
+<!--        <li class="btn_add lis"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>-->
+<!--        </li>-->
+<!--   {% endfor %}-->
 
-</ul>
-     </div>
+<!--</ul>-->
+<!--     </div>-->
 <div class='point reques'>
         <h2 class="li_of_s">Заявки на классы</h2>
 <ul class="list-group list-group-flush">
@@ -38,4 +45,15 @@
 
 </ul>
      </div>
+ <script>
+var button = document.getElementById("userButton");
+button.addEventListener("click", function (popa){
+var copytext = document.createElement("input");
+copytext.value = "090909000";
+document.body.appendChild(copytext);
+copytext.select();
+document.execCommand("copy");
+document.body.removeChild(copytext);
+});
+</script>
 {% endblock %}
