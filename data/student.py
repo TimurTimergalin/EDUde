@@ -9,6 +9,7 @@ from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
 from data.student_invite import StudentInvite
 from data import db_session
+from data.teacher_invite import TeacherInvite
 
 
 student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,

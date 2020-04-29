@@ -15,6 +15,8 @@ from data.task import Task
 from create_user import create_user
 from flask_restful import Api
 from api_func import abort_if_request_is_forbidden1, abort_if_student_not_found, abort_if_teacher_not_found
+from data.student_invite import StudentInvite
+from data.teacher_invite import TeacherInvite
 from forms import *
 import student_resources
 import teacher_resources
@@ -136,9 +138,13 @@ def profile():
     if current_user.user_type() == Teacher:
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id)
+            ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id,
+                               invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all())
     else:
-        return render_template('profile_of_student.html')
+        student = session.query(Student).filter(Student.id == current_user.student_id).first()
+        return render_template('profile_of_student.html', classrooms=session.query(ClassRoom).filter(
+            ClassRoom.teacher_id == student.id), name=student.name, id=student.id,
+                               invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all())
 
 
 @app.route('/new_class', methods=["GET", "POST"])
@@ -167,13 +173,10 @@ def add_class():
 def tasks(teacher_id, classroom_id):
     session = db_session.create_session()
     if current_user.teacher_id == int(teacher_id):
-        tasks = session.query(Task).filter(
-            Task.class_room_id == classroom_id)
-        # print(task.deadline.strftime("%Y-%m-%d %H:%M:%s"))
         return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
                                classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
                                link_logo=url_for('static', filename='img/logo.png'), tasks=session.query(Task).filter(
-                                Task.class_room_id == classroom_id))
+                Task.class_room_id == classroom_id))
     return render_template('bad_request.html')
 
 
@@ -190,7 +193,13 @@ def kek(task_id):
             task = session.query(Task).get(task_id)
             session.delete(task)
             session.commit()
-            return redirect(f'/tasks/{current_user.teacher_id}/{task_id}')
+            return redirect('/profile')
+
+
+@app.route('/accept_invite/<int:invite_id>')
+@login_required
+def accept_invite(invite_id):
+    pass
 
 
 @app.route('/api')
@@ -204,7 +213,7 @@ def api_1_0():
     # form = AddClassForm()/
 
 
-@app.route('/invite',  methods=['GET', 'POST'])
+@app.route('/invite', methods=['GET', 'POST'])
 @login_required
 def invite():
     form = InvitingForm()
