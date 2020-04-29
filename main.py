@@ -187,11 +187,6 @@ def new_task(classroom_id):
     if current_user.user_type() == Teacher:
         form = AddTaskForm()
         session = db_session.create_session()
-        for i in dir(form.deadline):
-            try:
-                print(i, getattr(form.deadline, i))
-            except Exception:
-                pass
         if form.validate_on_submit():
             print('ok')
             task = Task()
