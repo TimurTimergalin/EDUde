@@ -128,24 +128,32 @@ def logout():
 def profile():
     session = db_session.create_session()
     if current_user.user_type() == Teacher:
-        form = AddClassForm()
-        if form.validate_on_submit():
-            if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
-                return render_template('profile_of_teacher.html', form=form,
-                                       message="Такой класс уже есть")
-            classroom = ClassRoom()
-            classroom.name = form.name_of_class.data
-            classroom.teacher_id = current_user.teacher_id
-            session.add(classroom)
-            session.commit()
-            redirect('/dashboard')
-        print(session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == current_user.teacher_id))
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
-        return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
+        return render_template('profile_of_teacher.html', classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id)
     else:
         return render_template('profile_of_student.html')
+
+
+@app.route('/new_class')
+def add_class():
+    form = AddClassForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
+            form = AddClassForm()
+            return render_template('add_class.html', form=form,
+                                   message="Такой класс уже есть")
+        classroom = ClassRoom()
+        classroom.name = form.name_of_class.data
+        classroom.teacher_id = current_user.teacher_id
+        session.add(classroom)
+        session.commit()
+        redirect('/dashboard')
+    # print(session.query(ClassRoom).filter(
+    #     ClassRoom.teacher_id == current_user.teacher_id))
+    teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
+    return render_template('add_class.html', form=form)
 
 
 @app.route('/dashboard', methods=["GET", "POST"])
@@ -158,7 +166,7 @@ def dashboard():
             ClassRoom.teacher_id == teacher.id), link_css=url_for('static', filename='css/table.css'),
                                link_logo=url_for('static', filename='img/logo.png'))
     else:
-        return render_template('profile_of_student.html')
+        return render_template('dashboard_of_student.html')
 
 
 @app.route('/tasks/<teacher_id>/<classroom_id>', methods=['GET', 'POST'])

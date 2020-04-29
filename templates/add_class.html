@@ -29,13 +29,12 @@
         {% endfor %}
     </p>
   </div>
-    {{ form.submit(type="submit", class="btn btn_add lis form_btns sv") }}
+    {{ form.submit(type="submit", class="btn btn_add lis form_btns") }}
     {% for error in form.submit.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
-    <a class="btn btn_add lis form_btns" href="/">Добавить учеников</a>
     {{message}}
 
 </form>

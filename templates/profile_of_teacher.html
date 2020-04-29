@@ -4,34 +4,5 @@
 <link rel="stylesheet" href="../static/css/profs.css">
     {% endblock %}
 {% block add_class_to_teacher %}
-<style>
-table::-webkit-scrollbar { width: 0; }
-</style>
-    <textarea style="display: none" id="cont">90909090909090</textarea>
-    <div class="class" >
-        <div class="flex_box">
-    <table class="table table-borderless tab container" style="
-    margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
-       <thead>
-    <tr style="color: blue;width: auto">
-        <th scope="col">id</th>
-        <th scope="col">Класс\предмет</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for classroom in classrooms %}
-    <tr style="color: blue; text-align: left">
-        <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ classroom.id }}</strong></td>
-        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>
-        </td>
-    </tr>
-
-  {% endfor %}
-
-  </tbody>
-
-</table>
-        </div>
-        <a class="btn btn_add lis form_btns" href="/" style="width: 280px; margin-left: 57px">Добавить класс</a>
-    </div>
-         {% endblock %}
+    <a class="btn btn_add lis form_btns" href="/new_class" style="width: 280px; margin-left: 57px">Добавить класс</a>
+{% endblock %}

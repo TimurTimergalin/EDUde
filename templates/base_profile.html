@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% block else_link %}
+    <link rel="stylesheet" href="../static/css/table.css">
 <link rel="stylesheet" href="../static/css/profs.css">
-{% endblock %}
+    {% endblock %}
 {% block about_pr %}
 <li class="nav-item ab" style="width: auto;">
         <button id="userButton" style="width: auto;background: white; border: none;color: black;border-radius: 50px;padding: 6px 14px;margin-left:10px">
@@ -17,18 +18,34 @@
     <h6 class="name_user">Имя пользователя: {{ name }}</h6>
     <h6 class="name_user">Id пользователя: {{ id }}</h6>
 </div>
-{% block add_class_to_teacher %}
-{% endblock %}
-<!--<div class="point">-->
-<!--        <h2 class="li_of_s">Список классов</h2>-->
-<!--<ul class="list-group list-group-flush">-->
-<!--   {% for classroom in classrooms %}-->
-<!--        <li class="btn_add lis"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>-->
-<!--        </li>-->
-<!--   {% endfor %}-->
+<div class="class" >
+        <div class="flex_box">
+    <table class="table table-borderless tab container" style="
+    margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
+       <thead>
+    <tr style="color: blue;width: auto">
+        <th scope="col">id</th>
+        <th scope="col">Класс\предмет</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for classroom in classrooms %}
+    <tr style="color: blue; text-align: left">
+        <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ classroom.id }}</strong></td>
+        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>
+        </td>
+    </tr>
 
-<!--</ul>-->
-<!--     </div>-->
+  {% endfor %}
+
+  </tbody>
+
+</table>
+        </div>
+    {% block add_class_to_teacher %}
+
+{% endblock %}
+    </div>
 <div class='point reques'>
         <h2 class="li_of_s">Заявки на классы</h2>
 <ul class="list-group list-group-flush">
