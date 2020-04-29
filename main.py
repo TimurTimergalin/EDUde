@@ -199,7 +199,35 @@ def kek(task_id):
 @app.route('/accept_invite/<int:invite_id>')
 @login_required
 def accept_invite(invite_id):
-    pass
+    session = db_session.create_session()
+    if current_user.user_type() == Teacher:
+        invite_ = session.query(StudentInvite).get(invite_id)
+        if invite_.teacher == current_user.teacher:
+            current_user.teacher.add_student(invite_.student)
+    else:
+        invite_ = session.query(TeacherInvite).get(invite_id)
+        if invite_.student == current_user.student:
+            invite_.teacher.add_student(current_user.student)
+    session.delete(invite_)
+    session.commit()
+    return redirect('/profile')
+
+
+@app.route('/refuse_invite/<int:invite_id>')
+@login_required
+def refuse_invite(invite_id):
+    session = db_session.create_session()
+    if current_user.user_type() == Teacher:
+        invite_ = session.query(StudentInvite).get(invite_id)
+        if invite_.teacher != current_user.teacher:
+            return redirect('/profile')
+    else:
+        invite_ = session.query(TeacherInvite).get(invite_id)
+        if invite_.student != current_user.student:
+            return redirect('/profile')
+    session.delete(invite_)
+    session.commit()
+    return redirect('/profile')
 
 
 @app.route('/api')
