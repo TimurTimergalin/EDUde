@@ -1,118 +1,14 @@
 {% extends "base_dashboard.html" %}
 {% block buttons %}
-<style>
-        body{
-background: #65A2CE;
-background-size: cover;
-}
-.prof{
-font-size: 15px;
-font-weight: 100;
-color: white;
-padding: 40px 30px 20px 30px;
-background-color: #A8C7A8;
-margin-top: -35px;
-border-radius: 10px;
-box-shadow: 0 0 8px #818181;
-letter-spacing: 2px;
-}
-.log_out{
-background-color: white;
-color: #6896DC;
-padding: 9px 30px;
-border-radius: 27px;
-text-decoration: none;
-font-size: 18px;
-margin-right: 13px;
-box-shadow: 0 0 4px #818181;
-}
-.log_out:hover{
-background-color: #A8C7A8;
-color: white;
-text-decoration: none;
-}
-
-
-.tab{
-background: white;
-width: 95%;
-margin-top: 30px;
-opacity: 0.9;
-border-radius: 20px;
-overflow: scroll;
-max-height: 700px;
-box-shadow: 0 0 10px #818181;
-}
-.submt{
-text-align: center;
-background-color: #A8C7A8;
-width: 160px;
-border-radius: 40px;
-margin-bottom: 50px;
-margin-top: 50px;
-padding: 6px 11px;
-box-shadow: 0 0 4px #818181;
-}
-textarea{
-max-width: 190px;
-margin: 0;
-border: none;
-min-height: 40px;
-max-width: 190px;
-}
-.save{
-color: white;
-font-size: 17px;
-font-weight: 80;
-letter-spacing: 1px;
-}
-.save:hover{
-color: white;
-text-decoration: none;
-}
-.delete{
-color: #6896DC;
-font-size: 17px;
-margin: 0;
-padding: 0;
-}
-.delete:hover{
-text-decoration: none;
-color: #689775
-}
-.add{
-width: 200px;
-font-size: 12px;
-text-align: center;
-background-color: #A8C7A8;
-margin-bottom: 10px;
-border-radius: 40px;
-padding: 7px 9px;
-box-shadow: 0 0 4px #818181;
-margin-left: 33%;
-}
-.add_a{
-font-size: 15px;
-letter-spacing: 2px;
-font-weight: 100;
-}
-
-tab{
-margin-left: 50px;
-}
-.flex_box{
-display:flex;
-margin: 0 50px;
-}
-</style>
-<div style="display:flex;">
+<link rel="stylesheet" href="../static/css/dash_of_cur_class.css">
+<div class='flx'>
 <div class="container add">
     <div>
     <a href="/new_task/{{ classroom_id }}" class="save add_a"> Добавить задание </a>
     <!--передаем айди учителя и класса-->
     </div>
 </div>
-<div class="container add" style="margin-right: 6%">
+<div class="container add d3">
     <div>
     <a href="/new_task/1/2" class="save add_a"> Добавить ученика </a>
     <!--передаем айди учителя и класса-->
@@ -127,7 +23,7 @@ margin: 0 50px;
       <td><p>{{ task.name }}</p></td>
         <td><p>{{ task.deadline }}</p></td>
       <td><p>{{ task.description }}</p></td>
-        <td><p wrap='soft'>{{ task.link }}</p></td>
+        <td><p>{{ task.link }}</p></td>
         <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a></td>
     </tr>
     {% endfor %}
@@ -143,13 +39,13 @@ margin: 0 50px;
   <tbody>
     <tr>
       <th scope="row">1</th>
-      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+      <td><p>Timergalin Timur</p></td>
 
         <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
     </tr>
     <tr>
       <th scope="row">2</th>
-      <td><textarea wrap='soft'>Timergalin Timur</textarea></td>
+      <td><p>Timergalin Timur</p></td>
 
         <td><a href="/delete_task/1" class="delete"> Удалить</a></td>
     </tr>
