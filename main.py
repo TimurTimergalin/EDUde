@@ -22,6 +22,7 @@ import task_resources
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
+from generate_key import generate_key
 
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
@@ -143,7 +144,7 @@ def profile():
             ClassRoom.teacher_id == current_user.teacher_id))
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', form=form, classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id)
+            ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id, key=generate_key(teacher))
     else:
         return render_template('profile_of_student.html')
 

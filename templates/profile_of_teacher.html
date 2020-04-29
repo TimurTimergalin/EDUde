@@ -50,7 +50,7 @@
 var button = document.getElementById("userButton");
 button.addEventListener("click", function (popa){
 var copytext = document.createElement("input");
-copytext.value = "090909000";
+copytext.value = {{ key }};
 document.body.appendChild(copytext);
 copytext.select();
 document.execCommand("copy");
