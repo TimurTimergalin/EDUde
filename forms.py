@@ -53,7 +53,7 @@ class AddTaskForm(FlaskForm):
 class InvitingForm(FlaskForm):
     """invitingForm
        WTF model of Inviting form"""
-    email = EmailField('Введите email ученика', validators=[DataRequired()])
+    id = StringField('Введите id пользователя', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
 
 

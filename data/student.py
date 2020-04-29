@@ -59,6 +59,10 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def invite(self, teacher_id):
         session = db_session.create_session()
+        invites = session.query(StudentInvite).filter(StudentInvite.student_id == self.id).all()
+        for i in invites:
+            if i.teacher_id == teacher_id:
+                return
         invite_ = StudentInvite()
         invite_.student_id = self.id
         invite_.teacher_id = teacher_id
