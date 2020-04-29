@@ -190,7 +190,7 @@ def kek(task_id):
 
 @app.route('/api')
 def api():
-    return render_template('api.html', title='API проекта')
+    return render_template('send_homework.html', title='API проекта')
 
 
 @app.route('/api/1.0')

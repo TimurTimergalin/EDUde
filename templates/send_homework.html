@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block else_link %}
+<link rel="stylesheet" href="../static/css/log_up.css">
+<link rel="stylesheet" href="../static/css/log__in.css">
+{% endblock %}
+
+{% block content %}
+<style>
+    .ad_file{
+    text-align: center;
+    border-radius: 15px;
+    background-color: #A8C7A8;
+    padding: 3px 0;
+    cursor: pointer;
+    }
+    .form{
+    display: inline;
+    }
+</style>
+<div class="form-div">
+ <form action="" method="post" enctype=multipart/form-data>
+        <fieldset>
+          <legend>Отправка задания</legend>
+     <div class="form">
+  <input type="file" class="amount"><br>
+        <div class="add ad_file">Добавить файл</div>
+        </div>
+        </fieldset>
+           </form>
+</div>
+<script>
+    var $add = document.getElementsByClassName('add')[0];
+    var $form = document.getElementsByClassName('form')[0];
+    $add.addEventListener('click', function(event) {
+      var $input = document.createElement('input');
+      $input.type = 'file';
+      $input.placeholder = 'Кол-во';
+      $input.classList.add('amount');
+      $form.insertBefore($input, $add);
+});
+</script>
+{% endblock %}
