@@ -1,5 +1,6 @@
+from click import DateTime
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, SelectField, DateTimeField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, TextAreaField, DateTimeField, DateField, TimeField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 from flask_wtf.recaptcha import RecaptchaField
@@ -44,13 +45,13 @@ class AddTaskForm(FlaskForm):
        WTF model of Add class form"""
     name_of_task = TextAreaField('Название задания', validators=[DataRequired()])
     task = TextAreaField('Что делать', validators=[DataRequired()])
-    deadline = DateTimeField("Дедлайн")  # ?
-    post_place = StringField('Куда отправлять', validators=[DataRequired()])
+    deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    link = StringField('Куда отправлять', validators=[DataRequired()])
     submit = SubmitField('Отправить')
 
 
 class InvitingForm(FlaskForm):
     """invitingForm
        WTF model of Inviting form"""
-    email =EmailField('Введите email ученика', validators=[DataRequired()])
+    email = EmailField('Введите email ученика', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
