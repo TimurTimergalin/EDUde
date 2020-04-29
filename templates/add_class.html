@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block else_link %}
+<link rel="stylesheet" href="../static/css/profs.css">
+{% endblock %}
+{% block pages %}
+    <div class="class" style="margin-left: 400px">
+        <h2>Добавить класс</h2>
+<form class="forma" method="post">
+    {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+
+  <div class="form-group">
+       {{ form.name_of_class.label }}
+      {{ form.name_of_class(type="text", class="form-control") }}
+    <small class="sml">Например, 10А</small>
+      {% for error in form.name_of_class.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+  </div>
+  <div class="form-group">
+      {{ form.subj.label }}
+      {{ form.subj(type="text", class="form-control") }}
+      {% for error in form.subj.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    </p>
+  </div>
+    {{ form.submit(type="submit", class="btn btn_add lis form_btns sv") }}
+    {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+    <a class="btn btn_add lis form_btns" href="/">Добавить учеников</a>
+    {{message}}
+
+</form>
+    </div>
+{% endblock %}

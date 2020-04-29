@@ -177,6 +177,7 @@ def api():
 @app.route('/api/1.0')
 def api_1_0():
     return render_template('documentation_1.0.html', title='API v1.0')
+    # form = AddClassForm()/
 
 
 @app.route('/new_task', methods=['GET', 'POST'])
