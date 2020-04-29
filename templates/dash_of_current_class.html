@@ -124,10 +124,10 @@ margin: 0 50px;
     {% for task in tasks %}
     <tr>
       <th scope="row">{{ task.id }}</th>
-      <td><textarea wrap='soft'>{{ task.name }}</textarea></td>
-        <td><textarea wrap='soft'>{{ task.deadline }}</textarea></td>
-      <td><textarea wrap='soft'>{{ task.description }}</textarea></td>
-        <td><textarea wrap='soft'>{{ task.link }}</textarea></td>
+      <td><p>{{ task.name }}</p></td>
+        <td><p>{{ task.deadline }}</p></td>
+      <td><p>{{ task.description }}</p></td>
+        <td><p wrap='soft'>{{ task.link }}</p></td>
         <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a></td>
     </tr>
     {% endfor %}

@@ -50,14 +50,11 @@
     <div class="point">
         <h2 class="li_of_s">Заявки на классы</h2>
 <ul class="list-group list-group-flush">
-   {% for classroom in classrooms %}
-        <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a><br>
-            Здесь будет указано название и предмет класса и его руководитель
+   {% for invite in invites %}
+        <li class="btn_add lis req_li"><br>
+    invite.__repr__()
         <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
-        </li>
-    <li class="btn_add lis req_li"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a><br>
-            Здесь будет указано название и предмет класса и его руководитель
-        <br><input type='submit' value="Принять" class="btn btn_add lis form_btns sv">
+            <br><input type='submit' value="Отклонить" class="btn btn_add lis form_btns sv">
         </li>
    {% endfor %}
 
