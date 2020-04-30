@@ -53,8 +53,8 @@
    {% for invite in invites %}
         <li class="btn_add lis req_li"><br>
     {{ invite.__repr__() }}
-            <br><a class="btn btn_add lis form_btns sv" href="/accept_invite/invite.id">Принять</a>
-            <br><a class="btn btn_add lis form_btns sv" href="/refuse_invite/invite.id">Отклонить</a>
+            <br><a class="btn btn_add lis form_btns sv" href="/accept_invite/{{invite.id}}">Принять</a>
+            <br><a class="btn btn_add lis form_btns sv" href="/refuse_invite/{{invite.id}}">Отклонить</a>
         </li>
    {% endfor %}
 
