@@ -27,8 +27,8 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
     name = Cl(sql.String)
     email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
-    teachers = orm.relationship('Teacher', secondary='teacher_to_student')
-    class_rooms = orm.relationship('ClassRoom', secondary='student_to_class')
+    teachers = orm.relation('Teacher', secondary='teacher_to_student', backref='teacher')
+    class_rooms = orm.relation('ClassRoom', secondary='student_to_class', backref='class_room')
     users = orm.relation('User', back_populates='student')
 
     def __repr__(self):
