@@ -28,7 +28,11 @@
         <td><p>{{ task.deadline }}</p></td>
       <td><p>{{ task.description }}</p></td>
         <td><p>{{ task.link }}</p></td>
+        {% if is_teacher %}
         <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a></td>
+        {% else %}
+        <td><a href="/kek/{{ task.id }}" class="delete"> Отправить</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
 {% endblock %}
