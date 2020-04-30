@@ -10,19 +10,14 @@
 <form>
   <div class="form-check" style="width: 800px">
       {% for student in students %}
-  <input class="form-check-input" type="checkbox" value="{{student.id}}" id="defaultCheck1">
+  <input class="form-check-input" type="checkbox" value="{{student.id}}: {{student.name}} {{student.surname}}" id="defaultCheck1" name="checkbox">
   <label class="form-check-label" for="defaultCheck1">
     {{student.name}} {{student.name}}
   </label>
       {% endfor %}
 </div>
   <div class="buttons">
-        {{ form.submit(type="submit") }}<br>
-        {% for error in form.submit.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
+        <input type="submit" value="Отправить">
         </div>
 </form>
 {% endblock %}
