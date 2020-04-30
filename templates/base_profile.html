@@ -32,7 +32,7 @@
   {% for classroom in classrooms %}
     <tr style="color: blue; text-align: left">
         <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ classroom.id }}</strong></td>
-        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.teacher_id }}/{{ classroom.id }}">{{ classroom.name }}</a>
+        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.id }}">{{ classroom.name }}</a>
         </td>
     </tr>
 

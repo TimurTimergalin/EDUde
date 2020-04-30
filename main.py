@@ -22,6 +22,7 @@ import student_resources
 import teacher_resources
 import classroom_resources
 import task_resources
+from email_sender import sendmessage
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
@@ -152,7 +153,8 @@ def add_class():
     form = AddClassForm()
     session = db_session.create_session()
     if form.validate_on_submit():
-        if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data).first():
+        if session.query(ClassRoom).filter(ClassRoom.name == form.name_of_class.data,
+                                           ClassRoom.teacher_id == current_user.teacher_id).first():
             form = AddClassForm()
             return render_template('add_class.html', form=form,
                                    message="Такой класс уже есть")
@@ -161,24 +163,34 @@ def add_class():
         classroom.teacher_id = current_user.teacher_id
         session.add(classroom)
         session.commit()
-        redirect('/dashboard')
-    # print(session.query(ClassRoom).filter(
-    #     ClassRoom.teacher_id == current_user.teacher_id))
-    teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
+        return redirect('/profile')
     return render_template('add_class.html', form=form)
 
 
-@app.route('/tasks/<teacher_id>/<classroom_id>', methods=['GET', 'POST'])
+@app.route('/tasks/<classroom_id>', methods=['GET', 'POST'])
 @login_required
-def tasks(teacher_id, classroom_id):
+def tasks(classroom_id):
     session = db_session.create_session()
-    if current_user.teacher_id == int(teacher_id):
-        return render_template('dash_of_current_class.html', teacher_id=current_user.teacher_id,
-                               classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
-                               link_css1=url_for('static', filename='css/tasks.css'),
-                               link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
-                               link_logo=url_for('static', filename='img/logo.png'), tasks=session.query(Task).filter(
-                Task.class_room_id == classroom_id))
+    deadline_delete(classroom_id)
+    if current_user.user_type == Teacher:
+        if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
+            return render_template('dash_of_current_class.html',
+                                   classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
+                                   link_css1=url_for('static', filename='css/tasks.css'),
+                                   link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
+                                   link_logo=url_for('static', filename='img/logo.png'),
+                                   tasks=session.query(Task).filter(
+                                       Task.class_room_id == classroom_id), is_teacher=True)
+    else:
+        student = session.query(Student).get(current_user.student_id)
+        if student in session.query(ClassRoom).get(classroom_id).students:
+            return render_template('dash_of_current_class.html',
+                                   classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
+                                   link_css1=url_for('static', filename='css/tasks.css'),
+                                   link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
+                                   link_logo=url_for('static', filename='img/logo.png'),
+                                   tasks=session.query(Task).filter(
+                                       Task.class_room_id == classroom_id), is_teacher=False)
     return render_template('bad_request.html')
 
 
@@ -266,6 +278,24 @@ def invite():
     return render_template('invitings.html', form=form)
 
 
+@app.route('/send_task/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def send_task(task_id):
+    session = db_session.create_session()
+    task = session.query(Task).get(task_id)
+    classroom = task.class_room
+    if request.method == 'GET':
+        if current_user.user_type() == Student:
+            if current_user.student in classroom.students:
+                return render_template('send_homework.html')
+        return redirect('/profile')
+    elif request.method == 'POST':
+        text = request.form['message']
+        files = request.files
+        sendmessage(current_user.student.surname, classroom.name, task.name, task.link, text, files)
+        return redirect('/profile')
+
+
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def new_task(classroom_id):
@@ -290,6 +320,15 @@ def new_task(classroom_id):
                                form=form)
 
 
+def deadline_delete(classroom_id):
+    session = db_session.create_session()
+    tasks = session.query(ClassRoom).get(classroom_id).tasks
+    for task in tasks:
+        if datetime.now() > task.deadline:
+            session.delete(task)
+    session.commit()
+
+
 def check_email(session, form):
     if session.query(Teacher).filter(Teacher.email == form.email.data).first():
         return True
@@ -306,7 +345,6 @@ def user_type_choice(session, form):
 
 def main():
     db_session.global_init("db/edu.sqlite")
-    session = db_session.create_session()
     app.run()
 
 
