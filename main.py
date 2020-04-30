@@ -148,7 +148,27 @@ def profile():
                                invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all())
 
 
+@app.route('/new_student/<classroom_id>', methods=["GET", "POST"])
+@login_required
+def new_student(classroom_id):
+    if current_user.user_type() == Teacher:
+        if request.method == 'GET':
+            return render_template('add_students.html', students=current_user.teacher.students)
+        elif request.method == 'POST':
+            session = db_session.create_session()
+            classroom = session.query(ClassRoom).get(classroom_id)
+            for data in request.form.getlist('checkbox'):
+                student = session.query(Student).get(int(data))
+                classroom.add_student(student)
+            session.commit()
+        return redirect(f'/tasks/{classroom_id}')
+    return redirect('/profile')
+
+
+
+
 @app.route('/new_class', methods=["GET", "POST"])
+@login_required
 def add_class():
     form = AddClassForm()
     session = db_session.create_session()
@@ -172,7 +192,7 @@ def add_class():
 def tasks(classroom_id):
     session = db_session.create_session()
     deadline_delete(classroom_id)
-    if current_user.user_type == Teacher:
+    if current_user.user_type() == Teacher:
         if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
             return render_template('dash_of_current_class.html',
                                    classroom_id=classroom_id, link_css=url_for('static', filename='css/table.css'),
@@ -199,10 +219,8 @@ def tasks(classroom_id):
 def kek(task_id):
     if abort_if_request_is_forbidden1(current_user.teacher_id, task_id):
         if request.method == 'GET':
-            print('kok')
             return render_template('kek.html', task_id=task_id)
         elif request.method == 'POST':
-            print('sok')
             session = db_session.create_session()
             task = session.query(Task).get(task_id)
             session.delete(task)
@@ -303,7 +321,6 @@ def new_task(classroom_id):
         form = AddTaskForm()
         session = db_session.create_session()
         if form.validate_on_submit():
-            print('ok')
             task = Task()
             task.name = form.name_of_task.data
             task.description = form.task.data
