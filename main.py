@@ -234,7 +234,7 @@ def refuse_invite(invite_id):
 
 @app.route('/api')
 def api():
-    return render_template('bad_request.html', title='API проекта')
+    return render_template('api.html', title='API проекта')
 
 
 @app.route('/api/1.0')

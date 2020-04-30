@@ -22,10 +22,24 @@
         <fieldset>
           <legend>Отправка задания</legend>
      <div class="form">
-  <input type="file" class="amount"><br>
+         {{ form.file.label }}<br>
+        {{ form.file(type="file", class='amount') }}<br>
+        {% for error in form.password.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
         <div class="add ad_file">Добавить файл</div>
         </div>
         </fieldset>
+     <div class="buttons">
+        {{ form.submit(type="submit") }}<br>
+        {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        </div>
            </form>
 </div>
 <script>
@@ -35,6 +49,7 @@
       var $input = document.createElement('input');
       $input.type = 'file';
       $input.placeholder = 'Кол-во';
+      $input.name = 'file';
       $input.classList.add('amount');
       $form.insertBefore($input, $add);
 });
