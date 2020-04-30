@@ -250,10 +250,16 @@ def invite():
     if form.validate_on_submit():
         if current_user.user_type() == Teacher:
             user = current_user.teacher
+            for i in user.students:
+                if i.id == int(form.id.data):
+                    return redirect('/profile')
             abort_if_student_not_found(int(form.id.data))
             user.invite(int(form.id.data))
         else:
             user = current_user.student
+            for i in user.teachers:
+                if i.id == int(form.id.data):
+                    return redirect('/profile')
             abort_if_teacher_not_found(int(form.id.data))
             user.invite(int(form.id.data))
         return redirect('/profile')
