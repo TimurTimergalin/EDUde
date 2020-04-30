@@ -17,7 +17,7 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
     name = Cl(sql.String)
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
     teacher = orm.relation('Teacher')
-    students = orm.relationship('Student', secondary='student_to_class')
+    students = orm.relation('Student', secondary='student_to_class', backref='student')
     tasks = orm.relation('Task', back_populates='class_room')
 
     def __repr__(self):
