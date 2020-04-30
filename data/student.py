@@ -12,11 +12,6 @@ from data import db_session
 from data.teacher_invite import TeacherInvite
 
 
-student_to_class = sql.Table('student_to_class', SqlAlchemyBase.metadata,
-                             Cl('student', sql.Integer, sql.ForeignKey('students.id')),
-                             Cl('class_room', sql.Integer, sql.ForeignKey('class_rooms.id')))
-
-
 class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
     """Student
     SQLAlchemy model of student"""
@@ -27,8 +22,8 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
     name = Cl(sql.String)
     email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
-    teachers = orm.relation('Teacher', secondary='teacher_to_student', backref='teacher')
-    class_rooms = orm.relation('ClassRoom', secondary='student_to_class', backref='class_room')
+    teachers = orm.relationship('Teacher', secondary='teacher_to_student')
+    class_rooms = orm.relationship('ClassRoom', secondary='student_to_class')
     users = orm.relation('User', back_populates='student')
 
     def __repr__(self):

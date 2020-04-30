@@ -11,11 +11,7 @@ from sqlalchemy_serializer import SerializerMixin
 from flask_login import UserMixin
 from data.teacher_invite import TeacherInvite
 from data.student_invite import StudentInvite
-
-# Таблица для отношения учитель-студент
-teacher_to_student = sql.Table('teacher_to_student', SqlAlchemyBase.metadata,
-                               Cl('teacher', sql.Integer, sql.ForeignKey('teachers.id')),
-                               Cl('student', sql.Integer, sql.ForeignKey('students.id')))
+from data.teacher_to_student import TeacherToStudent
 
 
 class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
@@ -28,7 +24,7 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
     name = Cl(sql.String)
     email = Cl(sql.String, index=True, unique=True)
     hashed_password = Cl(sql.String,  nullable=True)
-    students = orm.relation('Student', secondary='teacher_to_student', backref='student')
+    students = orm.relationship('Student', secondary='teacher_to_student')
     class_rooms = orm.relation('ClassRoom', back_populates='teacher')
     users = orm.relation('User', back_populates='teacher')
 
@@ -39,7 +35,14 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         """Teacher.add_student
         add a student to the current teacher's students list"""
         try:
-            self.students.append(student)
+            relation = TeacherToStudent()
+            print(self.id, student.id)
+            relation.teacher_id = self.id
+            relation.student_id = student.id
+            session = db_session.create_session()
+            session.add(relation)
+            session.commit()
+            session.close()
             return 0
         except Exception:
             return 1
@@ -48,7 +51,7 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         """Teacher.remove_student
         remove a student from the current teacher's students list"""
         try:
-            self.students.remove(student)
+
             return 0
         except Exception:
             return 1
@@ -57,8 +60,7 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         """Teacher.add_class
         add a classroom to the current teacher's classrooms list"""
         try:
-            class_room.teacher = self
-            self.class_rooms.append(class_room)
+
             return 0
         except Exception:
             return 1

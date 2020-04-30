@@ -6,6 +6,7 @@ from sqlalchemy import orm
 from data import db_session
 from data.db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
+from data.student_to_class import StudentToClass
 
 
 class ClassRoom(SqlAlchemyBase, SerializerMixin):
@@ -17,7 +18,7 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
     name = Cl(sql.String)
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
     teacher = orm.relation('Teacher')
-    students = orm.relation('Student', secondary='student_to_class', backref='student')
+    students = orm.relationship('Student', secondary='student_to_class')
     tasks = orm.relation('Task', back_populates='class_room')
 
     def __repr__(self):
@@ -27,7 +28,13 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         """ClassRoom.add_student
         add student to the current class' students list"""
         try:
-            self.students.append(student)
+            session = db_session.create_session()
+            relation = StudentToClass()
+            relation.student_id = student.id
+            relation.classroom_id = self.id
+            session.add(relation)
+            session.commit()
+
             return 0
         except Exception:
             return 1
@@ -37,6 +44,7 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         remove student from the current class' students list"""
         try:
             self.students.remove(student)
+            student.class_rooms.remove(self)
             return 0
         except Exception:
             return 1
