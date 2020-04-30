@@ -2,29 +2,19 @@
 {% block else_link %}
 <link rel="stylesheet" href="../static/css/log_up.css">
 <link rel="stylesheet" href="../static/css/log__in.css">
+<link rel="stylesheet" href="../static/css/send_h_w.css">
 {% endblock %}
 
 {% block content %}
-<style>
-    .ad_file{
-    text-align: center;
-    border-radius: 15px;
-    background-color: #A8C7A8;
-    padding: 3px 0;
-    cursor: pointer;
-    }
-    .form{
-    display: inline;
-    }
-</style>
 <div class="form-div">
  <form action="" method="post" enctype=multipart/form-data>
+     {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
         <fieldset>
           <legend>Отправка задания</legend>
      <div class="form">
-         {{ form.file.label }}<br>
         {{ form.file(type="file", class='amount') }}<br>
-        {% for error in form.password.errors %}
+        {% for error in form.file.errors %}
             <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
