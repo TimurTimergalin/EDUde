@@ -1,0 +1,10 @@
+.ad_file{
+    text-align: center;
+    border-radius: 15px;
+    background-color: #A8C7A8;
+    padding: 3px 0;
+    cursor: pointer;
+    }
+    .form{
+    display: inline;
+    }

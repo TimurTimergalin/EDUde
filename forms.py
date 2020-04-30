@@ -1,6 +1,6 @@
 from click import DateTime
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, TextAreaField, DateTimeField, DateField, TimeField
+from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, TextAreaField, DateTimeField, DateField, TimeField, FileField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 from flask_wtf.recaptcha import RecaptchaField
@@ -63,3 +63,10 @@ class TaskSendForm(FlaskForm):
 
 class AcceptionForm(FlaskForm):
     submit_true = SubmitField('Удалить')
+
+
+class SendHomework(FlaskForm):
+    """SendHomework
+       WTF model of send homework form"""
+    file = FileField('', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
