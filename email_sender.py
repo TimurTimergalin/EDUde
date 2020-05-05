@@ -20,4 +20,4 @@ def sendmessage(student_name, student_class, task_name, teacher_email, text, fil
     server.quit()
 
 
-# sendmessage('Gleb', 'Math', 'DZ 23.04', 'gleb-petuhov@mail.ru', 'asd', [open('1.jpg', 'rb').read()])
+sendmessage('Gleb', 'Math', 'DZ 23.04', 'gleb-petuhov@mail.ru', 'asd', [open('1.jpg', 'rb').read()])

@@ -7,10 +7,10 @@
 {% endblock %}
 
 {% block content %}
-<form>
+<form method="post">
   <div class="form-check" style="width: 800px">
       {% for student in students %}
-  <input class="form-check-input" type="checkbox" value="{{student.id}}: {{student.name}} {{student.surname}}" id="defaultCheck1" name="checkbox">
+  <input class="form-check-input" type="checkbox" value="{{ student.id }}" id="defaultCheck1" name="checkbox">
   <label class="form-check-label" for="defaultCheck1">
     {{student.name}} {{student.name}}
   </label>
