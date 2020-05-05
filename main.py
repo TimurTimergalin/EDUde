@@ -141,6 +141,7 @@ def profile():
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id,
+                               students=current_user.teacher.students,
                                invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all())
     else:
         student = session.query(Student).filter(Student.id == current_user.student_id).first()
@@ -179,6 +180,7 @@ def add_class():
                                    message="Такой класс уже есть")
         classroom = ClassRoom()
         classroom.name = form.name_of_class.data
+        classroom.subject = form.subj.data
         classroom.teacher_id = current_user.teacher_id
         session.add(classroom)
         session.commit()
@@ -336,6 +338,12 @@ def new_task(classroom_id):
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form)
+
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    return render_template('edit_profile.html')
 
 
 def deadline_delete(classroom_id):
