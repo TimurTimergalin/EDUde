@@ -165,8 +165,6 @@ def new_student(classroom_id):
     return redirect('/profile')
 
 
-
-
 @app.route('/new_class', methods=["GET", "POST"])
 @login_required
 def add_class():
@@ -330,7 +328,7 @@ def new_task(classroom_id):
             task.class_room_id = classroom_id
             session.add(task)
             session.commit()
-            return redirect(f'/tasks/{current_user.teacher_id}/{classroom_id}')
+            return redirect(f'/tasks/{classroom_id}')
         return render_template('new_task.html', current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
