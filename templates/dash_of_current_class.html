@@ -5,8 +5,14 @@
 <link rel="stylesheet" href="{{ link_css2 }}">
     {% endblock %}
 {% block buttons %}
+{% if is_teacher %}
 <div class='flx'>
 <div class="container add">
+    <div>
+    <a href="/new_task/{{ classroom_id }}" class="save add_a"> Добавить задание </a>
+    </div>
+</div>
+    <div class="container add">
     <div>
     <a href="/new_task/{{ classroom_id }}" class="save add_a"> Добавить задание </a>
     </div>
@@ -17,6 +23,7 @@
     </div>
 </div>
 </div>
+{% endif %}
 {% endblock %}
 {% block tasks %}
     {% for task in tasks %}
@@ -36,6 +43,8 @@
 {% endblock %}
 
 {% block study %}
+{% if is_teacher %}
+<table class="table table-borderless tab container" style="width: 400px;">
   <thead>
     <tr>
       <th scope="col">#</th>
@@ -51,6 +60,7 @@
         <td><a href="/#" class="delete">Удалить</a></td>
     </tr>
     {% endfor %}
-
   </tbody>
+    </table>
+{% endif %}
 {% endblock %}
