@@ -21,6 +21,7 @@
 </div>
 <div class="class">
         <div class="flex_box">
+            <div>
     <table class="table table-borderless tab container" style="
     margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
        <thead>
@@ -42,6 +43,10 @@
   </tbody>
 
 </table>
+                {% block add_class_to_teacher %}
+
+{% endblock %}
+        </div>
 
             <table class="table table-borderless tab container" style="
     margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
@@ -68,10 +73,7 @@
         </div>
 
         </div>
-    {% block add_class_to_teacher %}
 
-{% endblock %}
-    </div>
 <div class=' reques'>
     <div class="point">
         <h2 class="li_of_s">Заявки на классы</h2>
