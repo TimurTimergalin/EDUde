@@ -75,3 +75,11 @@ class EditProfile(FlaskForm):
     new_surname = StringField('Фамилия', validators=[DataRequired()])
     new_email = EmailField('Логин', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class EditClass(FlaskForm):
+    """EditClass
+       WTF model of Edit class form"""
+    new_name = StringField('Название', validators=[DataRequired()])
+    new_subject = StringField('Предмет', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
