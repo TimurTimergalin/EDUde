@@ -144,8 +144,8 @@ def profile():
                                invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all())
     else:
         student = session.query(Student).filter(Student.id == current_user.student_id).first()
-        return render_template('profile_of_student.html', classrooms=session.query(ClassRoom).filter(
-            ClassRoom.teacher_id == student.id), name=student.name, id=student.id,
+        return render_template('profile_of_student.html', classrooms=student.class_rooms,
+                               name=student.name, id=student.id,
                                invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all())
 
 
@@ -311,7 +311,7 @@ def send_task(task_id):
     elif request.method == 'POST':
         text = request.form['message']
         files = request.files
-        sendmessage(current_user.student.surname, classroom.name, task.name, task.link, text, files)
+        # sendmessage(current_user.student.surname, classroom.name, task.name, task.link, text, files)
         return redirect('/profile')
 
 

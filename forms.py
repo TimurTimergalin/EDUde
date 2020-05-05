@@ -57,10 +57,6 @@ class InvitingForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
-class TaskSendForm(FlaskForm):
-    pass
-
-
 class AcceptionForm(FlaskForm):
     submit_true = SubmitField('Удалить')
 
