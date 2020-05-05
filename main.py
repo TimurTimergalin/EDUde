@@ -343,7 +343,17 @@ def new_task(classroom_id):
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    return render_template('edit_profile.html')
+    session = db_session.create_session()
+    form = EditProfile()
+    current_user_html = current_user.teacher if current_user.user_type() == Teacher else current_user.student
+    if form.validate_on_submit():
+        edit_user = session.query(current_user.user_type()).get(current_user_html.id)
+        edit_user.name = form.new_name.data
+        edit_user.surname = form.new_surname.data
+        edit_user.email = form.new_email.data
+        session.commit()
+        return redirect('/profile')
+    return render_template('edit_profile.html', form=form, title='Изменить профиль', current_user=current_user_html)
 
 
 def deadline_delete(classroom_id):
