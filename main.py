@@ -22,7 +22,7 @@ import student_resources
 import teacher_resources
 import classroom_resources
 import task_resources
-from email_sender import sendmessage
+# from email_sender import sendmessage
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime

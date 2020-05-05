@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block else_link %}
+<link rel="stylesheet" href="../static/css/log_up.css">
+<link rel="stylesheet" href="../static/css/log__in.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-div">
+ <form action="" method="post">
+     {{ form.hidden_tag() }}
+    {{ form.csrf_token }}
+        <fieldset>
+          <legend>Редактор профиля</legend>
+
+            {{ form.new_name.label }}<br>
+        {{ form.new_name(type="text") }}<br>
+        {% for error in form.new_name.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+            {{ form.new_surname.label }}<br>
+        {{ form.new_surname(type="text") }}<br>
+        {% for error in form.new_surname.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+
+            {{ form.new_email.label }}<br>
+        {{ form.new_email(type="email") }}<br>
+        {% for error in form.new_email.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+            <div>{{ message }}</div>
+
+        </fieldset>
+        <div class="buttons">
+        {{ form.submit(type="submit") }}<br>
+        {% for error in form.submit.errors %}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+        </div>
+      </form>
+</div>
+{% endblock %}

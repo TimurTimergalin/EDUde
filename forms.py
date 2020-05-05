@@ -70,3 +70,12 @@ class SendHomework(FlaskForm):
        WTF model of send homework form"""
     file = FileField('', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class EditProfile(FlaskForm):
+    """EditProfile
+       WTF model of Edit profile form"""
+    new_name = StringField('Имя', validators=[DataRequired()])
+    new_surname = StringField('Фамилия', validators=[DataRequired()])
+    new_email = EmailField('Логин', validators=[DataRequired()])
+    submit = SubmitField('Сохранить')
