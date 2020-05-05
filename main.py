@@ -23,7 +23,7 @@ import student_resources
 import teacher_resources
 import classroom_resources
 import task_resources
-# from email_sender import sendmessage
+from email_sender import sendmessage
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
@@ -303,18 +303,22 @@ def invite():
 @app.route('/send_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def send_task(task_id):
+    form = SendHomework()
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
     classroom = task.class_room
     if request.method == 'GET':
         if current_user.user_type() == Student:
             if current_user.student in classroom.students:
-                return render_template('send_homework.html')
+                return render_template('send_homework.html', form=form)
         return redirect('/profile')
     elif request.method == 'POST':
-        text = request.form['message']
+        # text = request.form['message']
         files = request.files
-        # sendmessage(current_user.student.surname, classroom.name, task.name, task.link, text, files)
+        a = [str(file[1]).split()[2][2:-3].split('/') for file in files.items()]
+        b = [i for i in request.files['file']]
+        c = [a[i] + [b[i]] for i in range(len(a))]
+        sendmessage(current_user.student.surname, classroom.name, task.name, task.link, 'text', c)
         return redirect('/profile')
 
 

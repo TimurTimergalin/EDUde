@@ -41,7 +41,7 @@
         {% if is_teacher %}
         <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a></td>
         {% else %}
-        <td><a href="/kek/{{ task.id }}" class="delete"> Отправить</a></td>
+        <td><a href="/send_task/{{ task.id }}" class="delete"> Отправить</a></td>
         {% endif %}
     </tr>
     {% endfor %}

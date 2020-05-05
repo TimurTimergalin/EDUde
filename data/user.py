@@ -22,6 +22,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     student_id = Cl(sql.Integer, sql.ForeignKey('students.id'), nullable=True)
     student = orm.relation('Student')
 
+    def __repr__(self):
+        return f'teacher: {self.teacher} id: {self.teacher_id}; student: {self.student} id:{self.student_id}'
+
     def get_id(self):
         return self.id
 
