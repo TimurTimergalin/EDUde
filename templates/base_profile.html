@@ -47,28 +47,8 @@
 
 {% endblock %}
         </div>
-
-            <table class="table table-borderless tab container" style="
-    margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
-       <thead>
-    <tr style="color: blue;width: auto">
-        <th scope="col">id</th>
-        <th scope="col">Класс\предмет</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for classroom in classrooms %}
-    <tr style="color: blue; text-align: left">
-        <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ classroom.id }}</strong></td>
-        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.id }}">{{ classroom.name }}</a>
-        </td>
-    </tr>
-
-  {% endfor %}
-
-  </tbody>
-
-</table>
+        {% block students_of_teacher %}
+            {% endblock %}
 
         </div>
 

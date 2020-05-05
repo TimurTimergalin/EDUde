@@ -4,5 +4,28 @@
 <link rel="stylesheet" href="../static/css/profs.css">
     {% endblock %}
 {% block add_class_to_teacher %}
-    <a class="btn btn_add lis form_btns" href="/new_class" style="width: 280px; margin-left: 0">Добавить класс</a>
+    <a class="btn btn_add lis form_btns" href="/new_class" style="width: 280px; margin-left: 10px">Добавить класс</a>
 {% endblock %}
+{% block students_of_teacher %}
+<table class="table table-borderless tab container" style="
+    margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
+       <thead>
+    <tr style="color: blue;width: auto">
+        <th scope="col">id</th>
+        <th scope="col">Ученик</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for student in students %}
+    <tr style="color: blue; text-align: left">
+        <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ student.id }}</strong></td>
+        <td class="btn_add lis" style="margin-right: 10px"><p>{{ student.name }} {{ student.surname }}</p>
+        </td>
+    </tr>
+
+  {% endfor %}
+
+  </tbody>
+
+</table>
+            {% endblock %}
