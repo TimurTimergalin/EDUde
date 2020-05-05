@@ -7,19 +7,24 @@
 {% block buttons %}
 {% if is_teacher %}
 <div class='flx'>
-<div class="container add">
+<div class="container add" style="margin: auto">
     <div>
-    <a href="/new_task/{{ classroom_id }}" class="save add_a"> Добавить задание </a>
+    <a href="/new_task/{{ classroom_id }}" class="save add_a" > Добавить задание </a>
     </div>
 </div>
-    <div class="container add">
-    <div>
-    <a href="/new_task/{{ classroom_id }}" class="save add_a"> Добавить задание </a>
+    <div class="container add" style="margin: auto">
+    <div >
+    <a href="/new_task/{{ classroom_id }}" class="save add_a" > Редактировать </a>
     </div>
 </div>
-<div class="container add d3">
+<div class="container add d3" style="margin: auto">
     <div>
-    <a href="/new_student/{{ classroom_id }}" class="save add_a"> Добавить ученика </a>
+    <a href="/new_student/{{ classroom_id }}" class="save add_a" > Добавить ученика </a>
+    </div>
+</div>
+    <div class="container add d3" style="margin: auto">
+    <div>
+    <a href="/new_student/{{ classroom_id }}" class="save add_a" > Удалить класс </a>
     </div>
 </div>
 </div>
