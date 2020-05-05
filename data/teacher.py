@@ -35,6 +35,8 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         """Teacher.add_student
         add a student to the current teacher's students list"""
         try:
+            if student in self.students:
+                return 1
             relation = TeacherToStudent()
             print(self.id, student.id)
             relation.teacher_id = self.id
@@ -51,27 +53,13 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         """Teacher.remove_student
         remove a student from the current teacher's students list"""
         try:
-
-            return 0
-        except Exception:
-            return 1
-
-    def add_class(self, class_room):
-        """Teacher.add_class
-        add a classroom to the current teacher's classrooms list"""
-        try:
-
-            return 0
-        except Exception:
-            return 1
-
-    def remove_class(self, class_room):
-        """Teacher.remove_class
-        delete class_room"""
-        try:
+            if student not in self.students:
+                return 1
             session = db_session.create_session()
-            session.delete(class_room)
-            return 0
+            relation = session.query(TeacherToStudent).filter(TeacherToStudent.teacher_id == self.id,
+                                                              TeacherToStudent.student_id == student.id).first()
+            session.delete(relation)
+            session.commit()
         except Exception:
             return 1
 
@@ -91,7 +79,7 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
         if not kwargs:
             return 1
         for i in kwargs:
-            if i not in ['surname', 'name']:
+            if i not in ['surname', 'name', 'email']:
                 return 2
             setattr(self, i, kwargs[i])
         return 0

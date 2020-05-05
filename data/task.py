@@ -27,3 +27,14 @@ class Task(SqlAlchemyBase, SerializerMixin):
         """Task.set_deadline
         Change a dealine of the task"""
         self.deadline = deadline
+
+    def edit_myself(self, **kwargs):
+        """ClassRoom.edit_myself
+        edit the current object"""
+        if not kwargs:
+            return 1
+        for i in kwargs:
+            if i not in ['name', 'description', 'deadline', 'link']:
+                return 2
+            setattr(self, i, kwargs[i])
+        return 0

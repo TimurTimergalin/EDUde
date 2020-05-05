@@ -45,7 +45,7 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
         if not kwargs:
             return 1
         for i in kwargs:
-            if i not in ['surname', 'name']:
+            if i not in ['surname', 'name', 'email']:
                 return 2
             setattr(self, i, kwargs[i])
         return 0

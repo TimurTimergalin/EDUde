@@ -28,6 +28,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         """ClassRoom.add_student
         add student to the current class' students list"""
         try:
+            if student in self.students:
+                return 1
             session = db_session.create_session()
             relation = StudentToClass()
             relation.student_id = student.id
@@ -43,8 +45,13 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         """ClassRoom.remove_student
         remove student from the current class' students list"""
         try:
-            self.students.remove(student)
-            student.class_rooms.remove(self)
+            if student not in self.students:
+                return 1
+            session = db_session.create_session()
+            relation = session.query(StudentToClass).filter(StudentToClass.student_id == student.id,
+                                                            StudentToClass.classroom_id == self.id).first()
+            session.delete(relation)
+            session.commit()
             return 0
         except Exception:
             return 1
@@ -53,6 +60,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         """ClassRoom.add_task
         add task to the current class' tasks list"""
         try:
+            if task in self.tasks:
+                return 1
             task.class_room = self
             self.tasks.append(task)
             return 0
@@ -63,6 +72,8 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
         """ClassRoom.remove_task
         remove task from the current class' tasks list"""
         try:
+            if task not in self.tasks:
+                return 1
             session = db_session.create_session()
             session.delete(task)
             return 0
