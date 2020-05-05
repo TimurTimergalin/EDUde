@@ -188,6 +188,7 @@ def add_class():
     return render_template('add_class.html', form=form)
 
 
+# chego blin
 @app.route('/tasks/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def tasks(classroom_id):
