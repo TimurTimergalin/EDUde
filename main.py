@@ -17,6 +17,7 @@ from flask_restful import Api
 from api_func import abort_if_request_is_forbidden1, abort_if_student_not_found, abort_if_teacher_not_found
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
+from data.student_to_class import StudentToClass
 from forms import *
 import student_resources
 import teacher_resources
@@ -190,6 +191,8 @@ def add_class():
 def tasks(classroom_id):
     session = db_session.create_session()
     deadline_delete(classroom_id)
+    classroom = session.query(ClassRoom).get(classroom_id)
+    students = classroom.students
     if current_user.user_type() == Teacher:
         if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
             return render_template('dash_of_current_class.html',
@@ -198,7 +201,7 @@ def tasks(classroom_id):
                                    link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
                                    link_logo=url_for('static', filename='img/logo.png'),
                                    tasks=session.query(Task).filter(
-                                       Task.class_room_id == classroom_id), is_teacher=True)
+                                       Task.class_room_id == classroom_id), is_teacher=True, students=students)
     else:
         student = session.query(Student).get(current_user.student_id)
         if student in session.query(ClassRoom).get(classroom_id).students:
