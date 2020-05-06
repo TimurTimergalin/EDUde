@@ -64,8 +64,7 @@ class AcceptionForm(FlaskForm):
 class SendHomework(FlaskForm):
     """SendHomework
        WTF model of send homework form"""
-    file = FileField('', validators=[DataRequired()])
-    submit = SubmitField('Сохранить')
+    pass
 
 
 class EditProfile(FlaskForm):
