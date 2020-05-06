@@ -238,7 +238,7 @@ def accept_invite(invite_id):
     session = db_session.create_session()
     if current_user.user_type() == Teacher:
         invite_ = session.query(StudentInvite).get(invite_id)
-        if invite_.teacher == current_user.teacher:
+        if invite_.teacher_id == current_user.teacher_id:
             current_user.teacher.add_student(invite_.student)
     else:
         invite_ = session.query(TeacherInvite).get(invite_id)
