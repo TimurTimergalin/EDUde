@@ -305,6 +305,7 @@ def invite():
 def send_task(task_id):
     if current_user.user_type() == Teacher:
         return redirect('/profile')
+    abort_if_task_not_found(task_id)
     form = SendHomework()
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
@@ -336,6 +337,7 @@ def send_task(task_id):
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
 @login_required
 def new_task(classroom_id):
+    abort_if_class_not_found(classroom_id)
     if current_user.user_type() == Teacher:
         form = AddTaskForm()
         session = db_session.create_session()
@@ -359,6 +361,8 @@ def new_task(classroom_id):
 @app.route('/delete_student/<int:classroom_id>/<int:student_id>', methods=['GET', 'POST'])
 @login_required
 def delete_student(classroom_id, student_id):
+    abort_if_class_not_found(classroom_id)
+    abort_if_student_not_found(student_id)
     if current_user.user_type() == Student:
         return redirect('/profile')
     sesssion = db_session.create_session()
@@ -380,6 +384,7 @@ def delete_student(classroom_id, student_id):
 def delete_classroom(classroom_id):
     if current_user.user_type() == Student:
         return redirect('/profile')
+    abort_if_class_not_found(classroom_id)
     session = db_session.create_session()
     classroom = session.query(ClassRoom).get(classroom_id)
     teacher = session.query(Teacher).get(current_user.teacher_id)
@@ -397,6 +402,7 @@ def delete_classroom(classroom_id):
 def edit_classroom(classroom_id):
     if current_user.user_type() == Student:
         return redirect('/profile')
+    abort_if_class_not_found(classroom_id)
     form = EditClass()
     session = db_session.create_session()
     classroom = session.query(ClassRoom).get(classroom_id)
