@@ -31,17 +31,30 @@
 {% endif %}
 {% endblock %}
 {% block tasks %}
+<style>
+.names{
+max-width: 300px;
+overflow:scroll;
+word-wrap: break-word;
+}
+td::-webkit-scrollbar { width: 0; }
+.t2{
+width: 400px;
+}
+</style>
     {% for task in tasks %}
     <tr>
       <th scope="row">{{ task.id }}</th>
-      <td><p>{{ task.name }}</p></td>
+      <td class='names' ><p>{{ task.name }}</p></td>
         <td><p>{{ task.deadline }}</p></td>
-      <td><p>{{ task.description }}</p></td>
+      <td class="names"><p>{{ task.description }}</p></td>
         <td><p>{{ task.link }}</p></td>
         {% if is_teacher %}
-        <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a></td>
+        <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a>
+        <a href="/kek/{{ task.id }}" class="delete"> Редактировать</a>
+        </td>
         {% else %}
-        <td><a href="/send_task/{{ task.id }}" class="delete"> Отправить</a></td>
+        <td><a href="/send_task/{{ task.id }}" class="delete"> Отправить </a></td>
         {% endif %}
     </tr>
     {% endfor %}
@@ -49,7 +62,7 @@
 
 {% block study %}
 {% if is_teacher %}
-<table class="table table-borderless tab container" style="width: 400px;">
+<table class="table table-borderless tab container t2">
   <thead>
     <tr>
       <th scope="col">#</th>
