@@ -303,22 +303,33 @@ def invite():
 @app.route('/send_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def send_task(task_id):
+    if current_user.user_type() == Teacher:
+        return redirect('/profile')
     form = SendHomework()
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
     classroom = task.class_room
+    student = session.query(Student).get(current_user.student_id)
     if request.method == 'GET':
         if current_user.user_type() == Student:
-            if current_user.student in classroom.students:
+            if student in classroom.students:
                 return render_template('send_homework.html', form=form)
         return redirect('/profile')
     elif request.method == 'POST':
         # text = request.form['message']
         files = request.files
+        i = 1
+        files_list = []
+        while True:
+            try:
+                files_list.append(request.files[str(i)].read())
+                i += 1
+            except Exception:
+                break
         a = [str(file[1]).split()[2][2:-3].split('/') for file in files.items()]
-        b = [i for i in request.files['file']]
+        b = [i for i in files_list]
         c = [a[i] + [b[i]] for i in range(len(a))]
-        sendmessage(current_user.student.surname, classroom.name, task.name, task.link, 'text', c)
+        sendmessage(student.surname, classroom.name, task.name, task.link, request.form['text'], c)
         return redirect('/profile')
 
 
