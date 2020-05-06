@@ -7,22 +7,22 @@
 {% block buttons %}
 {% if is_teacher %}
 <div class='flx'>
-<div class="container add" style="margin: auto">
+<div class="container add div_auto" >
     <div>
     <a href="/new_task/{{ classroom_id }}" class="save add_a" > Добавить задание </a>
     </div>
 </div>
-    <div class="container add" style="margin: auto">
+    <div class="container add div_auto">
     <div >
     <a href="/edit_classroom/{{ classroom_id }}" class="save add_a" > Редактировать </a>
     </div>
 </div>
-<div class="container add d3" style="margin: auto">
+<div class="container add d3 div_auto">
     <div>
     <a href="/new_student/{{ classroom_id }}" class="save add_a" > Добавить ученика </a>
     </div>
 </div>
-    <div class="container add d3" style="margin: auto">
+    <div class="container add d3 div_auto" >
     <div>
     <a href="/delete_classroom/{{ classroom_id }}" class="save add_a" > Удалить класс </a>
     </div>
@@ -41,6 +41,12 @@ td::-webkit-scrollbar { width: 0; }
 .t2{
 width: 400px;
 }
+.delete{
+margin-right: 20px
+}
+.div_auto{
+margin: auto
+}
 </style>
     {% for task in tasks %}
     <tr>
@@ -50,7 +56,7 @@ width: 400px;
       <td class="names"><p>{{ task.description }}</p></td>
         <td><p>{{ task.link }}</p></td>
         {% if is_teacher %}
-        <td><a href="/kek/{{ task.id }}" class="delete"> Удалить</a>
+        <td ><a href="/kek/{{ task.id }}" class="delete"> Удалить</a><br><br>
         <a href="/edit_task/{{ task.id }}" class="delete"> Редактировать</a>
         </td>
         {% else %}

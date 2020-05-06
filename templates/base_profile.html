@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 {% block else_link %}
     <link rel="stylesheet" href="../static/css/table.css">
-<link rel="stylesheet" href="../static/css/profs.css">
+    <link rel="stylesheet" href="../static/css/profs.css">
+<link rel="stylesheet" href="../static/css/prof_more.css">
+<link rel="stylesheet" href="../static/css/password.css">
     {% endblock %}
 {% block about_pr %}
-<li class="nav-item ab" style="width: auto;">
-        <button id="userButton" style="width: auto;background: white; border: none;color: black;border-radius: 50px;padding: 6px 14px;margin-left:10px">
+<li class="nav-item ab">
+        <button id="userButton" class='btn_copy'>
             Скопировать пароль<br>
-        <small style="font-size: 9px; margin-left: 6px">Никому не разглашайте данный пароль</small>
+        <small class='sm_never'>Никому не разглашайте данный пароль</small>
         </button>
       </li>
         {% endblock %}
     {% block content %}
 <div class="photo">
     {% if is_teacher %}
-        <img src="../static/img/teacher.png">
+<div style="display: flex;">
+        <img src="../static/img/teacher.png" style="width: 100px; height: 100px;vertical-align: middle">
+    <h2 style="margin-top: 68px;margin-left: -20px">Хорошей вам работы!</h2>
+</div>
     {% else %}
         <img src="../static/img/student.png">
+    <h2>Хорошей вам учебы!</h2>
     {% endif %}
-    <figcaption>Фото профиля</figcaption>
     <h6 class="name_user">Имя пользователя: {{ name }} {{ surname }}</h6>
     <h6 class="name_user">Id пользователя: {{ id }}</h6>
     <a href="/edit_profile" class="btn btn_add lis form_btns sv">Изменить</a>
@@ -26,19 +31,18 @@
 <div class="class">
         <div class="flex_box">
             <div>
-    <table class="table table-borderless tab container" style="
-    margin-top: 0px;margin-right: 50px;width: 300px; text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll">
+    <table class="table table-borderless tab container tbl_class">
        <thead>
-    <tr style="color: blue;width: auto">
+    <tr class='tr1'>
         <th scope="col">id</th>
         <th scope="col">Класс\предмет</th>
     </tr>
   </thead>
   <tbody>
   {% for classroom in classrooms %}
-    <tr style="color: blue; text-align: left">
-        <td class="btn_add lis" style="color: blue; text-align: left"><strong>{{ classroom.id }}</strong></td>
-        <td class="btn_add lis" style="margin-right: 10px"><a href="/tasks/{{ classroom.id }}">{{ classroom.name }}, {{ classroom.subject }}</a>
+    <tr class='tr_room'>
+        <td class="btn_add lis td1"><strong>{{ classroom.id }}</strong></td>
+        <td class="btn_add lis td2"><a href="/tasks/{{ classroom.id }}">{{ classroom.name }}, {{ classroom.subject }}</a>
         </td>
     </tr>
 
@@ -72,7 +76,7 @@
 
 </ul>
     </div>
-    <a class="btn btn_add lis form_btns" href="/invite" style="width: 200px; margin-left: 45px">Пригласить</a>
+    <a class="btn btn_add lis form_btns invt" href="/invite">Пригласить</a>
      </div>
  <script>
 var button = document.getElementById("userButton");

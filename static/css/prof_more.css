@@ -1,0 +1,24 @@
+ .ab{
+    width: auto;
+    }
+    .tab{
+     margin-top: 0px;margin-right: 50px;width: 300px;
+     text-align: left; letter-spacing: 1px; max-height: 400px; overflow: scroll;
+    }
+    .tr_room{
+    color: blue; text-align: left;
+    }
+    .td1{
+    color: blue; text-align: left;
+    }
+    .td2{
+    margin-right: 10px;
+    }
+    .invt{
+    width: 200px; margin-left: 45px
+    }
+    .tr1{
+    color: blue;width: auto;
+    }
+    .add_new_class{
+    width: 280px; margin-left: 10px}
