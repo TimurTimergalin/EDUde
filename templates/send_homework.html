@@ -13,33 +13,26 @@
         <fieldset>
           <legend>Отправка задания</legend>
      <div class="form">
-        {{ form.file(type="file", class='amount') }}<br>
-        {% for error in form.file.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
+         <textarea name="text">Оставьте комментарий</textarea>
+        <input type="file" name="1"><br>
         <div class="add ad_file">Добавить файл</div>
         </div>
         </fieldset>
      <div class="buttons">
-        {{ form.submit(type="submit") }}<br>
-        {% for error in form.submit.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
+         <button type="submit">Отправить</button>
         </div>
            </form>
 </div>
 <script>
+    var $count = 2;
     var $add = document.getElementsByClassName('add')[0];
     var $form = document.getElementsByClassName('form')[0];
     $add.addEventListener('click', function(event) {
       var $input = document.createElement('input');
       $input.type = 'file';
       $input.placeholder = 'Кол-во';
-      $input.name = 'file';
+      $input.name = $count.toString();
+      $count++;
       $input.classList.add('amount');
       $form.insertBefore($input, $add);
 });
