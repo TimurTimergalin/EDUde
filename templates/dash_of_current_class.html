@@ -14,7 +14,7 @@
 </div>
     <div class="container add" style="margin: auto">
     <div >
-    <a href="/new_task/{{ classroom_id }}" class="save add_a" > Редактировать </a>
+    <a href="/edit_classroom/{{ classroom_id }}" class="save add_a" > Редактировать </a>
     </div>
 </div>
 <div class="container add d3" style="margin: auto">
@@ -24,7 +24,7 @@
 </div>
     <div class="container add d3" style="margin: auto">
     <div>
-    <a href="/new_student/{{ classroom_id }}" class="save add_a" > Удалить класс </a>
+    <a href="/delete_classroom/{{ classroom_id }}" class="save add_a" > Удалить класс </a>
     </div>
 </div>
 </div>
@@ -62,7 +62,7 @@
       <th scope="row">{{ student.id }}</th>
       <td><p>{{ student.surname}} {{ student.name }}</p></td>
 
-        <td><a href="/delete_student" class="delete">Удалить</a></td>
+        <td><a href="/delete_student/{{ classroom_id }}/{{ student.id }}" class="delete">Удалить</a></td>
     </tr>
     {% endfor %}
   </tbody>

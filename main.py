@@ -14,7 +14,7 @@ from data.user import User
 from data.task import Task
 from create_user import create_user
 from flask_restful import Api
-from api_func import abort_if_request_is_forbidden1, abort_if_student_not_found, abort_if_teacher_not_found
+from api_func import *
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
 from data.student_to_class import StudentToClass
@@ -141,12 +141,12 @@ def profile():
         teacher = session.query(Teacher).filter(Teacher.id == current_user.teacher_id).first()
         return render_template('profile_of_teacher.html', classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id,
-                               students=current_user.teacher.students,
+                               students=teacher.students, surname=teacher.surname, is_teacher=True,
                                invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all())
     else:
         student = session.query(Student).filter(Student.id == current_user.student_id).first()
         return render_template('profile_of_student.html', classrooms=student.class_rooms,
-                               name=student.name, id=student.id,
+                               name=student.name, id=student.id, surname=student.surname, is_teacher=False,
                                invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all())
 
 
@@ -354,6 +354,60 @@ def new_task(classroom_id):
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form)
+
+
+@app.route('/delete_student/<int:classroom_id>/<int:student_id>', methods=['GET', 'POST'])
+@login_required
+def delete_student(classroom_id, student_id):
+    if current_user.user_type() == Student:
+        return redirect('/profile')
+    sesssion = db_session.create_session()
+    classroom = sesssion.query(ClassRoom).get(classroom_id)
+    student = sesssion.query(Student).get(student_id)
+    teacher = sesssion.query(Teacher).get(current_user.teacher_id)
+    abort_if_request_is_forbidden(teacher.id, classroom_id)
+    if student not in classroom.students:
+        abort(403, message='This student is not in this classroom')
+    if request.method == 'GET':
+        return render_template('kek.html')
+    elif request.method == 'POST':
+        classroom.remove_student(student)
+        return redirect(f'/tasks/{classroom_id}')
+
+
+@app.route('/delete_classroom/<int:classroom_id>', methods=['GET', 'POST'])
+@login_required
+def delete_classroom(classroom_id):
+    if current_user.user_type() == Student:
+        return redirect('/profile')
+    session = db_session.create_session()
+    classroom = session.query(ClassRoom).get(classroom_id)
+    teacher = session.query(Teacher).get(current_user.teacher_id)
+    abort_if_request_is_forbidden(teacher.id, classroom_id)
+    if request.method == 'GET':
+        return render_template('kek.html')
+    elif request.method == 'POST':
+        session.delete(classroom)
+        session.commit()
+        return redirect('/profile')
+
+
+@app.route('/edit_classroom/<int:classroom_id>', methods=['GET', 'POST'])
+@login_required
+def edit_classroom(classroom_id):
+    if current_user.user_type() == Student:
+        return redirect('/profile')
+    form = EditClass()
+    session = db_session.create_session()
+    classroom = session.query(ClassRoom).get(classroom_id)
+    abort_if_request_is_forbidden(current_user.teacher_id, classroom_id)
+    if form.validate_on_submit():
+        classroom.name = form.new_name.data
+        classroom.subject = form.new_subject.data
+        session.commit()
+        return redirect(f'/tasks/{classroom_id}')
+    return render_template('edit_class.html', classroom=classroom, form=form)
+
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])

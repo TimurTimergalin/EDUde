@@ -13,7 +13,11 @@
         {% endblock %}
     {% block content %}
 <div class="photo">
-    <img src="../static/img/desk.jpg">
+    {% if is_teacher %}
+        <img src="../static/img/teacher.png">
+    {% else %}
+        <img src="../static/img/student.png">
+    {% endif %}
     <figcaption>Фото профиля</figcaption>
     <h6 class="name_user">Имя пользователя: {{ name }} {{ surname }}</h6>
     <h6 class="name_user">Id пользователя: {{ id }}</h6>
