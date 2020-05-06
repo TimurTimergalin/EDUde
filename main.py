@@ -415,6 +415,27 @@ def edit_classroom(classroom_id):
     return render_template('edit_class.html', classroom=classroom, form=form)
 
 
+@app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
+@login_required
+def edit_task(task_id):
+    if current_user.user_type() == Student:
+        return redirect('/profile')
+    abort_if_task_not_found(task_id)
+    print('ok')
+    abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
+    print('cock')
+    form = EditTask()
+    session = db_session.create_session()
+    task = session.query(Task).get(task_id)
+    if form.validate_on_submit():
+        task.name = form.new_name.data
+        task.description = form.new_description.data
+        task.deadline = form.new_deadline.data
+        task.link = form.new_link.data
+        session.commit()
+        return redirect(f'/tasks/{task.class_room_id}')
+    return render_template('edit_task.html', form=form, task=task)
+
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

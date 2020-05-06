@@ -69,7 +69,7 @@ def abort_if_request_is_forbidden1(teacher_id, task_id):
 
 def abort_if_task_not_found(task_id):
     session = db_session.create_session()
-    task = session.query(ClassRoom).get(task_id)
+    task = session.query(Task).get(task_id)
     if not task:
         abort(404, message=f"Task {task_id} not found")
         return True
