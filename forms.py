@@ -82,3 +82,13 @@ class EditClass(FlaskForm):
     new_name = StringField('Название', validators=[DataRequired()])
     new_subject = StringField('Предмет', validators=[DataRequired()])
     submit = SubmitField('Сохранить')
+
+
+class EditTask(FlaskForm):
+    """EditTask
+       WTF model of Edit task form"""
+    new_name = TextAreaField('Название задания', validators=[DataRequired()])
+    new_description = TextAreaField('Что делать', validators=[DataRequired()])
+    new_deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    new_link = StringField('Куда отправлять', validators=[DataRequired()])
+    submit = SubmitField('Отправить')
