@@ -87,7 +87,6 @@ class EditClass(FlaskForm):
 
 def new_edit_task(task):
     def func():
-        print(type(task.deadline))
         return task.deadline
 
     class EditTask(FlaskForm):
