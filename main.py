@@ -1,6 +1,7 @@
 import sys
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask_ngrok import run_with_ngrok
 from werkzeug.utils import redirect
 from create_user import create_user
 
@@ -33,6 +34,7 @@ logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
+run_with_ngrok(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
