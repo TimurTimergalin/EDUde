@@ -29,8 +29,8 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
-# logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
-#                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -58,12 +58,15 @@ RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
 
 @app.errorhandler(404)
 def error404(e):
-    return render_template('not_found.html')
+    return render_template('not_found.html',
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           title='Oops!')
 
 
 @app.errorhandler(403)
 def error403(e):
-    return redirect('bad_request.html')
+    return render_template('bad_request.html', logo_link=url_for('static', filename='img/logo.png'),
+                           title='oops')
 
 
 @app.errorhandler(401)
@@ -79,7 +82,9 @@ def load_user(user_id):
 
 @app.route('/')
 def start():
-    return render_template('main_page.html')
+    return render_template('main_page.html',
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           title='Добро пожаловать!')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,8 +98,11 @@ def login():
             return redirect("/profile")
         return render_template('log_in.html',
                                message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('log_in.html', title='Вход', form=form)
+                               form=form,
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Вход')
+    return render_template('log_in.html', title='Вход', form=form,
+                           logo_link=url_for('static', filename='img/logo.png'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -104,27 +112,29 @@ def register():
         if form.password.data != form.check_password.data:
             return render_template('log_up.html', title='Регистрация',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Пароли не совпадают",
+                                   logo_link=url_for('static', filename='img/logo.png'))
         # db_session.global_init('')
         session = db_session.create_session()
         if check_email(session, form):
-            if form.user_type.data == 'ученик':
-                create_user(user_type=Student, surname=form.surname.data, name=form.name.data, email=form.email.data,
-                            password=form.password.data)
-            elif form.user_type.data == 'учитель':
-                create_user(user_type=Teacher, surname=form.surname.data, name=form.name.data, email=form.email.data,
-                            password=form.password.data)
+            create_user(user_type=Student if form.user_type.data == 'ученик' else Teacher, surname=form.surname.data,
+                        name=form.name.data, email=form.email.data,
+                        password=form.password.data)
         else:
             return render_template('log_up.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Такой пользователь уже есть",
+                                   logo_link=url_for('static', filename='img/logo.png'))
         return redirect('/logup_successful')
-    return render_template('log_up.html', title='Регистрация', form=form)
+    return render_template('log_up.html', title='Регистрация', form=form,
+                           logo_link=url_for('static', filename='img/logo.png'))
 
 
 @app.route('/logup_successful')
 def logup_successful():
-    return render_template('good_request.html')
+    return render_template('good_request.html',
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           title='Добро пожаловать!')
 
 
 @app.route('/logout')
@@ -143,12 +153,16 @@ def profile():
         return render_template('profile_of_teacher.html', classrooms=session.query(ClassRoom).filter(
             ClassRoom.teacher_id == teacher.id), name=teacher.name, id=teacher.id,
                                students=teacher.students, surname=teacher.surname, is_teacher=True,
-                               invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all())
+                               invites=session.query(StudentInvite).filter(StudentInvite.teacher == teacher).all(),
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Рабочий стол')
     else:
         student = session.query(Student).filter(Student.id == current_user.student_id).first()
         return render_template('profile_of_student.html', classrooms=student.class_rooms,
                                name=student.name, id=student.id, surname=student.surname, is_teacher=False,
-                               invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all())
+                               invites=session.query(TeacherInvite).filter(TeacherInvite.student == student).all(),
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Рабочий стол')
 
 
 @app.route('/new_student/<classroom_id>', methods=["GET", "POST"])
@@ -156,7 +170,9 @@ def profile():
 def new_student(classroom_id):
     if current_user.user_type() == Teacher:
         if request.method == 'GET':
-            return render_template('add_students.html', students=current_user.teacher.students)
+            return render_template('add_students.html', students=current_user.teacher.students,
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title='Добавить учеников')
         elif request.method == 'POST':
             session = db_session.create_session()
             classroom = session.query(ClassRoom).get(classroom_id)
@@ -178,7 +194,9 @@ def add_class():
                                            ClassRoom.teacher_id == current_user.teacher_id).first():
             form = AddClassForm()
             return render_template('add_class.html', form=form,
-                                   message="Такой класс уже есть")
+                                   message="Такой класс уже есть",
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title='Добавить класс')
         classroom = ClassRoom()
         classroom.name = form.name_of_class.data
         classroom.subject = form.subj.data
@@ -186,7 +204,9 @@ def add_class():
         session.add(classroom)
         session.commit()
         return redirect('/profile')
-    return render_template('add_class.html', form=form)
+    return render_template('add_class.html', form=form,
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           title='Добавить класс')
 
 
 # chego blin
@@ -205,7 +225,9 @@ def tasks(classroom_id):
                                    link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
                                    link_logo=url_for('static', filename='img/logo.png'),
                                    tasks=session.query(Task).filter(
-                                       Task.class_room_id == classroom_id), is_teacher=True, students=students)
+                                       Task.class_room_id == classroom_id), is_teacher=True, students=students,
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title=f'Класс "{classroom.name}"')
     else:
         student = session.query(Student).get(current_user.student_id)
         if student in session.query(ClassRoom).get(classroom_id).students:
@@ -215,8 +237,11 @@ def tasks(classroom_id):
                                    link_css2=url_for('static', filename='css/dash_of_cur_cl.css'),
                                    link_logo=url_for('static', filename='img/logo.png'),
                                    tasks=session.query(Task).filter(
-                                       Task.class_room_id == classroom_id), is_teacher=False)
-    return render_template('bad_request.html')
+                                       Task.class_room_id == classroom_id), is_teacher=False,
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title=f'Класс "{classroom.name}"')
+    return render_template('bad_request.html', logo_link=url_for('static', filename='img/logo.png'),
+                           title='Oops')
 
 
 @app.route('/kek/<int:task_id>', methods=['GET', 'POST'])
@@ -224,7 +249,12 @@ def tasks(classroom_id):
 def kek(task_id):
     if abort_if_request_is_forbidden1(current_user.teacher_id, task_id):
         if request.method == 'GET':
-            return render_template('kek.html', task_id=task_id)
+            return render_template('kek.html', task_id=task_id, logo_link=url_for('static', filename='img/logo.png'),
+                                   title='Удалить?',
+                                   link1=url_for('static', filename='css/log_up.css'),
+                                   link2=url_for('static', filename='css/log_success.css'),
+                                   link3=url_for('static', filename='css/kek.css'),
+                                   )
         elif request.method == 'POST':
             session = db_session.create_session()
             task = session.query(Task).get(task_id)
@@ -269,14 +299,16 @@ def refuse_invite(invite_id):
 
 @app.route('/api')
 def api():
-    return render_template('api.html', title='API проекта')
+    return render_template('api.html', title='API проекта',
+                           logo_link=url_for('static', filename='img/logo.png'))
 
 
 @app.route('/api/1.0')
 def api_1_0():
     return render_template('documentation_1.0.html', title='API v1.0',
                            user_key=generate_key(current_user.teacher if current_user.user_type() == Teacher
-                                                 else current_user.student))
+                                                 else current_user.student),
+                           logo_link=url_for('static', filename='img/logo.png'))
 
 
 @app.route('/invite', methods=['GET', 'POST'])
@@ -290,16 +322,17 @@ def invite():
                 if i.id == int(form.id.data):
                     return redirect('/profile')
             abort_if_student_not_found(int(form.id.data))
-            user.invite(int(form.id.data))
         else:
             user = current_user.student
             for i in user.teachers:
                 if i.id == int(form.id.data):
                     return redirect('/profile')
             abort_if_teacher_not_found(int(form.id.data))
-            user.invite(int(form.id.data))
+        user.invite(int(form.id.data))
         return redirect('/profile')
-    return render_template('invitings.html', form=form)
+    return render_template('invitings.html', form=form,
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           title='Приглашение')
 
 
 @app.route('/send_task/<int:task_id>', methods=['GET', 'POST'])
@@ -316,7 +349,9 @@ def send_task(task_id):
     if request.method == 'GET':
         if current_user.user_type() == Student:
             if student in classroom.students:
-                return render_template('send_homework.html', form=form)
+                return render_template('send_homework.html', form=form,
+                                       logo_link=url_for('static', filename='img/logo.png'),
+                                       title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
         # text = request.form['message']
@@ -357,7 +392,9 @@ def new_task(classroom_id):
         return render_template('new_task.html', current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form)
+                               form=form,
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Добавить задание')
 
 
 @app.route('/delete_student/<int:classroom_id>/<int:student_id>', methods=['GET', 'POST'])
@@ -375,7 +412,12 @@ def delete_student(classroom_id, student_id):
     if student not in classroom.students:
         abort(403, message='This student is not in this classroom')
     if request.method == 'GET':
-        return render_template('kek.html')
+        return render_template('kek.html',
+                               link1=url_for('static', filename='css/log_up.css'),
+                               link2=url_for('static', filename='css/log_success.css'),
+                               link3=url_for('static', filename='css/kek.css'),
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Удалить?')
     elif request.method == 'POST':
         classroom.remove_student(student)
         return redirect(f'/tasks/{classroom_id}')
@@ -392,7 +434,12 @@ def delete_classroom(classroom_id):
     teacher = session.query(Teacher).get(current_user.teacher_id)
     abort_if_request_is_forbidden(teacher.id, classroom_id)
     if request.method == 'GET':
-        return render_template('kek.html')
+        return render_template('kek.html',
+                               link1=url_for('static', filename='css/log_up.css'),
+                               link2=url_for('static', filename='css/log_success.css'),
+                               link3=url_for('static', filename='css/kek.css'),
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               title='Удалить?')
     elif request.method == 'POST':
         session.delete(classroom)
         session.commit()
@@ -414,7 +461,9 @@ def edit_classroom(classroom_id):
         classroom.subject = form.new_subject.data
         session.commit()
         return redirect(f'/tasks/{classroom_id}')
-    return render_template('edit_class.html', classroom=classroom, form=form)
+    return render_template('edit_class.html', classroom=classroom,
+                           form=form, logo_link=url_for('static', filename='img/logo.png'),
+                           title='Изменить класс')
 
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
@@ -434,7 +483,9 @@ def edit_task(task_id):
         task.link = form.new_link.data
         session.commit()
         return redirect(f'/tasks/{task.class_room_id}')
-    return render_template('edit_task.html', form=form, task=task)
+    return render_template('edit_task.html', form=form,
+                           task=task, logo_link=url_for('static', filename='img/logo.png'),
+                           title='Изменить задачу')
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
@@ -450,7 +501,9 @@ def edit_profile():
         edit_user.email = form.new_email.data
         session.commit()
         return redirect('/profile')
-    return render_template('edit_profile.html', form=form, title='Изменить профиль', current_user=current_user_html)
+    return render_template('edit_profile.html', form=form, title='Изменить профиль',
+                           current_user=current_user_html,
+                           logo_link=url_for('static', filename='img/logo.png'))
 
 
 def deadline_delete(classroom_id):
