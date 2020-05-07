@@ -238,7 +238,7 @@ def accept_invite(invite_id):
     session = db_session.create_session()
     if current_user.user_type() == Teacher:
         invite_ = session.query(StudentInvite).get(invite_id)
-        if invite_.teacher == current_user.teacher:
+        if invite_.teacher_id == current_user.teacher_id:
             current_user.teacher.add_student(invite_.student)
     else:
         invite_ = session.query(TeacherInvite).get(invite_id)
@@ -421,12 +421,10 @@ def edit_task(task_id):
     if current_user.user_type() == Student:
         return redirect('/profile')
     abort_if_task_not_found(task_id)
-    print('ok')
     abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
-    print('cock')
-    form = EditTask()
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
+    form = new_edit_task(task)
     if form.validate_on_submit():
         task.name = form.new_name.data
         task.description = form.new_description.data
