@@ -1,22 +1,81 @@
 {% extends "base.html" %}
+{% block else_link %}
+    <link rel="stylesheet" href="../static/css/table.css">
+    <link rel="stylesheet" href="../static/css/profs.css">
+<link rel="stylesheet" href="../static/css/prof_more.css">
+<link rel="stylesheet" href="../static/css/password.css">
+    {% endblock %}
 {% block modules %}
 <style>
     body{background-color: #65A2CE;
     color: white;
     }
+    code{
+    color: #F9A7CE;
+    opacity: 0.8;
+    margin-bottom: 20px
+    }
+    .elem{
+    margin-bottom: 50px
+    }
+    h2{
+    color: #F9A7CE;
+    font-weight: bold;
+    border-bottom: 3px dotted  #F9A7CE;
+    margin: 18px 0;
+    padding-bottom: 9px;
+    }
+    h3{
+    color: #A8C7A8;
+    padding: 15px 0 0 0
+    }
+    .doc{
+    margin-bottom: 100px;
+    }
 </style>
 <body>
-
+<nav class="navbar navbar-expand-lg navbar-light logo">
+        <div><a href="/"><img src="../static/img/logo.png"></a></div>
+    <ul class="navbar-nav mr-auto">
+        {% block about_pr %}
+<li class="nav-item ab">
+        <button id="userButton" class='btn_copy'>
+            Скопировать пароль<br>
+        <small class='sm_never'>Никому не разглашайте данный пароль</small>
+        </button>
+      </li>
+        {% endblock %}
+    </ul>
+    <span class="navbar-text">
+        {% if current_user.is_authenticated %}
+            <p>
+                <a class="log_up_btn shadow-lg log_out" href="/profile">Профиль</a>
+                <a class="log_up_btn shadow-lg log_out" href="/logout">Выйти</a>
+                </p>
+        {% else %}
+        <p>
+                <a class="log_up_btn shadow-lg log_out" href="/profile">Главная</a>
+                </p>
+        {% endif %}
+    </span>
+  </div>
+</nav>
 <div class="container doc">
-
+    <div class="elem">
     <h1>API 1.0: Документация</h1>
     <p>API - это мощный инструмент, с помощью которого пользователь может облегчить себе работу</p>
+    </div>
+
+    <div class="elem">
     <h2>Основная информация</h2>
     <p>Формат запроса: JSON</p>
     <p>Формат ответа: JSON</p>
     <p>Вид запроса: "http://edude.ru/api/1.0/модуль/аргументы"></p>
     <p>Все аргументы записываются через &</p>
     <p>О модулях подробнее ниже</p>
+    </div>
+
+    <div class="elem">
     <h2>teachers</h2>
     <p>Аргументы: нет</p>
     <p>Методы: GET</p>
@@ -34,6 +93,9 @@
       ]
     }
     </code>
+    </div>
+
+    <div class="elem">
     <h2>teacher</h2>
     <p>Аргументы: teacher_id (GET) или teacher_id&teacher_password (PUT, DELETE)</p>
     <p>Методы: GET, PUT, DELETE</p>
@@ -71,6 +133,9 @@
     <code>
         {"success": "OK"}
     </code>
+    </div>
+
+    <div class="elem">
     <h2>students</h2>
     <p>Аргументы: нет</p>
     <p>Поддерживаемые методы: GET</p>
@@ -123,6 +188,9 @@
     <code>
         {"success": "OK"}
     </code>
+    </div>
+
+    <div class="elem">
     <h2>classrooms</h2>
     <p>Аргументы: teacher_id&teacher_password</p>
     <p>Поддерживаемые методы: GET, POST</p>
@@ -196,6 +264,9 @@
       "success": "OK"
     }
     </code>
+    </div>
+
+    <div class="elem">
     <h2>tasks</h2>
     <p>Аргументы: teacher_id&teacher_password
     </p>
@@ -239,6 +310,9 @@
     <h4>Формат ответа</h4>
     <p>Ответ представляет из себя запись вида "success": переданные вами параметры
     </p>
+    </div>
+
+    <div class="elem">
     <h2>task</h2>
     <p>Аргументы: teacher_id&teacher_password&task_id
     </p>
@@ -283,6 +357,7 @@
     <code>
         {"success":  "OK"}
     </code>
+    </div>
 </div>
 </body>
 {% endblock %}

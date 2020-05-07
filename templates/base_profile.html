@@ -14,15 +14,17 @@
       </li>
         {% endblock %}
     {% block content %}
-<div class="photo" style="width: auto; height: auto">
+<div class="photo" style="width: auto; height: auto;box-shadow:none">
     {% if is_teacher %}
 <div style="display: flex;">
         <img src="../static/img/teacher.png" style="width: 100px; height: 100px;vertical-align: middle; box-shadow: none">
     <h2 style="margin-top: 68px;margin-left: -20px">Хорошей вам работы!</h2>
 </div>
     {% else %}
-        <img src="../static/img/student.png">
-    <h2>Хорошей вам учебы!</h2>
+    <div style="display: flex;">
+        <img src="../static/img/student.png" style="width: 100px; height: 100px;vertical-align: middle; box-shadow: none;">
+    <h2 style="margin-top: 68px;margin-left: -20px">Хорошей вам учебы!</h2>
+        </div>
     {% endif %}
     <h6 class="name_user">Имя пользователя: {{ name }} {{ surname }}</h6>
     <h6 class="name_user">Id пользователя: {{ id }}</h6>
