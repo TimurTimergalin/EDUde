@@ -24,6 +24,7 @@ import teacher_resources
 import classroom_resources
 import task_resources
 from email_sender import sendmessage
+from generate_key import generate_key
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
@@ -273,8 +274,9 @@ def api():
 
 @app.route('/api/1.0')
 def api_1_0():
-    return render_template('documentation_1.0.html', title='API v1.0')
-    # form = AddClassForm()/
+    return render_template('documentation_1.0.html', title='API v1.0',
+                           user_key=generate_key(current_user.teacher if current_user.user_type() == Teacher
+                                                 else current_user.student))
 
 
 @app.route('/invite', methods=['GET', 'POST'])

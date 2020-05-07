@@ -359,5 +359,17 @@
     </code>
     </div>
 </div>
+ <script>
+var button = document.getElementById("userButton");
+button.addEventListener("click", function (popa){
+var copytext = document.createElement("input");
+copytext.value = "{{ user_key }}";
+document.body.appendChild(copytext);
+copytext.select();
+document.execCommand("copy");
+document.body.removeChild(copytext);
+});
+</script>
 </body>
 {% endblock %}
+
