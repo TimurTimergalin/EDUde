@@ -4,6 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, RadioField, Boolean
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 from flask_wtf.recaptcha import RecaptchaField
+from datetime import datetime
 
 RECAPTCHA_PUBLIC_KEY = '6LeYIbsSAAAAACRPIllxA7wvXjIE411PfdB2gt2J'
 RECAPTCHA_PRIVATE_KEY = '6LeYIbsSAAAAAJezaIq3Ft_hSTo0YtyeFG-JgRtu'
@@ -84,11 +85,18 @@ class EditClass(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
-class EditTask(FlaskForm):
-    """EditTask
-       WTF model of Edit task form"""
-    new_name = TextAreaField('Название задания', validators=[DataRequired()])
-    new_description = TextAreaField('Что делать', validators=[DataRequired()])
-    new_deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    new_link = StringField('Куда отправлять', validators=[DataRequired()])
-    submit = SubmitField('Отправить')
+def new_edit_task(task):
+    def func():
+        print(type(task.deadline))
+        return task.deadline
+
+    class EditTask(FlaskForm):
+        """EditTask
+           WTF model of Edit task form"""
+        new_name = StringField('Название задания', validators=[DataRequired()], default=task.name)
+        new_description = TextAreaField('Что делать', validators=[DataRequired()], default=task.description)
+        new_deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M',
+                                     default=func)
+        new_link = StringField('Куда отправлять', validators=[DataRequired()], default=task.link)
+        submit = SubmitField('Отправить')
+    return EditTask()
