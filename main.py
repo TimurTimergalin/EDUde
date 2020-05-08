@@ -30,11 +30,11 @@ import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
 
-logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+# logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
+#                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
 app = Flask(__name__)
-run_with_ngrok(app)
+# run_with_ngrok(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -373,8 +373,12 @@ def send_task(task_id):
             except Exception:
                 break
         a = [str(file[1]).split()[2][2:-3].split('/') for file in files.items()]
+        for i in range(len(a)):
+            if len(a[i]) == 1:
+                a[i] = ['image', 'png']
         b = [i for i in files_list]
         c = [a[i] + [b[i]] for i in range(len(a))]
+        print(a)
         sendmessage(student.surname, classroom.name, task.name, task.link, request.form['text'], c)
         return redirect('/profile')
 
