@@ -170,14 +170,20 @@ def profile():
 @app.route('/new_student/<classroom_id>', methods=["GET", "POST"])
 @login_required
 def new_student(classroom_id):
+    session = db_session.create_session()
+    classroom = session.query(ClassRoom).get(classroom_id)
     if current_user.user_type() == Teacher:
         if request.method == 'GET':
-            return render_template('add_students.html', students=current_user.teacher.students,
-                                   logo_link=url_for('static', filename='img/logo.png'),
-                                   title='Добавить учеников')
+            teacher = session.query(Teacher).get(current_user.teacher_id)
+            students = []
+            for i in teacher.students:
+                if i not in classroom.students:
+                    students.append(i)
+            if students:
+                return render_template('add_students.html', students=students,
+                                       logo_link=url_for('static', filename='img/logo.png'),
+                                       title='Добавить учеников')
         elif request.method == 'POST':
-            session = db_session.create_session()
-            classroom = session.query(ClassRoom).get(classroom_id)
             for data in request.form.getlist('checkbox'):
                 student = session.query(Student).get(int(data))
                 classroom.add_student(student)
