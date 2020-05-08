@@ -384,8 +384,10 @@ def send_task(task_id):
 def new_task(classroom_id):
     abort_if_class_not_found(classroom_id)
     if current_user.user_type() == Teacher:
+        abort_if_request_is_forbidden(current_user.teacher_id, classroom_id)
         form = AddTaskForm()
         session = db_session.create_session()
+        teacher = session.query(Teacher).get(current_user.teacher_id)
         if form.validate_on_submit():
             task = Task()
             task.name = form.name_of_task.data
@@ -402,7 +404,8 @@ def new_task(classroom_id):
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form,
                                logo_link=url_for('static', filename='img/logo.png'),
-                               title='Добавить задание')
+                               title='Добавить задание',
+                               link=teacher.email)
 
 
 @app.route('/delete_student/<int:classroom_id>/<int:student_id>', methods=['GET', 'POST'])

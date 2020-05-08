@@ -34,7 +34,7 @@
             </p>
         {% endfor %}
           {{ form.link.label }}
-      {{ form.link(class="half-width", type='email', style="width:250px") }}
+      {{ form.link(class="half-width", type='email', style="width:250px", value=link ) }}
       {% for error in form.task.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}
