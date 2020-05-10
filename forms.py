@@ -1,7 +1,7 @@
 from click import DateTime
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, RadioField, BooleanField, TextAreaField, DateTimeField, DateField, TimeField, FileField
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, DateTimeLocalField
 from wtforms.validators import DataRequired
 from flask_wtf.recaptcha import RecaptchaField
 from datetime import datetime
@@ -27,7 +27,7 @@ class RegistrationForm(FlaskForm):
 class LoginForm(FlaskForm):
     """LoginForm
     WTF model of login form"""
-    email = EmailField('Логин', validators=[DataRequired()])
+    email = EmailField('Эл. почта', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Войти')
@@ -91,7 +91,7 @@ def new_edit_task(task):
            WTF model of Edit task form"""
         new_name = StringField('Название задания', validators=[DataRequired()], default=task.name)
         new_description = TextAreaField('Что делать', validators=[DataRequired()], default=task.description)
-        new_deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M',
+        new_deadline = DateTimeLocalField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M',
                                      default=task.deadline)
         new_link = StringField('Куда отправлять', validators=[DataRequired()], default=task.link)
         submit = SubmitField('Отправить')

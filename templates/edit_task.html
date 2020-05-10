@@ -31,8 +31,7 @@
 
             {{ form.new_deadline.label }}<br>
 
-      {{ form.new_deadline(class="half-width", type='datetime-local' , placeholder=task.deadline,
-            value=task.deadline.strftime("%Y-%m-%d %H:%M") ) }}<br>
+      {{ form.new_deadline(class="half-width")  }}<br>
       {% for error in form.new_deadline.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}
