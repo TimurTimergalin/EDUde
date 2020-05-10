@@ -15,6 +15,7 @@ class StudentInvite(SqlAlchemyBase, SerializerMixin):  # От ученика к 
     teacher = orm.relation('Teacher')
     student_id = Cl(sql.Integer, sql.ForeignKey('students.id'))
     student = orm.relation('Student')
+    status = Cl(sql.Boolean, default=1)
 
     def __repr__(self):
         return f'{self.student.surname} {self.student.name} просит стать вашим учеников'

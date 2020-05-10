@@ -20,6 +20,7 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
     teacher = orm.relation('Teacher')
     students = orm.relationship('Student', secondary='student_to_class')
     subject = Cl(sql.String)
+    status = Cl(sql.Boolean, default=1)
     tasks = orm.relation('Task', back_populates='class_room')
 
     def __repr__(self):
