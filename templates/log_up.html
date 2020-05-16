@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block else_link %}
 <link rel="stylesheet" href="../static/css/log_up.css">
+<link rel="stylesheet" href="../static/css/after_log.css">
 {% endblock %}
 
 {% block content %}
@@ -78,5 +79,9 @@
         {% endfor %}
         </div>
       </form>
+<div class="last_offer">
+    Уже есть в системе?
+    <a href="/login" class='goto' style="">Войдите</a>
+</div>
 </div>
 {% endblock %}

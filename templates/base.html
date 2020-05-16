@@ -3,11 +3,22 @@
  <link rel="stylesheet" href="../static/css/to_base_html.css">
 {% endblock %}
 {% block modules %}
+<style>
+    .loho::after{
+    content: 'На главную';
+    position: absolute;
+    margin-top: 85px;
+    margin-left: -87px;
+    color: white;
+    font-size: 13px;
+    letter-spacing: 1px
+    }
+</style>
 <body>
 <div class="bodys">
 <header>
     <nav class="navbar navbar-expand-lg navbar-light logo">
-        <div><a href="/"><img src="{{ logo_link }}"></a></div>
+        <div class="loho"><a href="/"><img src="{{ logo_link }}"></a></div>
 
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">

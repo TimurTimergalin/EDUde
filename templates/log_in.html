@@ -2,6 +2,7 @@
 {% block else_link %}
 <link rel="stylesheet" href="../static/css/log_up.css">
 <link rel="stylesheet" href="../static/css/log__in.css">
+<link rel="stylesheet" href="../static/css/after_log.css">
 {% endblock %}
 
 {% block content %}
@@ -49,6 +50,10 @@
             </p>
         {% endfor %}
         </div>
-      </form>
+ </form>
+<div class="last_offer">
+    В первый раз на сайте?
+    <a href="/register" class='goto'>Зарегистрируйтесь</a>
+</div>
 </div>
 {% endblock %}

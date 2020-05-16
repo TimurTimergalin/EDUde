@@ -19,6 +19,7 @@ class Task(SqlAlchemyBase, SerializerMixin):
     link = Cl(sql.String)
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
+    status = Cl(sql.Boolean, default=1)
 
     def __repr__(self):
         return f'Task#{self.id}: {self.name}'

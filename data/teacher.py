@@ -89,7 +89,7 @@ class Teacher(SqlAlchemyBase, SerializerMixin, UserMixin):
 
     def invite(self, student_id):
         session = db_session.create_session()
-        invites = session.query(TeacherInvite).filter(TeacherInvite.teacher_id == self.id).all()
+        invites = session.query(TeacherInvite).filter(TeacherInvite.teacher_id == self.id, TeacherInvite == 1).all()
         for i in invites:
             if i.student_id == student_id:
                 return
