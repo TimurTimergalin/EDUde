@@ -553,7 +553,7 @@ def user_type_choice(session, form):
 
 
 def main():
-    db_session.global_init("/home/flask/db/edu.sqlite")
+    db_session.global_init("db/edu.sqlite")
     app.run()
 
 

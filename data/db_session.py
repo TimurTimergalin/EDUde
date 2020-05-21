@@ -21,6 +21,7 @@ def global_init(db_file):
     print(f"connecting {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
+    print(engine)
     __factory = orm.sessionmaker(bind=engine)
 
     from . import __all_models
@@ -31,3 +32,7 @@ def global_init(db_file):
 def create_session() -> Session:
     global __factory
     return __factory()
+
+
+if __name__ == '__main__':
+    global_init('db/edu.sqlite')
