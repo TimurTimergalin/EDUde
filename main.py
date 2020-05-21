@@ -35,6 +35,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 # run_with_ngrok(app)
+db_session.global_init("db/edu.sqlite")
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -553,7 +554,6 @@ def user_type_choice(session, form):
 
 
 def main():
-    db_session.global_init("db/edu.sqlite")
     app.run()
 
 

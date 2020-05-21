@@ -21,10 +21,7 @@ def global_init(db_file):
     print(f"connecting {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
-    print(engine)
     __factory = orm.sessionmaker(bind=engine)
-    if not __factory:
-        raise Exception('her\'')
 
     from . import __all_models
 
