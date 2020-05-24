@@ -3,3 +3,12 @@
     border-radius: 20px;
     padding: 8px 15px;
     }
+.loho::after{
+    content: 'На главную';
+    position: absolute;
+    margin-top: 85px;
+    margin-left: -87px;
+    color: white;
+    font-size: 13px;
+    letter-spacing: 1px
+    }
