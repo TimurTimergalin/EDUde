@@ -5,7 +5,6 @@ from data.class_room import ClassRoom
 from data.student import Student
 from data.task import Task
 from generate_key import generate_key
-import webbrowser
 
 
 def abort_if_class_not_found(class_room_id):
@@ -74,3 +73,13 @@ def abort_if_task_not_found(task_id):
         abort(404, message=f"Task {task_id} not found")
         return True
     return task
+
+
+#  student in classroom of the task check
+def abort_if_request_is_forbidden2(student_id, task_id):
+    session = db_session.create_session()
+    task = session.query(Task).get(task_id)
+    classroom = session.query(ClassRoom).get(task.class_room_id)
+    student = session.query(Student).get(student_id)
+    if student not in classroom.students:
+        abort(403, message="You are not allowed to get info about this task")

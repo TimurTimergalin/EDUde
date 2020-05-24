@@ -261,6 +261,20 @@ def tasks(classroom_id):
                            title='Oops')
 
 
+@app.route('/task/<int:task_id>', methods=['GET'])
+@login_required
+def task(task_id):
+    session = db_session.create_session()
+    abort_if_task_not_found(task_id)
+    task = session.query(Task).get(task_id)
+    if current_user.user_type() == Teacher:
+        abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
+        return render_template('', title=f'Задача "{task.name}"', task=task,
+                               logo_link=url_for('static', filename='img/logo.png'))
+    else:
+        abort_if_request_is_forbidden2(current_user.student_id, task_id)
+
+
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def delete_task(task_id):
@@ -371,7 +385,6 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
-        # text = request.form['message']
         files = request.files
         i = 1
         files_list = []
