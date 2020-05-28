@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import scoped_session
 import sqlalchemy.ext.declarative as dec
 
 SqlAlchemyBase = dec.declarative_base()
@@ -28,9 +29,9 @@ def global_init(db_file):
     SqlAlchemyBase.metadata.create_all(engine)
 
 
-def create_session() -> Session:
+def create_session() -> scoped_session:
     global __factory
-    return __factory()
+    return scoped_session(__factory)
 
 
 if __name__ == '__main__':
