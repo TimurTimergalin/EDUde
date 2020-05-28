@@ -29,9 +29,14 @@ def global_init(db_file):
     SqlAlchemyBase.metadata.create_all(engine)
 
 
-def create_session() -> scoped_session:
+def create_scoped_session() -> scoped_session:
     global __factory
     return scoped_session(__factory)
+
+
+def create_session() -> Session:
+    global __factory
+    return __factory()
 
 
 if __name__ == '__main__':
