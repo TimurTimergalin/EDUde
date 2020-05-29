@@ -15,11 +15,11 @@ class ClassRoom(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'class_rooms'
 
     id = Cl(sql.Integer, primary_key=True, autoincrement=True)
-    name = Cl(sql.String)
+    name = Cl(sql.String(32))
     teacher_id = Cl(sql.Integer, sql.ForeignKey('teachers.id'))
     teacher = orm.relation('Teacher')
     students = orm.relationship('Student', secondary='student_to_class')
-    subject = Cl(sql.String)
+    subject = Cl(sql.String(32))
     status = Cl(sql.Boolean, default=1)
     tasks = orm.relation('Task', back_populates='class_room')
 

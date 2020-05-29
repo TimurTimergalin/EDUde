@@ -18,7 +18,7 @@ def global_init(db_file):
     if not db_file or not db_file.strip():
         raise Exception("filename required")
 
-    conn_str = f'mysql+mysqldb:///flask:flask@localhost:3306/{db_file.strip()}'
+    conn_str = f'mysql+mysqldb://flask:flask@localhost:3306/{db_file.strip()}'
     print(f"connecting {conn_str}")
 
     engine = sa.create_engine(conn_str, echo=False)
