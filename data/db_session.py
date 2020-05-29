@@ -18,10 +18,10 @@ def global_init(db_file):
     if not db_file or not db_file.strip():
         raise Exception("filename required")
 
-    conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
+    conn_str = f'mysql+mysqldb///flask:flask@195.66.114.154:3306/{db_file.strip()}'
     print(f"connecting {conn_str}")
 
-    engine = sa.create_engine(conn_str, echo=False)
+    engine = sa.create_engine(conn_str, echo=False, pool_recycle=3600)
     __factory = orm.sessionmaker(bind=engine)
 
     from . import __all_models
