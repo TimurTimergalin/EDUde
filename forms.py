@@ -58,6 +58,10 @@ class InvitingForm(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
+class SendHomework(FlaskForm):
+    pass
+
+
 class AcceptionForm(FlaskForm):
     submit_true = SubmitField('Удалить')
 

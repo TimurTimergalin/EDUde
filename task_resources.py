@@ -5,7 +5,7 @@ from flask_restful import reqparse, abort, Resource
 from data import db_session
 from data.class_room import ClassRoom
 from data.teacher import Teacher
-from data.task import Task
+from data.normaltask import NormalTask
 from api_func import *
 
 
@@ -35,7 +35,7 @@ class TaskResource(Resource):
         abort_if_teacher_not_found(teacher_id)
         abort_if_task_not_found(task_id)
         session = db_session.create_session()
-        task = session.query(Task).get(task_id)
+        task = session.query(NormalTask).get(task_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
         abort_if_request_is_forbidden1(teacher_id, task_id)
         args = edit_parser.parse_args()
@@ -55,7 +55,7 @@ class TaskResource(Resource):
         abort_if_password_is_wrong(teacher_id, teacher_password)
         abort_if_request_is_forbidden1(teacher_id, task_id)
         session = db_session.create_session()
-        task = session.query(Task).get(task_id)
+        task = session.query(NormalTask).get(task_id)
         session.delete(task)
         session.commit()
         return jsonify({'success': 'OK'})
@@ -73,7 +73,7 @@ class TaskListResource(Resource):
         args = parser.parse_args()
         abort_if_teacher_not_found(teacher_id)
         abort_if_password_is_wrong(teacher_id, teacher_password)
-        task = Task()
+        task = NormalTask()
         task.name = args['name']
         task.deadline = datetime.datetime.strptime(args['deadline'], '%Y-%m-%d %H:%M:%S')
         task.link = args['link']

@@ -12,6 +12,7 @@ from data.student import Student
 from data.teacher import Teacher
 from data.class_room import ClassRoom
 from data.user import User
+from data.normaltask import NormalTask
 from data.task import Task
 from create_user import create_user
 from flask_restful import Api
@@ -266,7 +267,7 @@ def tasks(classroom_id):
 def task(task_id):
     session = db_session.create_session()
     abort_if_task_not_found(task_id)
-    task = session.query(Task).get(task_id)
+    task = session.query(NormalTask).get(task_id)
     if current_user.user_type() == Teacher:
         abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
         return render_template('', title=f'Задача "{task.name}"', task=task,
@@ -288,7 +289,7 @@ def delete_task(task_id):
                                    )
         elif request.method == 'POST':
             session = db_session.create_session()
-            task = session.query(Task).get(task_id)
+            task = session.query(NormalTask).get(task_id)
             task.status = 0
             session.commit()
             return redirect('/profile')
@@ -374,7 +375,7 @@ def send_task(task_id):
     abort_if_task_not_found(task_id)
     form = SendHomework()
     session = db_session.create_session()
-    task = session.query(Task).get(task_id)
+    task = session.query(NormalTask).get(task_id)
     classroom = task.class_room
     student = session.query(Student).get(current_user.student_id)
     if request.method == 'GET':
@@ -415,7 +416,7 @@ def new_task(classroom_id):
         session = db_session.create_session()
         teacher = session.query(Teacher).get(current_user.teacher_id)
         if form.validate_on_submit():
-            task = Task()
+            task = NormalTask()
             task.name = form.name_of_task.data
             task.description = form.task.data
             task.link = form.link.data
@@ -511,7 +512,7 @@ def edit_task(task_id):
     abort_if_task_not_found(task_id)
     abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
     session = db_session.create_session()
-    task = session.query(Task).get(task_id)
+    task = session.query(NormalTask).get(task_id)
     form = new_edit_task(task)
     if form.validate_on_submit():
         task.name = form.new_name.data
