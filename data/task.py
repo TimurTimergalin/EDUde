@@ -5,6 +5,8 @@ from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
 from sqlalchemy_serializer import SerializerMixin
+from data.formtask import FormTask
+from data.normaltask import NormalTask
 
 
 class Task(SqlAlchemyBase, SerializerMixin):
@@ -18,6 +20,11 @@ class Task(SqlAlchemyBase, SerializerMixin):
     deadline = Cl(sql.DateTime)
     link = Cl(sql.String(128))
     status = Cl(sql.Boolean, default=1)
+
+    def task_type(self):
+        if type(self.normal_id) == int:
+            return NormalTask
+        return FormTask
 
 
 
