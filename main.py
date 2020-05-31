@@ -526,6 +526,12 @@ def edit_task(task_id):
                            title='Изменить задачу')
 
 
+@app.route('/tasks/<int:task_id>/solutions')
+@login_required
+def solutions(task_id):
+    return render_template('solutions.html')
+
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block else_link %}
+    <link rel="stylesheet" href="{{ link_css }}">
+<link rel="stylesheet" href="{{ link_css1 }}">
+<link rel="stylesheet" href="{{ link_css2 }}">
+    {% endblock %}
+{% block content%}
+<style>
+.names{
+max-width: 300px;
+overflow:scroll;
+word-wrap: break-word;
+}
+td::-webkit-scrollbar { width: 0; }
+.t2{
+width: 400px;
+}
+.delete{
+margin-right: 20px
+}
+.div_auto{
+margin: auto
+}
+</style>
+<div class="flex_box">
+    <table class="table table-borderless tab container" style="margin: 30px 50px auto 10px">
+  <thead>
+    <tr>
+      <th scope="col">id</th>
+      <th scope="col">Ученик</th>
+      <th scope="col">Наличие задания</th>
+        <th scope="col">Подробнее</th>
+        <th scope="col">Оставить комментарий</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for student in students %}
+    <tr>
+      <th scope="row">{{ student.id }}</th>
+      <td><p>{{ student.surname}} {{ student.name }}</p></td>
+    <td><p>{{ student.surname}} {{ student.name }}</p></td>
+        <td><p>{{ student.surname}} {{ student.name }}</p></td>
+        <td><p>{{ student.surname}} {{ student.name }}</p></td>
+        <td><p>{{ student.surname}} {{ student.name }}</p></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
