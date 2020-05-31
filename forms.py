@@ -36,8 +36,8 @@ class LoginForm(FlaskForm):
 class AddClassForm(FlaskForm):
     """AddClassForm
        WTF model of Add class form"""
-    name_of_class = StringField('Название класса', validators=[DataRequired(), Length(32)])
-    subj = StringField('Предмет', validators=[DataRequired(), Length(32)])
+    name_of_class = StringField('Название класса', validators=[DataRequired(), Length(1, 32)])
+    subj = StringField('Предмет', validators=[DataRequired(), Length(1, 32)])
     submit = SubmitField('Сохранить')
 
 
@@ -49,11 +49,10 @@ class AddTaskForm(FlaskForm):
 
 
 class AddFormTaskForm(FlaskForm):
-    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(32)])
-    form_link = StringField('Ссылка на Google Форму', validators=[DataRequired(), Length(128)])
-    link = StringField('Куда отправлять', validators=[DataRequired(), Length(128)])
+    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(1, 32)])
+    form_link = StringField('Ссылка на Google Форму', validators=[DataRequired(), Length(1, 128)])
+    link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('Отправить')
-
 
 
 class InvitingForm(FlaskForm):
@@ -74,17 +73,17 @@ class AcceptionForm(FlaskForm):
 class EditProfile(FlaskForm):
     """EditProfile
        WTF model of Edit profile form"""
-    new_name = StringField('Имя', validators=[DataRequired(), Length(32)])
-    new_surname = StringField('Фамилия', validators=[DataRequired(), Length(32)])
-    new_email = EmailField('Логин', validators=[DataRequired(), Length(64)])
+    new_name = StringField('Имя', validators=[DataRequired(), Length(1, 32)])
+    new_surname = StringField('Фамилия', validators=[DataRequired(), Length(1, 32)])
+    new_email = EmailField('Логин', validators=[DataRequired(), Length(1, 64)])
     submit = SubmitField('Сохранить')
 
 
 class EditClass(FlaskForm):
     """EditClass
        WTF model of Edit class form"""
-    new_name = StringField('Название', validators=[DataRequired(), Length(32)])
-    new_subject = StringField('Предмет', validators=[DataRequired(), Length(32)])
+    new_name = StringField('Название', validators=[DataRequired(), Length(1, 32)])
+    new_subject = StringField('Предмет', validators=[DataRequired(), Length(1, 32)])
     submit = SubmitField('Сохранить')
 
 
@@ -92,10 +91,10 @@ def new_edit_task(task):
     class EditTask(FlaskForm):
         """EditTask
            WTF model of Edit task form"""
-        new_name = StringField('Название задания', validators=[DataRequired(), Length(32)], default=task.name)
+        new_name = StringField('Название задания', validators=[DataRequired(), Length(1, 32)], default=task.name)
         new_description = TextAreaField('Что делать', validators=[DataRequired()], default=task.description)
         new_deadline = DateTimeLocalField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M',
                                      default=task.deadline)
-        new_link = StringField('Куда отправлять', validators=[DataRequired(), Length(128)], default=task.link)
+        new_link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)], default=task.link)
         submit = SubmitField('Отправить')
     return EditTask()
