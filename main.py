@@ -425,13 +425,15 @@ def new_task(classroom_id):
         session = db_session.create_session()
         teacher = session.query(Teacher).get(current_user.teacher_id)
         if form.validate_on_submit():
-            task = NormalTask()
+            normal_task = NormalTask()
+            normal_task.description = form.task.data
+            session.add(normal_task)
+            task = Task()
             task.name = form.name_of_task.data
-            task.description = form.task.data
             task.link = form.link.data
-            task.teacher_id = current_user.teacher_id
             task.deadline = form.deadline.data
             task.class_room_id = classroom_id
+            task.normal_id = normal_task.id
             session.add(task)
             session.commit()
             return redirect(f'/tasks/{classroom_id}')

@@ -44,11 +44,16 @@ class AddClassForm(FlaskForm):
 class AddTaskForm(FlaskForm):
     """AddTaskForm
        WTF model of Add class form"""
-    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(32)])
     task = TextAreaField('Что делать', validators=[DataRequired()])
     deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+
+
+class AddFormTaskForm(FlaskForm):
+    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(32)])
+    form_link = StringField('Ссылка на Google Форму', validators=[DataRequired(), Length(128)])
     link = StringField('Куда отправлять', validators=[DataRequired(), Length(128)])
     submit = SubmitField('Отправить')
+
 
 
 class InvitingForm(FlaskForm):
