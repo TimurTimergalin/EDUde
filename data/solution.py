@@ -22,3 +22,4 @@ class Solution(SqlAlchemyBase):
     student_id = Cl(sql.Integer, sql.ForeignKey('students.id'))
     student = orm.relation('Student')
     solution_link = Cl(sql.String)
+    is_active = Cl(sql.Boolean, default=True)
