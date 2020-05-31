@@ -438,6 +438,12 @@ def new_task(classroom_id):
                                link=teacher.email)
 
 
+@app.route('/tasks/<int:task_id>/solutions')
+@login_required
+def solutions(task_id):
+    return render_template('solutions.html')
+
+
 @app.route('/delete_student/<int:classroom_id>/<int:student_id>', methods=['GET', 'POST'])
 @login_required
 def delete_student(classroom_id, student_id):
@@ -531,7 +537,7 @@ def edit_task(task_id):
 
 @app.route('/tasks/<int:task_id>/solutions')
 @login_required
-def solutions(task_id):
+def solution(task_id):
     return render_template('solutions.html')
 
 
