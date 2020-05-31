@@ -267,13 +267,22 @@ def tasks(classroom_id):
 def task(task_id):
     session = db_session.create_session()
     abort_if_task_not_found(task_id)
-    task = session.query(NormalTask).get(task_id)
+    task_ = session.query(NormalTask).get(task_id)
     if current_user.user_type() == Teacher:
         abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
-        return render_template('', title=f'Задача "{task.name}"', task=task,
-                               logo_link=url_for('static', filename='img/logo.png'))
+        is_teacher = True
     else:
         abort_if_request_is_forbidden2(current_user.student_id, task_id)
+        is_teacher = False
+    if task_.task_type() == NormalTask:
+        task_ = task_.normal_task
+        is_normal = True
+    else:
+        task_ = task_.form_task
+        is_normal = False
+    return render_template('', title=f'Задача "{task_.name}"', task=task_,
+                           logo_link=url_for('static', filename='img/logo.png'),
+                           is_teacher=is_teacher, is_normal=is_normal)
 
 
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
