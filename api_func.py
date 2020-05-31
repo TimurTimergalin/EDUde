@@ -4,6 +4,7 @@ from data.teacher import Teacher
 from data.class_room import ClassRoom
 from data.student import Student
 from data.normaltask import NormalTask
+from data.task import Task
 from generate_key import generate_key
 
 
@@ -59,7 +60,7 @@ def abort_if_student_not_found(student_id):
 def abort_if_request_is_forbidden1(teacher_id, task_id):
     session = db_session.create_session()
     teacher = session.query(Teacher).get(teacher_id)
-    task = session.query(NormalTask).get(task_id)
+    task = session.query(Task).get(task_id)
     for i in teacher.class_rooms:
         if task in i.tasks:
             return True

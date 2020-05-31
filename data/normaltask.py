@@ -15,9 +15,6 @@ class NormalTask(SqlAlchemyBase, SerializerMixin):
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)
     description = Cl(sql.Text)
 
-    def __repr__(self):
-        return f'Task#{self.id}: {self.name}'
-
     def set_deadline(self, deadline):
         """Task.set_deadline
         Change a dealine of the task"""

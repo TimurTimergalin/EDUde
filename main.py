@@ -290,19 +290,19 @@ def task(task_id):
 @login_required
 def delete_task(task_id):
     if abort_if_request_is_forbidden1(current_user.teacher_id, task_id):
+        session = db_session.create_session()
+        task = session.query(Task).get(task_id)
         if request.method == 'GET':
             return render_template('delete.html', task_id=task_id, logo_link=url_for('static', filename='img/logo.png'),
                                    title='Удалить?',
                                    link1=url_for('static', filename='css/log_up.css'),
                                    link2=url_for('static', filename='css/log_success.css'),
-                                   link3=url_for('static', filename='css/delete.css'),
+                                   link3=url_for('static', filename='css/delete.css')
                                    )
         elif request.method == 'POST':
-            session = db_session.create_session()
-            task = session.query(NormalTask).get(task_id)
             task.status = 0
             session.commit()
-            return redirect('/profile')
+            return redirect(f'/tasks/{task.class_room_id}')
 
 
 @app.route('/accept_invite/<int:invite_id>')
@@ -429,6 +429,8 @@ def new_task(classroom_id):
             normal_task = NormalTask()
             normal_task.description = form.task.data
             session.add(normal_task)
+            session.commit()
+            print(normal_task.id)
             task = Task()
             task.name = form.name_of_task.data
             task.link = form.link.data
@@ -447,14 +449,14 @@ def new_task(classroom_id):
                                link=teacher.email)
 
 
-@app.route('task/<int:task_id>/solutions', methods=['GET'])
+@app.route('/task/<int:task_id>/solutions', methods=['GET'])
 @login_required
 def solutions(task_id):
     # передать учеников, сделать таблицу с заданиями
     return render_template('solutions.html', )
 
 
-@app.route('task/<int:task_id>/solutions/view', methods=['GET', 'POST'])
+@app.route('/task/<int:task_id>/solutions/view', methods=['GET', 'POST'])
 @login_required
 def solution_view(task_id):
     pass
@@ -537,18 +539,20 @@ def edit_task(task_id):
     abort_if_task_not_found(task_id)
     abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
     session = db_session.create_session()
-    task = session.query(NormalTask).get(task_id)
-    form = new_edit_task(task)
-    if form.validate_on_submit():
-        task.name = form.new_name.data
-        task.description = form.new_description.data
-        task.deadline = form.new_deadline.data
-        task.link = form.new_link.data
-        session.commit()
-        return redirect(f'/tasks/{task.class_room_id}')
-    return render_template('edit_task.html', form=form,
-                           task=task, logo_link=url_for('static', filename='img/logo.png'),
-                           title='Изменить задачу')
+    task = session.query(Task).get(task_id)
+    normal_task = task.normal_task
+    if task.task_type() == NormalTask:
+        form = new_edit_task(task, normal_task)
+        if form.validate_on_submit():
+            task.name = form.new_name.data
+            normal_task.description = form.new_description.data
+            task.deadline = form.new_deadline.data
+            task.link = form.new_link.data
+            session.commit()
+            return redirect(f'/tasks/{task.class_room_id}')
+        return render_template('edit_task.html', form=form,
+                               task=task, logo_link=url_for('static', filename='img/logo.png'),
+                               title='Изменить задачу')
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])

@@ -14,9 +14,9 @@ class Task(SqlAlchemyBase, SerializerMixin):
     id = Cl(sql.Integer, autoincrement=True, primary_key=True)
     name = Cl(sql.String(32))
     normal_id = Cl(sql.Integer, sql.ForeignKey('normal_tasks.id'), nullable=True)
-    normal = orm.relation('NormalTask')
+    normal_task = orm.relation('NormalTask')
     form_id = Cl(sql.Integer, sql.ForeignKey('form_tasks.id'), nullable=True)
-    form = orm.relation('FormTask')
+    form_task = orm.relation('FormTask')
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
     deadline = Cl(sql.DateTime)
@@ -27,6 +27,9 @@ class Task(SqlAlchemyBase, SerializerMixin):
         if type(self.normal_id) == int:
             return NormalTask
         return FormTask
+
+    def __repr__(self):
+        return f'Task#{self.id}'
 
 
 
