@@ -36,7 +36,8 @@ from datetime import datetime
 
 app = Flask(__name__)
 # run_with_ngrok(app)
-db_session.global_init("flaskdb")
+# db_session.global_init("flaskdb")
+db_session.global_init('db/edu.sqlite')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
