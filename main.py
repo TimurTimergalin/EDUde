@@ -270,8 +270,11 @@ def task(task_id):
     task = session.query(Task).get(task_id)
     if current_user.user_type() == Teacher:
         abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
-        return render_template('', title=f'Задача "{task.name}"', task=task,
-                               logo_link=url_for('static', filename='img/logo.png'))
+        return render_template('dash_of_current_class.html', title=f'Задача "{task.name}"', task=task,
+                               logo_link=url_for('static', filename='img/logo.png'),
+                               link1=url_for('static', filename='css/log_up.css'),
+                               link2=url_for('static', filename='css/log_up.css'),
+                               link3=url_for('static', filename='css/log_up.css'))
     else:
         abort_if_request_is_forbidden2(current_user.student_id, task_id)
 
