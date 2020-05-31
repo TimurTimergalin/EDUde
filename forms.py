@@ -51,6 +51,18 @@ class AddTaskForm(FlaskForm):
     submit = SubmitField('Отправить')
 
 
+class AddFormTaskForm(FlaskForm):
+    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(1, 32)])
+    deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)])
+    form_link = StringField('Ссылка на Google Форму', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('Отправить')
+
+
+class SendHomework(FlaskForm):
+    pass
+
+
 class InvitingForm(FlaskForm):
     """invitingForm
        WTF model of Inviting form"""
