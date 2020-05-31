@@ -55,7 +55,7 @@ margin: auto
         <td><p>{{ task.deadline }}</p></td>
         <td><p>{{ task.link }}</p></td>
       <td class="names"><a href="/task/{{ task.id }}" class="delete">Открыть</a><br><br>
-      <a href="/task/{{ task.id }}/solutions" class="delete">Посмотреть решения</a></td>
+      <a href="/tasks/{{ task.id }}/solutions" class="delete">Посмотреть решения</a></td>
         {% if is_teacher %}
         <td ><a href="/delete_task/{{ task.id }}" class="delete"> Удалить</a><br><br>
         <a href="/edit_task/{{ task.id }}" class="delete"> Редактировать</a>
