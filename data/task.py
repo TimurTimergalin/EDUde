@@ -19,6 +19,7 @@ class Task(SqlAlchemyBase, SerializerMixin):
     link = Cl(sql.String(128))
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
+    form_link = Cl(sql.String(128))
     status = Cl(sql.Boolean, default=1)
 
     def __repr__(self):
@@ -39,3 +40,8 @@ class Task(SqlAlchemyBase, SerializerMixin):
                 return 2
             setattr(self, i, kwargs[i])
         return 0
+
+    def is_google(self):
+        if type(self.form_link) == str:
+            return True
+        return False
