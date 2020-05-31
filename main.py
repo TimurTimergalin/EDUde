@@ -1,12 +1,13 @@
 import sys
+import os
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # from flask_ngrok import run_with_ngrok
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, flash
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -18,6 +19,7 @@ from flask_restful import Api
 from api_func import *
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
+from data.solution import Solution
 from data.student_to_class import StudentToClass
 from forms import *
 import student_resources
@@ -33,6 +35,9 @@ from datetime import datetime
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
+UPLOAD_FOLDER = '/static/solutions'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
+
 app = Flask(__name__)
 # run_with_ngrok(app)
 # db_session.global_init("flaskdb")
@@ -42,6 +47,8 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 app.config['RECAPTCHA_PUBLIC_KEY'] = RECAPTCHA_PUBLIC_KEY
 app.config['RECAPTCHA_PRIVATE_KEY'] = RECAPTCHA_PRIVATE_KEY
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 api = Api(app)
 api.add_resource(student_resources.StudentResource, '/api/1.0/student/<int:student_id>&<string:student_password>')
 api.add_resource(student_resources.StudentListResource, '/api/1.0/students')
@@ -273,7 +280,10 @@ def task(task_id):
     else:
         abort_if_request_is_forbidden2(current_user.student_id, task_id)
     return render_template('', title=f'Задача "{task.name}"', task=task,
-                           logo_link=url_for('static', filename='img/logo.png'))
+                           logo_link=url_for('static', filename='img/logo.png')б
+                           link1=url_for('static', filename='css/log_up.css'),
+                           link2=url_for('static', filename='css/log_up.css'),
+                           link3=url_for('static', filename='css/log_up.css')))
 
 
 @app.route('/accept_invite/<int:invite_id>')
@@ -367,24 +377,25 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
-        files = request.files
-        i = 1
-        files_list = []
-        while True:
-            try:
-                files_list.append(request.files[str(i)].read())
-                i += 1
-            except Exception:
-                break
-        a = [str(file[1]).split()[2][2:-3].split('/') for file in files.items()]
-        for i in range(len(a)):
-            if len(a[i]) == 1:
-                a[i] = ['image', 'png']
-        b = [i for i in files_list]
-        c = [a[i] + [b[i]] for i in range(len(a))]
-        print(a)
-        sendmessage(student.surname, classroom.name, task.name, task.link, request.form['text'], c)
-        return redirect('/profile')
+        if '1' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        for i in range(1, len(request.files) + 1):
+            file = request.files[str(i)]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                print(secure_filename(file.filename))
+                if '.' not in filename:
+                    flash('No selected file')
+                    return redirect(request.url)
+                file.save(os.path.join('static/solutions', filename))
+                solution = Solution()
+                solution.task_id = task_id
+                solution.student_id = current_user.student_id
+                solution.solution_link = 'static/solutions/' + filename
+                session.add(solution)
+                session.commit()
+        return redirect(f'/tasks/{task_id}')
 
 
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
@@ -416,6 +427,12 @@ def new_task(classroom_id):
                                link=teacher.email)
 
 
+@app.route('/tasks/<int:task_id>/solutions')
+@login_required
+def solutions(task_id):
+    return render_template('solutions.html')
+
+  
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def delete_task(task_id):
@@ -527,6 +544,12 @@ def edit_task(task_id):
                                title='Изменить задачу')
 
 
+@app.route('/tasks/<int:task_id>/solutions')
+@login_required
+def solution(task_id):
+    return render_template('solutions.html')
+
+
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -552,6 +575,11 @@ def deadline_delete(classroom_id):
         if datetime.now() > task.deadline:
             task.status = 0
     session.commit()
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def check_email(session, form):

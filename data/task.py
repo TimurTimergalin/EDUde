@@ -19,6 +19,7 @@ class Task(SqlAlchemyBase, SerializerMixin):
     link = Cl(sql.String(128))
     class_room_id = Cl(sql.Integer, sql.ForeignKey('class_rooms.id'))
     class_room = orm.relation('ClassRoom')
+    solutions = orm.relation('Solution', back_populates='task')
     form_link = Cl(sql.String(128))
     status = Cl(sql.Boolean, default=1)
 

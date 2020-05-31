@@ -91,6 +91,10 @@ class EditClass(FlaskForm):
     submit = SubmitField('Сохранить')
 
 
+class SendHomework(FlaskForm):
+    pass
+
+
 def new_edit_task(task):
     class EditTask(FlaskForm):
         """EditTask

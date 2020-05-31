@@ -25,6 +25,7 @@ class Student(SqlAlchemyBase, SerializerMixin, UserMixin):
     teachers = orm.relationship('Teacher', secondary='teacher_to_student')
     class_rooms = orm.relationship('ClassRoom', secondary='student_to_class')
     users = orm.relation('User', back_populates='student')
+    solutions = orm.relation('Solution', back_populates='student')
 
     def __repr__(self):
         return f'{self.surname} {self.name}#{self.id}, student'
