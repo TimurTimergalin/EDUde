@@ -11,7 +11,7 @@ from data.student_invite import StudentInvite
 from data import db_session
 
 
-class Solutions(SqlAlchemyBase):
+class Solution(SqlAlchemyBase):
     """Solution
     SQLAlchemy model of solutions"""
     __tablename__ = 'solutions'

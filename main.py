@@ -19,6 +19,7 @@ from flask_restful import Api
 from api_func import *
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
+from data.solution import Solution
 from data.student_to_class import StudentToClass
 from forms import *
 import student_resources
@@ -395,20 +396,25 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
-        # print(request.files)
         if '1' not in request.files:
             flash('No file part')
             return redirect(request.url)
-        file = request.files['1']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join('static/solutions', filename))
-            return redirect('/profile')
+        for i in range(1, len(request.files) + 1):
+            file = request.files[str(i)]
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                print(secure_filename(file.filename))
+                if '.' not in filename:
+                    flash('No selected file')
+                    return redirect(request.url)
+                file.save(os.path.join('static/solutions', filename))
+                solution = Solution()
+                solution.task_id = task_id
+                solution.student_id = current_user.student_id
+                solution.solution_link = 'static/solutions/' + filename
+                session.add(solution)
+                session.commit()
+        return redirect(f'/tasks/{task_id}')
 
 
 @app.route('/new_task/<classroom_id>', methods=['GET', 'POST'])
