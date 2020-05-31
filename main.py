@@ -280,10 +280,10 @@ def task(task_id):
     else:
         abort_if_request_is_forbidden2(current_user.student_id, task_id)
     return render_template('', title=f'Задача "{task.name}"', task=task,
-                           logo_link=url_for('static', filename='img/logo.png')б
+                           logo_link=url_for('static', filename='img/logo.png'),
                            link1=url_for('static', filename='css/log_up.css'),
                            link2=url_for('static', filename='css/log_up.css'),
-                           link3=url_for('static', filename='css/log_up.css')))
+                           link3=url_for('static', filename='css/log_up.css'))
 
 
 @app.route('/accept_invite/<int:invite_id>')
@@ -430,9 +430,21 @@ def new_task(classroom_id):
 @app.route('/tasks/<int:task_id>/solutions')
 @login_required
 def solutions(task_id):
-    return render_template('solutions.html')
+    session = db_session.create_session()
+    task = session.query(Task).get(task_id)
+    solutions_in_task = {}
+    solutions_ = session.query(Solution).filter(Solution.task_id == task_id).all()
+    for i in solutions_:
+        solutions_in_task[i.student_id] = i.solution_link
+    students_success_homework = [i.student_id for i in solutions_]
+    return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
+                           students_success_homework=students_success_homework,
+                           title='Решения учеников',
+                           link_css=url_for('static', filename='css/table.css'),
+                           link_css1=url_for('static', filename='css/tasks.css'),
+                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
 
-  
+
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def delete_task(task_id):

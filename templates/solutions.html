@@ -38,10 +38,14 @@ margin: auto
     <tr>
       <th scope="row">{{ student.id }}</th>
       <td><p>{{ student.surname}} {{ student.name }}</p></td>
-    <td><p>{{ student.surname}} {{ student.name }}</p></td>
-        <td><p>{{ student.surname}} {{ student.name }}</p></td>
-        <td><p>{{ student.surname}} {{ student.name }}</p></td>
-        <td><p>{{ student.surname}} {{ student.name }}</p></td>
+        {% if student.id in students_success_homework %}
+    <td><p>Выполнил</p></td>
+    <td><a href="{{ solutions[student.id] }}">Скачать</a></td>
+        {% else %}
+        <td><p>Не выполнил</p></td>
+        <td><p></p></td>
+        {% endif %}
+        <td><p>Комментарий</p></td>
     </tr>
     {% endfor %}
   </tbody>
