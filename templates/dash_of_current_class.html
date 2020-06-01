@@ -61,7 +61,7 @@ margin: auto
         <a href="/edit_task/{{ task.id }}" class="delete"> Редактировать</a>
         </td>
         {% else %}
-        <td><a href="/send_task/{{ task.id }}" class="delete"> Отправить </a></td>
+        <td><a href="/send_task/{{ classroom_id }}" class="delete"> Отправить </a></td>
         {% endif %}
     </tr>
     {% endfor %}

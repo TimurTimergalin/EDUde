@@ -35,12 +35,24 @@ margin: auto
   </thead>
   <tbody>
     {% for student in students %}
-    <tr>
+    <td>
       <th scope="row">{{ student.id }}</th>
       <td><p>{{ student.surname}} {{ student.name }}</p></td>
         {% if student.id in students_success_homework %}
     <td><p>Выполнил</p></td>
-    <td><a href="/uploads/{{ solutions[student.id] }}/{{ teacher_id }}">Скачать</a></td>
+    <td><div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button"
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Подробнее
+        </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        {% for linked in solutions[student.id] %}
+        <a class="dropdown-item" href="/uploads/{{ linked }}/{{ teacher_id }}">Фото 1</a>
+        {% endfor %}
+    </div>
+    </div>
+
+    </td>
         {% else %}
         <td><p>Не выполнил</p></td>
         <td><p></p></td>
