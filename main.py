@@ -417,13 +417,13 @@ def new_task(classroom_id):
             session.add(task)
             session.commit()
             return redirect(f'/tasks/{classroom_id}')
-        return render_template('new_task.html', current_user=current_user,
+        return render_template('new_task.html', is_google=False, current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
-                               link=teacher.email)
+                               link=teacher.email, cur_class=classroom_id )
     return redirect('/profile')
 
 
@@ -446,13 +446,13 @@ def new_form_task(classroom_id):
             session.add(task)
             session.commit()
             return redirect(f'/tasks/{classroom_id}')
-        return render_template('new_form_task.html', current_user=current_user,
+        return render_template('new_task.html', is_google=True, current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
-                               link=teacher.email)
+                               link=teacher.email, cur_class=classroom_id)
     return redirect('/profile')
 
 
@@ -473,7 +473,7 @@ def solutions(task_id):
                            link_css1=url_for('static', filename='css/tasks.css'),
                            link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
 
-
+  
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def delete_task(task_id):

@@ -20,6 +20,7 @@
                 {{ error }}
             </p>
         {% endfor %}
+            {% if is_google == False %}
           {{ form.task.label }}
       {{ form.task(placeholder="Заполните здесь...", class="two-third-width") }}
       {% for error in form.task.errors %}
@@ -27,16 +28,29 @@
                 {{ error }}
             </p>
         {% endfor %}
+            {% endif %}
+
           {{ form.deadline.label }}
       {{ form.deadline(class="half-width", type='datetime-local', style="width:250px") }}
-      {% for error in form.task.errors %}
+      {% for error in form.deadline.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
         {% endfor %}
+
+            {% if is_google %}
+            {{ form.form_link.label }}
+      {{ form.form_link(class="half-width", type='text', style="width:250px" ) }}
+      {% for error in form.form_link.errors %}
+      <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+        {% endfor %}
+            {% endif %}
+
           {{ form.link.label }}
       {{ form.link(class="half-width", type='email', style="width:250px", value=link ) }}
-      {% for error in form.task.errors %}
+      {% for error in form.link.errors %}
       <p class="alert alert-danger" role="alert">
                 {{ error }}
             </p>
@@ -50,11 +64,17 @@
             </p>
         {% endfor %}
         </div>
-         <div class="last_offer" style='margin-top: 35px'>
-    Нужна гугл форма?
-    <a href="/login" class='goto' >Создайте</a>
-</div>
+
       </form>
+           <div class="last_offer" style='margin-top: 35px'>
+               {% if is_google %}
+    Нужно добавить задание?
+    <a href="/new_task/{{ cur_class }}" class='goto' >Создайте</a>
+               {% else %}
+               Нужна гугл форма?
+    <a href="/new_form_task/{{ cur_class }}" class='goto' >Создайте</a>
+               {% endif %}
+</div>
     </main>
     <footer class="page-footer"></footer>
   </body>
