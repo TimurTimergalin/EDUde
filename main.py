@@ -412,12 +412,24 @@ def new_task(classroom_id):
         form = AddTaskForm()
         session = db_session.create_session()
         teacher = session.query(Teacher).get(current_user.teacher_id)
-        if form.validate_on_submit():
+        if request.method == 'GET':
+            return render_template('new_task.html', current_user=current_user,
+                                   classrooms=session.query(ClassRoom).filter(
+                                       ClassRoom.teacher_id == current_user.teacher_id),
+                                   form=form,
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title='Добавить задание',
+                                   link=teacher.email)
+        elif request.method == 'POST':
+            form = request.form
             task = Task()
-            task.name = form.name_of_task.data
-            task.description = form.task.data
-            task.link = form.link.data
-            task.deadline = form.deadline.data
+            task.name = form['name']
+            if 'description' in form.to_dict():
+                task.description = form['description']
+            else:
+                task.form_link = form['form_link']
+            task.deadline = datetime.strptime(form['deadline'], '%Y-%m-%dT%H:%M')
+            task.link = form['link']
             task.class_room_id = classroom_id
             session.add(task)
             session.commit()
@@ -426,35 +438,6 @@ def new_task(classroom_id):
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
                                form=form, classroom_id=classroom_id,
-                               logo_link=url_for('static', filename='img/logo.png'),
-                               title='Добавить задание',
-                               link=teacher.email)
-    return redirect('/profile')
-
-
-@login_required
-@app.route('/new_form_task/<int:classroom_id>')
-def new_form_task(classroom_id):
-    abort_if_class_not_found(classroom_id)
-    if current_user.user_type() == Teacher:
-        abort_if_request_is_forbidden(current_user.teacher_id, classroom_id)
-        form = AddFormTaskForm()
-        session = db_session.create_session()
-        teacher = session.query(Teacher).get(current_user.teacher_id)
-        if form.validate_on_submit():
-            task = Task()
-            task.name = form.name_of_task.data
-            task.form_link = form.form_link.data
-            task.link = form.link.data
-            task.deadline = form.deadline.data
-            task.class_room_id = classroom_id
-            session.add(task)
-            session.commit()
-            return redirect(f'/tasks/{classroom_id}')
-        return render_template('new_form_task.html', current_user=current_user,
-                               classrooms=session.query(ClassRoom).filter(
-                                   ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
                                link=teacher.email)
