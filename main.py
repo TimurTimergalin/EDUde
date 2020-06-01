@@ -242,6 +242,13 @@ def tasks(classroom_id):
     if not classroom.status:
         return redirect('/profile')
     students = classroom.students
+    teachers_comments = {}
+    for i in session.query(Solution).all():
+        if i.teachers_comment and i.is_active:
+            if i not in teachers_comments.keys():
+                teachers_comments[i.task_id] = [i.teachers_comment]
+            teachers_comments[i.task_id] = i.teachers_comment
+    print(teachers_comments)
     if current_user.user_type() == Teacher:
         if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
             return render_template('dash_of_current_class.html',
@@ -265,26 +272,10 @@ def tasks(classroom_id):
                                    tasks=session.query(Task).filter(
                                        Task.class_room_id == classroom_id, Task.status == 1), is_teacher=False,
                                    logo_link=url_for('static', filename='img/logo.png'),
+                                   teachers_comments=teachers_comments,
                                    title=f'Класс "{classroom.name}"')
     return render_template('bad_request.html', logo_link=url_for('static', filename='img/logo.png'),
                            title='Oops')
-
-
-@app.route('/task/<int:task_id>', methods=['GET'])
-@login_required
-def task(task_id):
-    session = db_session.create_session()
-    abort_if_task_not_found(task_id)
-    task = session.query(Task).get(task_id)
-    if current_user.user_type() == Teacher:
-        abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
-    else:
-        abort_if_request_is_forbidden2(current_user.student_id, task_id)
-    return render_template('', title=f'Задача "{task.name}"', task=task,
-                           logo_link=url_for('static', filename='img/logo.png'),
-                           link1=url_for('static', filename='css/log_up.css'),
-                           link2=url_for('static', filename='css/log_up.css'),
-                           link3=url_for('static', filename='css/log_up.css'))
 
 
 @app.route('/accept_invite/<int:invite_id>')
@@ -458,15 +449,18 @@ def solutions(task_id):
             solutions_in_task[i.student_id].append(i.solution_link)
     students_success_homework = [i.student_id for i in solutions_]
     if request.method == 'POST':
-        for i in request.form:
-            print(i)
+        key = ''
+        for i in request.form.keys():
+            key = i
+        solution = session.query(Solution).filter(Solution.student_id == key, Solution.is_active).first()
+        solution.teachers_comment = request.form[key]
+        session.commit()
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
                            students_success_homework=students_success_homework,
                            title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
                            link_css2=url_for('static', filename='css/dash_of_cur_cl.css'))
-
 
 
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
