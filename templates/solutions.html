@@ -57,7 +57,10 @@ margin: auto
         <td><p>Не выполнил</p></td>
         <td><p></p></td>
         {% endif %}
-        <td><p>Комментарий</p></td>
+        <td><form action="" method="post">
+            <input name="{{ student.id }}" placeholder="Комментарий">
+            <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+            </form></td>
     </tr>
     {% endfor %}
   </tbody>

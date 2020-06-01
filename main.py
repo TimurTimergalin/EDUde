@@ -294,10 +294,10 @@ def accept_invite(invite_id):
     if current_user.user_type() == Teacher:
         invite_ = session.query(StudentInvite).get(invite_id)
         if invite_.teacher_id == current_user.teacher_id:
-            current_user.teacher.add_student(invite_.student)
+            session.query(Teacher).get(current_user.teacher_id).add_student(invite_.student)
     else:
         invite_ = session.query(TeacherInvite).get(invite_id)
-        if invite_.student == current_user.student:
+        if invite_.student_id == current_user.student_id:
             invite_.teacher.add_student(current_user.student)
     invite_.status = 0
     session.commit()
@@ -461,7 +461,7 @@ def new_form_task(classroom_id):
     return redirect('/profile')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
+@app.route('/tasks/<int:task_id>/solutions', methods=['GET', 'POST'])
 @login_required
 def solutions(task_id):
     session = db_session.create_session()
@@ -474,12 +474,16 @@ def solutions(task_id):
         else:
             solutions_in_task[i.student_id].append(i.solution_link)
     students_success_homework = [i.student_id for i in solutions_]
+    if request.method == 'POST':
+        for i in request.form:
+            print(i)
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
                            students_success_homework=students_success_homework,
                            title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
-                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
+                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'))
+
 
 
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])

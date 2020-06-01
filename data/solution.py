@@ -23,3 +23,4 @@ class Solution(SqlAlchemyBase):
     student = orm.relation('Student')
     solution_link = Cl(sql.String)
     is_active = Cl(sql.Boolean, default=True)
+    teachers_comment = Cl(sql.String(100))
