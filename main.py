@@ -1,5 +1,6 @@
 import sys
 import os
+import zipfile
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # from flask_ngrok import run_with_ngrok
@@ -7,7 +8,7 @@ from werkzeug.utils import redirect, secure_filename
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, send_from_directory, current_app
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -35,7 +36,7 @@ from datetime import datetime
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-UPLOAD_FOLDER = '/static/solutions'
+UPLOAD_FOLDER = 'static/solutions'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
 
 app = Flask(__name__)
@@ -293,10 +294,10 @@ def accept_invite(invite_id):
     if current_user.user_type() == Teacher:
         invite_ = session.query(StudentInvite).get(invite_id)
         if invite_.teacher_id == current_user.teacher_id:
-            current_user.teacher.add_student(invite_.student)
+            session.query(Teacher).get(current_user.teacher_id).add_student(invite_.student)
     else:
         invite_ = session.query(TeacherInvite).get(invite_id)
-        if invite_.student == current_user.student:
+        if invite_.student_id == current_user.student_id:
             invite_.teacher.add_student(current_user.student)
     invite_.status = 0
     session.commit()
@@ -377,6 +378,11 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
+        solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active,
+                                                    Solution.student_id == current_user.student_id).all()
+        for i in solutions_:
+            i.is_active = False
+        session.commit()
         if '1' not in request.files:
             flash('No file part')
             return redirect(request.url)
@@ -384,7 +390,6 @@ def send_task(task_id):
             file = request.files[str(i)]
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                print(secure_filename(file.filename))
                 if '.' not in filename:
                     flash('No selected file')
                     return redirect(request.url)
@@ -432,29 +437,36 @@ def new_task(classroom_id):
         return render_template('new_task.html', current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form,
+                               form=form, classroom_id=classroom_id,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
                                link=teacher.email)
     return redirect('/profile')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
+@app.route('/tasks/<int:task_id>/solutions', methods=['GET', 'POST'])
 @login_required
 def solutions(task_id):
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
     solutions_in_task = {}
-    solutions_ = session.query(Solution).filter(Solution.task_id == task_id).all()
+    solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active).all()
     for i in solutions_:
-        solutions_in_task[i.student_id] = i.solution_link
+        if i.student_id not in solutions_in_task.keys():
+            solutions_in_task[i.student_id] = [i.solution_link]
+        else:
+            solutions_in_task[i.student_id].append(i.solution_link)
     students_success_homework = [i.student_id for i in solutions_]
+    if request.method == 'POST':
+        for i in request.form:
+            print(i)
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
                            students_success_homework=students_success_homework,
-                           title='Решения учеников',
+                           title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
-                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
+                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'))
+
 
 
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
@@ -568,12 +580,6 @@ def edit_task(task_id):
                                title='Изменить задачу')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
-@login_required
-def solution(task_id):
-    return render_template('solutions.html')
-
-
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -592,8 +598,20 @@ def edit_profile():
                            logo_link=url_for('static', filename='img/logo.png'))
 
 
+@app.route('/uploads/<path:filename>/<int:id_>', methods=['GET', 'POST'])
+@login_required
+def download(filename, id_):
+    if current_user.teacher_id != id_:
+        abort(403, message="You are not allowed to get info about this page")
+    else:
+        filename = filename.split('/')[-1]
+        uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+        return send_from_directory(directory=uploads, filename=filename)
+
+
 def deadline_delete(classroom_id):
     session = db_session.create_session()
+    print(classroom_id)
     tasks = session.query(ClassRoom).get(classroom_id).tasks
     for task in tasks:
         if datetime.now() > task.deadline:
