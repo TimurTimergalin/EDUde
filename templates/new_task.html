@@ -13,51 +13,17 @@
     {{ form.csrf_token }}
     <fieldset id="form">
         <legend>Добавление задания</legend>
-        <!--          {{ form.name_of_task.label }}-->
-        <!--      {{ form.name_of_task(placeholder="Введите тут...", class="two-third-width") }}-->
-        <!--      {% for error in form.name_of_task.errors %}-->
-        <!--      <p class="alert alert-danger" role="alert">-->
-        <!--                {{ error }}-->
-        <!--            </p>-->
-        <!--        {% endfor %}-->
         <label for="name">Название задания</label><br>
         <input id="name" name="name" placeholder="Введите тут..." class="two-third-width">
-        <!--          {{ form.task.label }}-->
-        <!--      {{ form.task(placeholder="Заполните здесь...", class="two-third-width") }}-->
-        <!--      {% for error in form.task.errors %}-->
-        <!--      <p class="alert alert-danger" role="alert">-->
-        <!--                {{ error }}-->
-        <!--            </p>-->
-        <!--        {% endfor %}-->
         <label for="description" id="cur_label">Описание задания</label><br>
         <textarea id="description" name="description" placeholder="Введите тут..." class="two-third-width"></textarea>
-        <!--          {{ form.deadline.label }}-->
-        <!--      {{ form.deadline(class="half-width", type='datetime-local', style="width:250px") }}-->
-        <!--      {% for error in form.task.errors %}-->
-        <!--      <p class="alert alert-danger" role="alert">-->
-        <!--                {{ error }}-->
-        <!--            </p>-->
-        <!--        {% endfor %}-->
         <label for="deadline" id="label">Сдать до</label>
         <input type="datetime-local" id="deadline" name="deadline" class="half-width" style="width:250px;">
-        <!--          {{ form.link.label }}-->
-        <!--      {{ form.link(class="half-width", type='email', style="width:250px", value=link ) }}-->
-        <!--      {% for error in form.task.errors %}-->
-        <!--      <p class="alert alert-danger" role="alert">-->
-        <!--                {{ error }}-->
-        <!--            </p>-->
-        <!--        {% endfor %}-->
         <label for="link">Куда отправлять</label>
-        <input type="email" id="link" name="link" value="link" class="half-width" style="width:250px;">
+        <input type="email" id="link" name="link" value="{{ link }}" class="half-width" style="width:250px;">
     </fieldset>
     <div class="buttons">
-        <!--          {{ form.submit(type="submit") }}-->
-        <!--    {% for error in form.submit.errors %}-->
         <button type="submit">Создать</button>
-        <!--            <p class="alert alert-danger" role="alert">-->
-        <!--                {{ error }}-->
-        <!--            </p>-->
-        <!--        {% endfor %}-->
     </div>
     <input type="radio" name="r1" id="r1" onclick="on_normal_click()"><label for="r1" >Обычное задание</label><br>
     <input type="radio" name="r2" id="r2" onclick="on_form_click()"><label for="r2">Google форма</label>

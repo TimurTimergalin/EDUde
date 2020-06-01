@@ -44,19 +44,12 @@ class AddClassForm(FlaskForm):
 class AddTaskForm(FlaskForm):
     """AddTaskForm
        WTF model of Add class form"""
-    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(1, 32)])
-    task = TextAreaField('Что делать', validators=[DataRequired()])
-    deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)])
-    submit = SubmitField('Отправить')
-
-
-class AddFormTaskForm(FlaskForm):
-    name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(1, 32)])
-    deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
-    link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)])
-    form_link = StringField('Ссылка на Google Форму', validators=[DataRequired(), Length(1, 128)])
-    submit = SubmitField('Отправить')
+    # name_of_task = TextAreaField('Название задания', validators=[DataRequired(), Length(1, 32)])
+    # task = TextAreaField('Что делать', validators=[DataRequired()])
+    # deadline = DateTimeField("Дедлайн", validators=[DataRequired()], format='%Y-%m-%dT%H:%M')
+    # link = StringField('Куда отправлять', validators=[DataRequired(), Length(1, 128)])
+    # submit = SubmitField('Отправить')
+    pass
 
 
 class SendHomework(FlaskForm):
@@ -89,10 +82,6 @@ class EditClass(FlaskForm):
     new_name = StringField('Название', validators=[DataRequired(), Length(1, 32)])
     new_subject = StringField('Предмет', validators=[DataRequired(), Length(1, 32)])
     submit = SubmitField('Сохранить')
-
-
-class SendHomework(FlaskForm):
-    pass
 
 
 def new_edit_task(task):
