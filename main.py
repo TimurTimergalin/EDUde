@@ -378,10 +378,14 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
+        solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active,
+                                                    Solution.student_id == current_user.student_id).all()
+        for i in solutions_:
+            i.is_active = False
+        session.commit()
         if '1' not in request.files:
             flash('No file part')
             return redirect(request.url)
-        # newzip=zipfile.ZipFile(current_user.st)
         for i in range(1, len(request.files) + 1):
             file = request.files[str(i)]
             if file and allowed_file(file.filename):
@@ -463,14 +467,13 @@ def solutions(task_id):
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
     solutions_in_task = {}
-    solutions_ = session.query(Solution).filter(Solution.task_id == task_id and Solution.is_active).all()
+    solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active).all()
     for i in solutions_:
         if i.student_id not in solutions_in_task.keys():
             solutions_in_task[i.student_id] = [i.solution_link]
         else:
             solutions_in_task[i.student_id].append(i.solution_link)
     students_success_homework = [i.student_id for i in solutions_]
-    # print(solutions_in_task)
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
                            students_success_homework=students_success_homework,
                            title='Решения учеников', teacher_id=current_user.teacher_id,
@@ -617,7 +620,6 @@ def download(filename, id_):
         filename = filename.split('/')[-1]
         uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
         return send_from_directory(directory=uploads, filename=filename)
-
 
 
 def deadline_delete(classroom_id):
