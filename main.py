@@ -7,7 +7,7 @@ from werkzeug.utils import redirect, secure_filename
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, send_from_directory, current_app
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -35,7 +35,7 @@ from datetime import datetime
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-UPLOAD_FOLDER = '/static/solutions'
+UPLOAD_FOLDER = 'static/solutions'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
 
 app = Flask(__name__)
@@ -420,7 +420,7 @@ def new_task(classroom_id):
         return render_template('new_task.html', current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
                                    ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form,
+                               form=form, classroom_id=classroom_id,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
                                link=teacher.email)
@@ -468,7 +468,7 @@ def solutions(task_id):
     students_success_homework = [i.student_id for i in solutions_]
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
                            students_success_homework=students_success_homework,
-                           title='Решения учеников',
+                           title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
                            link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
@@ -585,12 +585,6 @@ def edit_task(task_id):
                                title='Изменить задачу')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
-@login_required
-def solution(task_id):
-    return render_template('solutions.html')
-
-
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -607,6 +601,18 @@ def edit_profile():
     return render_template('edit_profile.html', form=form, title='Изменить профиль',
                            current_user=current_user_html,
                            logo_link=url_for('static', filename='img/logo.png'))
+
+
+@app.route('/uploads/<path:filename>/<int:id_>', methods=['GET', 'POST'])
+@login_required
+def download(filename, id_):
+    if current_user.teacher_id != id_:
+        abort(403, message="You are not allowed to get info about this page")
+    else:
+        filename = filename.split('/')[-1]
+        uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+        return send_from_directory(directory=uploads, filename=filename)
+
 
 
 def deadline_delete(classroom_id):
