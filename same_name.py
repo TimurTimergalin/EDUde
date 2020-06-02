@@ -1,6 +1,14 @@
-def same_name(lst):
+def same_name(lst, extra=None):
+    if extra is None:
+        extra = []
     dic = {}
     new_list = []
+    for i in range(len(extra)):
+        cur = extra[i]
+        try:
+            dic[cur] += 1
+        except KeyError:
+            dic[cur] = 1
     for i in range(len(lst)):
         cur = lst[i]
         if '.' in cur:
@@ -20,8 +28,8 @@ def same_name(lst):
 if __name__ == '__main__':
     # print(same_name(['123.docx', 'lol.xlsx']))
     # print(same_name(['123.docx', '123.docx']))
-    print(same_name(['12.34.docx', '12.34.docx']))
-
+    # print(same_name(['12.34.docx', '12.34.docx']))
+    print(same_name(['qwerty.uiop', 'qwerty', 'qwerty', 'ulul.html'], ['qwerty']))
 
 
 

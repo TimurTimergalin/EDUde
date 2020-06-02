@@ -30,9 +30,9 @@ def kir_to_lat(string):
         'ч': 'ch',
         'ш': 'sh',
         'щ': 'sh',
-        'ъ': '1',
+        'ъ': '\'',
         'ы': 'y',
-        'ь': '2',
+        'ь': '\'',
         'э': 'e',
         'ю': 'yu',
         'я': 'ya',
@@ -43,8 +43,10 @@ def kir_to_lat(string):
         if i not in lets:
             if i in dic:
                 new_str += dic[i]
+            elif i in punctuation:
+                new_str += i
             else:
-                new_str += '3'
+                new_str += '\''
         else:
             new_str += i
     return new_str
