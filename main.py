@@ -551,6 +551,16 @@ def edit_classroom(classroom_id):
                            title='Изменить класс')
 
 
+@app.route('/tasks/<int:task_id>/detail', method=['GET', 'POST'])
+@login_required
+def task_detail(task_id):
+    if current_user.user_type() == Teacher:
+        return redirect('/profile')
+    if request.method == 'POST':
+        pass
+    return render_template('task_detail.html', )
+
+
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id):
