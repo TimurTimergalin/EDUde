@@ -9,6 +9,7 @@ from create_user import create_user
 
 sys.path.insert(1, '/data')
 from flask import Flask, render_template, url_for, request, flash, send_from_directory, current_app
+from flask_socketio import SocketIO, send, emit
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -21,6 +22,7 @@ from api_func import *
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
 from data.solution import Solution
+from data.chat import *
 from data.student_to_class import StudentToClass
 from forms import *
 import student_resources
@@ -40,6 +42,7 @@ UPLOAD_FOLDER = 'static/solutions'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
 
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 # run_with_ngrok(app)
 # db_session.global_init("flaskdb")
 db_session.global_init('db/edu.sqlite')
@@ -272,7 +275,7 @@ def tasks(classroom_id):
                                    tasks=session.query(Task).filter(
                                        Task.class_room_id == classroom_id, Task.status == 1), is_teacher=False,
                                    logo_link=url_for('static', filename='img/logo.png'),
-                                   teachers_comments=teachers_comments,
+                                   teachers_comments=teachers_comments, student_id=student.id,
                                    title=f'Класс "{classroom.name}"')
     return render_template('bad_request.html', logo_link=url_for('static', filename='img/logo.png'),
                            title='Oops')
@@ -551,14 +554,52 @@ def edit_classroom(classroom_id):
                            title='Изменить класс')
 
 
-@app.route('/tasks/<int:task_id>/detail', methods=['GET', 'POST'])
+def messageReceived(methods=['GET', 'POST']):
+    print('message was received!!!')
+
+
+@socketio.on('my event')
+def handle_my_custom_event(json, methods=['GET', 'POST']):
+    print('received my event: ' + str(json))
+    socketio.emit('my response', json, callback=messageReceived)
+    # message = Message()
+    # message.content = msg
+    # message.chat_id = chat_id
+    # message.user_id = user_id
+    # session = db_session.create_session()
+    # session.add(message)
+    # session.commit()
+    # send(msg, broadcast=True)
+
+
+@app.route('/tasks/<int:task_id>/detail/<int:student_id>', methods=['GET', 'POST'])
 @login_required
-def task_detail(task_id):
+def task_detail(task_id, student_id):
+    session = db_session.create_session()
+    user_name = ''
     if current_user.user_type() == Teacher:
-        return redirect('/profile')
-    if request.method == 'POST':
-        pass
-    return render_template('task_detail.html', )
+        chat = session.query(Chat).filter(Chat.teacher_id == current_user.teacher_id, Chat.task_id == task_id).first()
+        if not chat:
+            chat = Chat()
+            chat.task_id = task_id
+            chat.teacher_id = current_user.teacher_id
+            chat.student_id = student_id
+            session.add(chat)
+            session.commit()
+        user_name = current_user.teacher.name
+    else:
+        chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
+        if not chat:
+            chat = Chat()
+            chat.task_id = task_id
+            chat.teacher_id = session.query(Task).get(task_id).class_room.teacher.id
+            chat.student_id = student_id
+            session.add(chat)
+            session.commit()
+        user_name = str(current_user.student.name)
+    messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
+    return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
+                           user_name=user_name)
 
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
@@ -643,7 +684,7 @@ def user_type_choice(session, form):
 
 
 def main():
-    app.run()
+    socketio.run(app)
 
 
 if __name__ == '__main__':
