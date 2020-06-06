@@ -30,7 +30,7 @@ margin: auto
       <th scope="col">Ученик</th>
       <th scope="col">Наличие задания</th>
         <th scope="col">Подробнее</th>
-        <th scope="col">Оставить комментарий</th>
+        <th scope="col">Статус</th>
     </tr>
   </thead>
   <tbody>
@@ -38,6 +38,7 @@ margin: auto
     <td>
       <th scope="row">{{ student.id }}</th>
       <td><p>{{ student.surname}} {{ student.name }}</p></td>
+    <td><a href="/tasks/{{ task_id }}/detail/{{ student.id }}">Открыть</a></td>
         {% if student.id in students_success_homework %}
     <td><p>Выполнил</p></td>
     <td><div class="dropdown">

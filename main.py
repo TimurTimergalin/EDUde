@@ -459,7 +459,7 @@ def solutions(task_id):
         solution.teachers_comment = request.form[key]
         session.commit()
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
-                           students_success_homework=students_success_homework,
+                           students_success_homework=students_success_homework, task_id=task_id,
                            title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
@@ -586,7 +586,7 @@ def task_detail(task_id, student_id):
             chat.student_id = student_id
             session.add(chat)
             session.commit()
-        user_name = current_user.teacher.name
+        user_name = session.query(Teacher).get(current_user.teacher_id).name
     else:
         chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
         if not chat:
@@ -596,7 +596,7 @@ def task_detail(task_id, student_id):
             chat.student_id = student_id
             session.add(chat)
             session.commit()
-        user_name = str(current_user.student.name)
+        user_name = session.query(Student).get(current_user.student_id).name
     messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
                            user_name=user_name)
