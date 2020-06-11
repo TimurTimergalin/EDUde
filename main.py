@@ -9,7 +9,7 @@ from create_user import create_user
 
 sys.path.insert(1, '/data')
 from flask import Flask, render_template, url_for, request, flash, send_from_directory, current_app
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -41,6 +41,7 @@ from datetime import datetime
 UPLOAD_FOLDER = 'static/solutions'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
 
+async_mode = None
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 # run_with_ngrok(app)
@@ -251,7 +252,6 @@ def tasks(classroom_id):
             if i not in teachers_comments.keys():
                 teachers_comments[i.task_id] = [i.teachers_comment]
             teachers_comments[i.task_id] = i.teachers_comment
-    print(teachers_comments)
     if current_user.user_type() == Teacher:
         if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
             return render_template('dash_of_current_class.html',
@@ -554,22 +554,28 @@ def edit_classroom(classroom_id):
                            title='Изменить класс')
 
 
-def messageReceived(methods=['GET', 'POST']):
-    print('message was received!!!')
+@socketio.on('my_broadcast_event', namespace='/test')
+def test_broadcast_message(message):
+    emit('my response',
+         {'data': message['data']}, broadcast=True)
 
 
-@socketio.on('my event')
-def handle_my_custom_event(json, methods=['GET', 'POST']):
-    print('received my event: ' + str(json))
-    socketio.emit('my response', json, callback=messageReceived)
-    # message = Message()
-    # message.content = msg
-    # message.chat_id = chat_id
-    # message.user_id = user_id
-    # session = db_session.create_session()
-    # session.add(message)
-    # session.commit()
-    # send(msg, broadcast=True)
+@socketio.on('connect', namespace='/test')
+def connect(json):
+    emit('my response', {'data': 'ok'})
+
+
+@socketio.on('message event', namespace='/test')
+def handle_message_event(json):
+    emit('my response', json, broadcast=True)
+    if 'data' not in json.keys():
+        message = Message()
+        message.content = json['message']
+        message.chat_id = json['chat_id']
+        message.user_id = json['user_id']
+        session = db_session.create_session()
+        session.add(message)
+        session.commit()
 
 
 @app.route('/tasks/<int:task_id>/detail/<int:student_id>', methods=['GET', 'POST'])
@@ -599,7 +605,7 @@ def task_detail(task_id, student_id):
         user_name = session.query(Student).get(current_user.student_id).name
     messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
-                           user_name=user_name)
+                           user_name=user_name, async_mode=socketio.async_mode)
 
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
