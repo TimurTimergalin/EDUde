@@ -574,6 +574,7 @@ def handle_message_event(json):
     message.chat_id = int(json['chat_id'])
     message.user_id = int(json['user_id'])
     message.user_name = str(json['user_name'])
+    message.user_surname = json['user_surname']
     session = db_session.create_session()
     session.add(message)
     session.commit()
@@ -584,6 +585,7 @@ def handle_message_event(json):
 def task_detail(task_id, student_id):
     session = db_session.create_session()
     user_name = ''
+    user_surname = ''
     if current_user.user_type() == Teacher:
         if session.query(Task).get(task_id).class_room.teacher_id == current_user.teacher_id:
             chat = session.query(Chat).filter(Chat.teacher_id == current_user.teacher_id, Chat.task_id == task_id).first()
@@ -597,6 +599,7 @@ def task_detail(task_id, student_id):
         else:
             return redirect('/profile')
         user_name = session.query(Teacher).get(current_user.teacher_id).name
+        user_surname = session.query(Teacher).get(current_user.teacher_id).surname
     else:
         if current_user.student_id == student_id:
             chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
@@ -612,7 +615,7 @@ def task_detail(task_id, student_id):
             return redirect('/profile')
         messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
-                           user_name=user_name, async_mode=socketio.async_mode)
+                           user_name=user_name, async_mode=socketio.async_mode, user_surname=user_surname)
 
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])

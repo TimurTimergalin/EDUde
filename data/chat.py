@@ -28,6 +28,9 @@ class Message(SqlAlchemyBase):
     # date_create = Cl(sql.DateTime)
     is_active = Cl(sql.Boolean, default=True)
 
+    def __repr__(self):
+        return f'{self.user_name} {self.user_surname}: {self.content}'
+
     def delete_message(self, user_id):
         try:
             if user_id != self.user_id:
