@@ -613,7 +613,7 @@ def task_detail(task_id, student_id):
             user_name = session.query(Student).get(current_user.student_id).name
         else:
             return redirect('/profile')
-        messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
+    messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
                            user_name=user_name, async_mode=socketio.async_mode, user_surname=user_surname)
 
