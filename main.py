@@ -561,21 +561,22 @@ def test_broadcast_message(message):
 
 
 @socketio.on('connect', namespace='/test')
-def connect(json):
-    emit('my response', {'data': 'ok'})
+def connect():
+    emit('my response', {'data': 'has connected', 'user_name': f'{current_user.get_name()}'})
 
 
 @socketio.on('message event', namespace='/test')
 def handle_message_event(json):
-    emit('my response', json, broadcast=True)
-    if 'data' not in json.keys():
-        message = Message()
-        message.content = json['message']
-        message.chat_id = json['chat_id']
-        message.user_id = json['user_id']
-        session = db_session.create_session()
-        session.add(message)
-        session.commit()
+    emit('my response', {'user_name': current_user.get_name(), 'data': json['data']})
+    print(json)
+    message = Message()
+    message.content = json['data']
+    message.chat_id = int(json['chat_id'])
+    message.user_id = int(json['user_id'])
+    message.user_name = str(json['user_name'])
+    session = db_session.create_session()
+    session.add(message)
+    session.commit()
 
 
 @app.route('/tasks/<int:task_id>/detail/<int:student_id>', methods=['GET', 'POST'])
@@ -584,26 +585,32 @@ def task_detail(task_id, student_id):
     session = db_session.create_session()
     user_name = ''
     if current_user.user_type() == Teacher:
-        chat = session.query(Chat).filter(Chat.teacher_id == current_user.teacher_id, Chat.task_id == task_id).first()
-        if not chat:
-            chat = Chat()
-            chat.task_id = task_id
-            chat.teacher_id = current_user.teacher_id
-            chat.student_id = student_id
-            session.add(chat)
-            session.commit()
+        if session.query(Task).get(task_id).class_room.teacher_id == current_user.teacher_id:
+            chat = session.query(Chat).filter(Chat.teacher_id == current_user.teacher_id, Chat.task_id == task_id).first()
+            if not chat:
+                chat = Chat()
+                chat.task_id = task_id
+                chat.teacher_id = current_user.teacher_id
+                chat.student_id = student_id
+                session.add(chat)
+                session.commit()
+        else:
+            return redirect('/profile')
         user_name = session.query(Teacher).get(current_user.teacher_id).name
     else:
-        chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
-        if not chat:
-            chat = Chat()
-            chat.task_id = task_id
-            chat.teacher_id = session.query(Task).get(task_id).class_room.teacher.id
-            chat.student_id = student_id
-            session.add(chat)
-            session.commit()
-        user_name = session.query(Student).get(current_user.student_id).name
-    messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
+        if current_user.student_id == student_id:
+            chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
+            if not chat:
+                chat = Chat()
+                chat.task_id = task_id
+                chat.teacher_id = session.query(Task).get(task_id).class_room.teacher.id
+                chat.student_id = student_id
+                session.add(chat)
+                session.commit()
+            user_name = session.query(Student).get(current_user.student_id).name
+        else:
+            return redirect('/profile')
+        messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
                            user_name=user_name, async_mode=socketio.async_mode)
 
