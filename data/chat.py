@@ -25,6 +25,8 @@ class Message(SqlAlchemyBase):
     chat_id = Cl(sql.Integer)
     user_id = Cl(sql.Integer)
     content = Cl(sql.String)
+    user_name = Cl(sql.String)
+    user_surname = Cl(sql.String)
     # date_create = Cl(sql.DateTime)
     is_active = Cl(sql.Boolean, default=True)
 
