@@ -1,21 +1,113 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <title>Чат</title>
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block else_link %}
 
+{% endblock %}
+{% block content %}
+<style>
+  body{
+	font-family: Quicksand, Arial, sans-serif;
+	max-width: 900px;
+	margin: auto;
+	padding: auto;
+}
+.table{
+	padding: 50px;
+	width: 90%;
+	background-color: #A8C7A8;
+	color: white;
+	border-radius: 10px;
+    border: none;
+    border-collapse: collapse;
+    margin: 50px auto;
+}
+.table th{
+	text-align: left;
+	font-size: 20px;
+	padding: 20px 20px 1em 10px;
+	border: none;
+}
+.table tr{
+	padding: 40px 0;}
+.table td{
+	overflow-y: scroll;
+	white-space: pre-wrap;
+	border: none;
+}
+.table td::-webkit-scrollbar {
+    width: 0px;
+}
+.table .td1{
+	margin-right: 30px
+}
+.messages{
+margin-left: 7%;
+}
+.message{
+width: 70%;
+height: 40px;
+border: 2px solid #6896DC;
+border-radius: 3px;
+}
+.message:focus{
+border-color: #6896DC;
+}
+.submit_{
+height: 40px;
+width: 20%;
+background-color: #6896DC;
+border: none;
+border-radius: 3px;
+color: white;
+font-size: 15px;
+}
+.submit_:active{
+border: none;
+background-color: #A8C7A8;
+}
+</style>
+<div class='flx'>
+    <table class='table'>
+      <thead>
+    <tr>
+      <th scope="col">Категории</th>
+      <th scope="col">Данные ученика</th>
+    </tr>
+  </thead>
+      <tbody>
+      <tr>
+      	<td class='td1'>Название</td>
+      	<td>втоволвмолвимимывиливов</td>
+      </tr>
+      <tr>
+      	<td class='td1'>Дэдлайн</td>
+      	<td>20ю20ю2000</td>
+      </tr>
+      <tr>
+      	<td class='td1'>Что делать</td>
+      	<td>втоволвмолвимимывиливffff ffffffffffffffffffffff fffffоввввввввввввв вввввв</td>
+      </tr>
+      <!-- {% if is_google %} -->
+       <tr>
+      	<td class='td1'>Гугл форма</td>
+      	<td><iframe src="https://docs.google.com/forms/d/1dMemRY5tZ22EXk-D0jNIdm_ouRF10_PmG2hIp9XmzeQ/edit" width='100%' height="100%" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe></td>
+      </tr>
+      <!-- {%endif  %} -->
+      </tbody>
+    </table>
+  </div>
+<div class="messages">
     <form action="" id="message" method="POST">
       {% for msg in messages %}
         <div>{{ msg }}</div>
       {% endfor %}
-      <input type="text" class="message" id="content" placeholder="messages"/>
-      <input type="submit"/>
+      <input type="text" class="message" id="content" placeholder="Напишите сообщение"/>
+      <input class='submit_' type="submit"/>
     <input type="text" id='chat_id_' value='{{ chat_id }}' style="display: none">
     <input type="text" id='user_id_' value='{{ user_id }}' style="display: none">
     <input type="text" id='user_name_' value='{{ user_name }}' style="display: none">
       <input type="text" id='user_surname_' value='{{ user_surname }}' style="display: none">
     </form>
+</div>
      <script src="//code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
     <script type="text/javascript">
@@ -38,5 +130,4 @@
         });
       });
     </script>
-  </body>
-  </html>
+{% endblock %}
