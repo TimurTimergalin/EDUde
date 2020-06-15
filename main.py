@@ -615,7 +615,10 @@ def task_detail(task_id, student_id):
             return redirect('/profile')
     messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
     return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
-                           user_name=user_name, async_mode=socketio.async_mode, user_surname=user_surname)
+                           user_name=user_name, async_mode=socketio.async_mode, user_surname=user_surname,
+                           link1=url_for('static', filename='css/to_base_html.css'),
+                           link2=url_for('static', filename='css/about.css'),
+                           link3=url_for('static', filename='css/main_page.css'))
 
 
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
