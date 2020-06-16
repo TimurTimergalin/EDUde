@@ -4,11 +4,6 @@ import sqlalchemy as sql
 from sqlalchemy import orm
 from sqlalchemy import Column as Cl
 from data.db_session import SqlAlchemyBase
-from werkzeug.security import check_password_hash, generate_password_hash
-from sqlalchemy_serializer import SerializerMixin
-from flask_login import UserMixin
-from data.student_invite import StudentInvite
-from data import db_session
 
 
 class Solution(SqlAlchemyBase):
@@ -23,3 +18,4 @@ class Solution(SqlAlchemyBase):
     student = orm.relation('Student')
     solution_link = Cl(sql.String)
     is_active = Cl(sql.Boolean, default=True)
+    teachers_comment = Cl(sql.String(100))

@@ -1,5 +1,6 @@
 import sys
 import os
+import zipfile
 
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 # from flask_ngrok import run_with_ngrok
@@ -7,7 +8,8 @@ from werkzeug.utils import redirect, secure_filename
 from create_user import create_user
 
 sys.path.insert(1, '/data')
-from flask import Flask, render_template, url_for, request, flash
+from flask import Flask, render_template, url_for, request, flash, send_from_directory, current_app
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 from data import db_session
 from data.student import Student
 from data.teacher import Teacher
@@ -20,6 +22,7 @@ from api_func import *
 from data.student_invite import StudentInvite
 from data.teacher_invite import TeacherInvite
 from data.solution import Solution
+from data.chat import *
 from data.student_to_class import StudentToClass
 from forms import *
 import student_resources
@@ -35,10 +38,12 @@ from datetime import datetime
 # logging.basicConfig(filename='logs/edude.log', level=logging.INFO,
 #                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
 
-UPLOAD_FOLDER = '/static/solutions'
+UPLOAD_FOLDER = 'static/solutions'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'docx'}
 
+async_mode = None
 app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins="*")
 # run_with_ngrok(app)
 # db_session.global_init("flaskdb")
 db_session.global_init('db/edu.sqlite')
@@ -241,6 +246,12 @@ def tasks(classroom_id):
     if not classroom.status:
         return redirect('/profile')
     students = classroom.students
+    teachers_comments = {}
+    for i in session.query(Solution).all():
+        if i.teachers_comment and i.is_active:
+            if i not in teachers_comments.keys():
+                teachers_comments[i.task_id] = [i.teachers_comment]
+            teachers_comments[i.task_id] = i.teachers_comment
     if current_user.user_type() == Teacher:
         if session.query(ClassRoom).get(classroom_id).teacher_id == current_user.teacher_id:
             return render_template('dash_of_current_class.html',
@@ -264,26 +275,10 @@ def tasks(classroom_id):
                                    tasks=session.query(Task).filter(
                                        Task.class_room_id == classroom_id, Task.status == 1), is_teacher=False,
                                    logo_link=url_for('static', filename='img/logo.png'),
+                                   teachers_comments=teachers_comments, student_id=student.id,
                                    title=f'Класс "{classroom.name}"')
     return render_template('bad_request.html', logo_link=url_for('static', filename='img/logo.png'),
                            title='Oops')
-
-
-@app.route('/task/<int:task_id>', methods=['GET'])
-@login_required
-def task(task_id):
-    session = db_session.create_session()
-    abort_if_task_not_found(task_id)
-    task = session.query(Task).get(task_id)
-    if current_user.user_type() == Teacher:
-        abort_if_request_is_forbidden1(current_user.teacher_id, task_id)
-    else:
-        abort_if_request_is_forbidden2(current_user.student_id, task_id)
-    return render_template('', title=f'Задача "{task.name}"', task=task,
-                           logo_link=url_for('static', filename='img/logo.png'),
-                           link1=url_for('static', filename='css/log_up.css'),
-                           link2=url_for('static', filename='css/log_up.css'),
-                           link3=url_for('static', filename='css/log_up.css'))
 
 
 @app.route('/accept_invite/<int:invite_id>')
@@ -293,10 +288,10 @@ def accept_invite(invite_id):
     if current_user.user_type() == Teacher:
         invite_ = session.query(StudentInvite).get(invite_id)
         if invite_.teacher_id == current_user.teacher_id:
-            current_user.teacher.add_student(invite_.student)
+            session.query(Teacher).get(current_user.teacher_id).add_student(invite_.student)
     else:
         invite_ = session.query(TeacherInvite).get(invite_id)
-        if invite_.student == current_user.student:
+        if invite_.student_id == current_user.student_id:
             invite_.teacher.add_student(current_user.student)
     invite_.status = 0
     session.commit()
@@ -377,6 +372,11 @@ def send_task(task_id):
                                        title='Отправить')
         return redirect('/profile')
     elif request.method == 'POST':
+        solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active,
+                                                    Solution.student_id == current_user.student_id).all()
+        for i in solutions_:
+            i.is_active = False
+        session.commit()
         if '1' not in request.files:
             flash('No file part')
             return redirect(request.url)
@@ -384,7 +384,6 @@ def send_task(task_id):
             file = request.files[str(i)]
             if file and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
-                print(secure_filename(file.filename))
                 if '.' not in filename:
                     flash('No selected file')
                     return redirect(request.url)
@@ -407,71 +406,64 @@ def new_task(classroom_id):
         form = AddTaskForm()
         session = db_session.create_session()
         teacher = session.query(Teacher).get(current_user.teacher_id)
-        if form.validate_on_submit():
+        if request.method == 'GET':
+            return render_template('new_task.html', current_user=current_user,
+                                   classrooms=session.query(ClassRoom).filter(
+                                       ClassRoom.teacher_id == current_user.teacher_id),
+                                   form=form,
+                                   logo_link=url_for('static', filename='img/logo.png'),
+                                   title='Добавить задание',
+                                   link=teacher.email)
+        elif request.method == 'POST':
+            form = request.form
             task = Task()
-            task.name = form.name_of_task.data
-            task.description = form.task.data
-            task.link = form.link.data
-            task.deadline = form.deadline.data
+            task.name = form['name']
+            if 'description' in form.to_dict():
+                task.description = form['description']
+            else:
+                task.form_link = form['form_link']
+            task.deadline = datetime.strptime(form['deadline'], '%Y-%m-%dT%H:%M')
+            task.link = form['link']
             task.class_room_id = classroom_id
             session.add(task)
             session.commit()
             return redirect(f'/tasks/{classroom_id}')
         return render_template('new_task.html', is_google=False, current_user=current_user,
                                classrooms=session.query(ClassRoom).filter(
-                                   ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form,
-                               logo_link=url_for('static', filename='img/logo.png'),
-                               title='Добавить задание',
-                               link=teacher.email, cur_class=classroom_id )
-    return redirect('/profile')
-
-
-@login_required
-@app.route('/new_form_task/<int:classroom_id>')
-def new_form_task(classroom_id):
-    abort_if_class_not_found(classroom_id)
-    if current_user.user_type() == Teacher:
-        abort_if_request_is_forbidden(current_user.teacher_id, classroom_id)
-        form = AddFormTaskForm()
-        session = db_session.create_session()
-        teacher = session.query(Teacher).get(current_user.teacher_id)
-        if form.validate_on_submit():
-            task = Task()
-            task.name = form.name_of_task.data
-            task.form_link = form.form_link.data
-            task.link = form.link.data
-            task.deadline = form.deadline.data
-            task.class_room_id = classroom_id
-            session.add(task)
-            session.commit()
-            return redirect(f'/tasks/{classroom_id}')
-        return render_template('new_task.html', is_google=True, current_user=current_user,
-                               classrooms=session.query(ClassRoom).filter(
-                                   ClassRoom.teacher_id == current_user.teacher_id),
-                               form=form,
+                                ClassRoom.teacher_id == current_user.teacher_id),
+                               form=form, classroom_id=classroom_id,
                                logo_link=url_for('static', filename='img/logo.png'),
                                title='Добавить задание',
                                link=teacher.email, cur_class=classroom_id)
     return redirect('/profile')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
+@app.route('/tasks/<int:task_id>/solutions', methods=['GET', 'POST'])
 @login_required
 def solutions(task_id):
     session = db_session.create_session()
     task = session.query(Task).get(task_id)
     solutions_in_task = {}
-    solutions_ = session.query(Solution).filter(Solution.task_id == task_id).all()
+    solutions_ = session.query(Solution).filter(Solution.task_id == task_id, Solution.is_active).all()
     for i in solutions_:
-        solutions_in_task[i.student_id] = i.solution_link
+        if i.student_id not in solutions_in_task.keys():
+            solutions_in_task[i.student_id] = [i.solution_link]
+        else:
+            solutions_in_task[i.student_id].append(i.solution_link)
     students_success_homework = [i.student_id for i in solutions_]
+    if request.method == 'POST':
+        key = ''
+        for i in request.form.keys():
+            key = i
+        solution = session.query(Solution).filter(Solution.student_id == key, Solution.is_active).first()
+        solution.teachers_comment = request.form[key]
+        session.commit()
     return render_template('solutions.html', students=task.class_room.students, solutions=solutions_in_task,
-                           students_success_homework=students_success_homework,
-                           title='Решения учеников',
+                           students_success_homework=students_success_homework, task_id=task_id,
+                           title='Решения учеников', teacher_id=current_user.teacher_id,
                            link_css=url_for('static', filename='css/table.css'),
                            link_css1=url_for('static', filename='css/tasks.css'),
-                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'), )
+                           link_css2=url_for('static', filename='css/dash_of_cur_cl.css'))
 
   
 @app.route('/delete_task/<int:task_id>', methods=['GET', 'POST'])
@@ -562,6 +554,73 @@ def edit_classroom(classroom_id):
                            title='Изменить класс')
 
 
+@socketio.on('my_broadcast_event', namespace='/test')
+def test_broadcast_message(message):
+    emit('my response',
+         {'data': message['data']}, broadcast=True)
+
+
+@socketio.on('connect', namespace='/test')
+def connect():
+    emit('my response', {'data': 'has connected', 'user_name': f'{current_user.get_name()}'})
+
+
+@socketio.on('message event', namespace='/test')
+def handle_message_event(json):
+    emit('my response', {'user_name': current_user.get_name(), 'data': json['data']})
+    print(json)
+    message = Message()
+    message.content = json['data']
+    message.chat_id = int(json['chat_id'])
+    message.user_id = int(json['user_id'])
+    message.user_name = str(json['user_name'])
+    message.user_surname = json['user_surname']
+    session = db_session.create_session()
+    session.add(message)
+    session.commit()
+
+
+@app.route('/tasks/<int:task_id>/detail/<int:student_id>', methods=['GET', 'POST'])
+@login_required
+def task_detail(task_id, student_id):
+    session = db_session.create_session()
+    user_name = ''
+    user_surname = ''
+    if current_user.user_type() == Teacher:
+        if session.query(Task).get(task_id).class_room.teacher_id == current_user.teacher_id:
+            chat = session.query(Chat).filter(Chat.teacher_id == current_user.teacher_id, Chat.task_id == task_id).first()
+            if not chat:
+                chat = Chat()
+                chat.task_id = task_id
+                chat.teacher_id = current_user.teacher_id
+                chat.student_id = student_id
+                session.add(chat)
+                session.commit()
+        else:
+            return redirect('/profile')
+        user_name = session.query(Teacher).get(current_user.teacher_id).name
+        user_surname = session.query(Teacher).get(current_user.teacher_id).surname
+    else:
+        if current_user.student_id == student_id:
+            chat = session.query(Chat).filter(Chat.student_id == current_user.student_id, Chat.task_id == task_id).first()
+            if not chat:
+                chat = Chat()
+                chat.task_id = task_id
+                chat.teacher_id = session.query(Task).get(task_id).class_room.teacher.id
+                chat.student_id = student_id
+                session.add(chat)
+                session.commit()
+            user_name = session.query(Student).get(current_user.student_id).name
+        else:
+            return redirect('/profile')
+    messages = session.query(Message).filter(Message.chat_id == chat.chat_id).all()
+    return render_template('task_detail.html', messages=messages, chat_id=chat.chat_id, user_id=current_user.id,
+                           user_name=user_name, async_mode=socketio.async_mode, user_surname=user_surname,
+                           link1=url_for('static', filename='css/to_base_html.css'),
+                           link2=url_for('static', filename='css/about.css'),
+                           link3=url_for('static', filename='css/main_page.css'))
+
+
 @app.route('/edit_task/<int:task_id>', methods=['GET', 'POST'])
 @login_required
 def edit_task(task_id):
@@ -585,12 +644,6 @@ def edit_task(task_id):
                                title='Изменить задачу')
 
 
-@app.route('/tasks/<int:task_id>/solutions')
-@login_required
-def solution(task_id):
-    return render_template('solutions.html')
-
-
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
@@ -609,8 +662,20 @@ def edit_profile():
                            logo_link=url_for('static', filename='img/logo.png'))
 
 
+@app.route('/uploads/<path:filename>/<int:id_>', methods=['GET', 'POST'])
+@login_required
+def download(filename, id_):
+    if current_user.teacher_id != id_:
+        abort(403, message="You are not allowed to get info about this page")
+    else:
+        filename = filename.split('/')[-1]
+        uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
+        return send_from_directory(directory=uploads, filename=filename)
+
+
 def deadline_delete(classroom_id):
     session = db_session.create_session()
+    print(classroom_id)
     tasks = session.query(ClassRoom).get(classroom_id).tasks
     for task in tasks:
         if datetime.now() > task.deadline:
@@ -638,7 +703,7 @@ def user_type_choice(session, form):
 
 
 def main():
-    app.run()
+    socketio.run(app)
 
 
 if __name__ == '__main__':

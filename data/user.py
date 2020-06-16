@@ -27,6 +27,11 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     def get_id(self):
         return self.id
 
+    def get_name(self):
+        if self.teacher:
+            return self.teacher.name + " " + self.teacher.surname
+        return self.student.name + " " + self.student.surname
+
     def get_user(self):
         if self.is_teacher:
             return self.teacher

@@ -9,73 +9,70 @@
   <body>
     <main>
       <form action="" method="post">
-        {{ form.hidden_tag() }}
+    {{ form.hidden_tag() }}
     {{ form.csrf_token }}
-        <fieldset>
-          <legend>Добавление задания</legend>
-          {{ form.name_of_task.label }}
-      {{ form.name_of_task(placeholder="Введите тут...", class="two-third-width") }}
-      {% for error in form.name_of_task.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-            {% if is_google == False %}
-          {{ form.task.label }}
-      {{ form.task(placeholder="Заполните здесь...", class="two-third-width") }}
-      {% for error in form.task.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-            {% endif %}
+    <fieldset id="form">
+        <legend>Добавление задания</legend>
+        <label for="name">Название задания</label><br>
+        <input id="name" name="name" placeholder="Введите тут..." class="two-third-width">
+        <label for="description" id="cur_label">Описание задания</label><br>
+        <textarea id="description" name="description" placeholder="Введите тут..." class="two-third-width"></textarea>
+        <label for="deadline" id="label">Сдать до</label>
+        <input type="datetime-local" id="deadline" name="deadline" class="half-width" style="width:250px;">
+        <label for="link">Куда отправлять</label>
+        <input type="email" id="link" name="link" value="{{ link }}" class="half-width" style="width:250px;">
+         <input type="radio" name="r1" id="r1" onclick="on_normal_click()" class="half-width" ><label class="half-width" for="r1" >Обычное задание</label>
+    <input type="radio" name="r2" id="r2" onclick="on_form_click()" class="half-width" ><label for="r2">Google форма</label>
+    </fieldset>
+    <div class="buttons">
+        <button type="submit">Создать</button>
+    </div>
 
-          {{ form.deadline.label }}
-      {{ form.deadline(class="half-width", type='datetime-local', style="width:250px") }}
-      {% for error in form.deadline.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-
-            {% if is_google %}
-            {{ form.form_link.label }}
-      {{ form.form_link(class="half-width", type='text', style="width:250px" ) }}
-      {% for error in form.form_link.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-            {% endif %}
-
-          {{ form.link.label }}
-      {{ form.link(class="half-width", type='email', style="width:250px", value=link ) }}
-      {% for error in form.link.errors %}
-      <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-        </fieldset>
-        <div class="buttons">
-          {{ form.submit(type="submit") }}
-    {% for error in form.submit.errors %}
-            <p class="alert alert-danger" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-        </div>
-
-      </form>
-           <div class="last_offer" style='margin-top: 35px'>
-               {% if is_google %}
-    Нужно добавить задание?
-    <a href="/new_task/{{ cur_class }}" class='goto' >Создайте</a>
-               {% else %}
-               Нужна гугл форма?
-    <a href="/new_form_task/{{ cur_class }}" class='goto' >Создайте</a>
-               {% endif %}
-</div>
+</form>
     </main>
     <footer class="page-footer"></footer>
   </body>
+<script>
+var normal_radio = document.getElementById('r1');
+var form_radio = document.getElementById('r2');
+normal_radio.checked = true;
+console.log('init complete');
+
+function on_form_click() {
+    console.log('on_form_click started');
+    var task = document.getElementById('description');
+    var label = document.getElementById('label');
+    var cur_label = document.getElementById('cur_label');
+    var form = document.getElementById('form');
+    task.remove();
+    var link_input = document.createElement('input');
+    link_input.classList.add('two-third-width');
+    link_input.id = 'description';
+    link_input.name = 'form_link';
+    link_input.maxLength = 128;
+    link_input.placeholder = 'Введите тут...';
+    form.appendChild(link_input);
+    form.insertBefore(link_input, label);
+    cur_label.innerText = 'Ссылка на Google форму';
+    normal_radio.checked = false;
+}
+
+function on_normal_click() {
+    console.log('on_normal_click started');
+    var task = document.getElementById('description');
+    var label = document.getElementById('label');
+    var cur_label = document.getElementById('cur_label');
+    var form = document.getElementById('form');
+    task.remove();
+    var desc_input = document.createElement('textarea');
+    desc_input.classList.add('two-third-width');
+    desc_input.id = 'description';
+    desc_input.name = 'description';
+    desc_input.placeholder = 'Введите тут...';
+    form.appendChild(desc_input);
+    form.insertBefore(desc_input, label);
+    cur_label.innerText = 'Описание задания'
+    form_radio.checked = false;
+}
+</script>
 {% endblock %}
